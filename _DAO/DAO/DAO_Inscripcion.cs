@@ -227,104 +227,99 @@ namespace _DAO.DAO
 
 
 
-        public Resultado<bool> CorregirFechaInicio()
-        {
-            return GenerarErrorInhabilitacion();
-        }
+        //public Resultado<bool> GenerarErrorInhabilitacion()
+        //{
+        //    var resultado = new Resultado<bool>();
 
-        public Resultado<bool> GenerarErrorInhabilitacion()
-        {
-            var resultado = new Resultado<bool>();
+        //    try
+        //    {
+        //        using (var s = SessionManager.Instance.SessionFactory.OpenSession())
+        //        {
+        //            s.SetBatchSize(1000);
 
-            try
-            {
-                using (var s = SessionManager.Instance.SessionFactory.OpenSession())
-                {
-                    s.SetBatchSize(1000);
+        //            var usuarios = s.QueryOver<Inhabilitacion>()
+        //                .List()
+        //                .ToList();
 
-                    var usuarios = s.QueryOver<Inhabilitacion>()
-                        .List()
-                        .ToList();
+        //            using (var t = s.BeginTransaction())
+        //            {
+        //                usuarios.ForEach((entity) =>
+        //                {
+        //                    try
+        //                    {
+        //                        List<string> errores = new List<string>();
 
-                    using (var t = s.BeginTransaction())
-                    {
-                        usuarios.ForEach((entity) =>
-                        {
-                            try
-                            {
-                                List<string> errores = new List<string>();
+        //                        //Usuario
+        //                        //Es error cuando no tiene usuario o cuando su usuario tiene error
+        //                        bool conUsuario = entity.Usuario != null;
+        //                        bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;
+        //                        if (!conUsuario || conUsuarioConError)
+        //                        {
+        //                            if (!conUsuario)
+        //                            {
+        //                                errores.Add("Sin usuario");
+        //                            }
+        //                            else
+        //                            {
+        //                                errores.Add("Usuario con error: " + entity.Usuario.Error);
+        //                            }
+        //                        }
 
-                                //Usuario
-                                //Es error cuando no tiene usuario o cuando su usuario tiene error
-                                bool conUsuario = entity.Usuario != null;
-                                bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;
-                                if (!conUsuario || conUsuarioConError)
-                                {
-                                    if (!conUsuario)
-                                    {
-                                        errores.Add("Sin usuario");
-                                    }
-                                    else
-                                    {
-                                        errores.Add("Usuario con error: " + entity.Usuario.Error);
-                                    }
-                                }
-
-                                //Tipo
-                                //Cuando no tiene
-                                //Cuando tiene pero es invalido
-                                //Cuando tiene pero es permanente y no tiene fecha fin
-                                bool conTipo= entity.TipoInhabilitacion!= null;
-                                if (!conTipo)
-                                {
-                                    errores.Add("Sin tipo inhabilitacion");
-                                }
-                                else
-                                {
-                                    bool esValido = !entity.TipoInhabilitacion.Invalido;
-                                    if (!esValido)
-                                    {
-                                        errores.Add("Tipo inhabilitacion inválido");
-                                    }
-                                    else
-                                    {
-                                        //No es permanente y no tiene fecha fin
-                                        if (!entity.TipoInhabilitacion.Permanente && !entity.FechaFin.HasValue)
-                                        {
-                                            errores.Add("Inhabilitacion no permanente y sin fecha de fin");
-                                        }
-                                    }
-                                }
+        //                        //Tipo
+        //                        //Cuando no tiene
+        //                        //Cuando tiene pero es invalido
+        //                        //Cuando tiene pero es permanente y no tiene fecha fin
+        //                        bool conTipo= entity.TipoInhabilitacion!= null;
+        //                        if (!conTipo)
+        //                        {
+        //                            errores.Add("Sin tipo inhabilitacion");
+        //                        }
+        //                        else
+        //                        {
+        //                            bool esValido = !entity.TipoInhabilitacion.Invalido;
+        //                            if (!esValido)
+        //                            {
+        //                                errores.Add("Tipo inhabilitacion inválido");
+        //                            }
+        //                            else
+        //                            {
+        //                                //No es permanente y no tiene fecha fin
+        //                                if (!entity.TipoInhabilitacion.Permanente && !entity.FechaFin.HasValue)
+        //                                {
+        //                                    errores.Add("Inhabilitacion no permanente y sin fecha de fin");
+        //                                }
+        //                            }
+        //                        }
 
                                
 
-                                if (errores.Count != 0)
-                                {
-                                    entity.Error = string.Join(" - ", errores);
-                                }
-                                else
-                                {
-                                    entity.Error = null;
-                                }
-                                s.Update(entity);
-                            }
-                            catch (Exception ex)
-                            {
-                                var e = ex;
-                            }
-                        });
+        //                        if (errores.Count != 0)
+        //                        {
+        //                            entity.Error = string.Join(" - ", errores);
+        //                        }
+        //                        else
+        //                        {
+        //                            entity.Error = null;
+        //                        }
+        //                        s.Update(entity);
+        //                    }
+        //                    catch (Exception ex)
+        //                    {
+        //                        var e = ex;
+        //                    }
+        //                });
 
-                        t.Commit();
-                    }
-                }
+        //                t.Commit();
+        //            }
+        //        }
 
-            }
-            catch (Exception e)
-            {
-                resultado.SetError(e);
-            }
-            return resultado;
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        resultado.SetError(e);
+        //    }
+        //    return resultado;
+        //}
 
 
         //public Resultado<bool> GenerarErroresInscripcion()
@@ -436,7 +431,14 @@ namespace _DAO.DAO
         //                        bool conApellido = entity.Apellido != null && entity.Apellido.Trim() != "";
         //                        if (!conNombre && !conApellido)
         //                        {
-        //                            errores.Add("Sin nombre o apellido");
+        //                            errores.Add("El nombre y/o apellido es requerido");
+        //                        }
+
+
+        //                        //Sexo
+        //                        if (!entity.SexoMasculino.HasValue)
+        //                        {
+        //                            errores.Add("El campo sexo es requerido");
         //                        }
 
         //                        //DNI
@@ -444,7 +446,7 @@ namespace _DAO.DAO
         //                        bool dniValido = conDni && entity.Dni.Value > 0 && entity.Dni.Value < 200000000;
         //                        if (!dniValido)
         //                        {
-        //                            errores.Add("N° de DNI inválido");
+        //                            errores.Add("El campo N° de DNI es inválido");
         //                        }
 
         //                        if (errores.Count != 0)

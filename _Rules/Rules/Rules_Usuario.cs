@@ -23,6 +23,7 @@ namespace _Rules.Rules
 
         public Resultado<_Model.Resultados.Resultado_Paginador<Usuario>> GetPaginado(_Model.Consultas.Consulta_UsuarioPaginado consulta)
         {
+            //DAO_Inscripcion.Instance.GenerarErroresUsuario();
             return dao.GetPaginado(consulta);
         }
 

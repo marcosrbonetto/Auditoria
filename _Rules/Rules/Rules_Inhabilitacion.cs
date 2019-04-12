@@ -55,7 +55,6 @@ namespace _Rules.Rules
                     //Valido las fechas
                     DateTime? fechaInicio = null;
                     DateTime? fechaFin = null;
-                    DateTime? fechaExpediente = null;
 
                     if (!string.IsNullOrEmpty(comando.FechaInicio))
                     {
@@ -77,6 +76,25 @@ namespace _Rules.Rules
                         }
                     }
 
+
+                    //Tipo
+                    var resultadoConsultaTipo = new Rules.Rules_TipoInhabilitacion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInhabilitacionKeyValue.Value);
+                    if (!resultadoConsultaTipo.Ok)
+                    {
+                        resultado.Error = resultadoConsultaTipo.Error;
+                        return false;
+                    }
+
+                    if (resultadoConsultaTipo.Return == null)
+                    {
+                        resultado.Error = "El tipo inhabilitacion no existe";
+                        return false;
+                    }
+
+
+                    var tipo = resultadoConsultaTipo.Return;
+
+
                     //Creo la entidad
                     var entity = new Inhabilitacion()
                     {
@@ -85,8 +103,19 @@ namespace _Rules.Rules
                         FechaFin = fechaFin,
                         DtoRes = comando.DtoRes,
                         Expediente = comando.Expediente,
-                        Observaciones = comando.Observaciones
+                        Observaciones = comando.Observaciones,
+                        ObservacionesTipoAuto = comando.ObservacionesTipoAuto,
+                        ObservacionesAutoChapa = comando.ObservacionesAutoChapa,
+                        TipoInhabilitacion = tipo
                     };
+
+                    //Valido
+                    var resultadoValidar = ValidarConsistencia(entity);
+                    if (!resultadoValidar.Ok)
+                    {
+                        resultado.Error = resultadoValidar.Error;
+                        return false;
+                    }
 
                     //Inserto
                     var resultadoInsertar = base.Insert(entity);
@@ -162,6 +191,23 @@ namespace _Rules.Rules
                         }
                     }
 
+                    //Tipo
+                    var resultadoConsultaTipo = new Rules.Rules_TipoInhabilitacion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInhabilitacionKeyValue.Value);
+                    if (!resultadoConsultaTipo.Ok)
+                    {
+                        resultado.Error = resultadoConsultaTipo.Error;
+                        return false;
+                    }
+
+                    if (resultadoConsultaTipo.Return == null)
+                    {
+                        resultado.Error = "El tipo inhabilitacion no existe";
+                        return false;
+                    }
+
+
+                    var tipo = resultadoConsultaTipo.Return;
+
                     //Busco la entidad
                     var resultadoEntity = GetByIdObligatorio(comando.Id);
                     if (!resultadoEntity.Ok)
@@ -178,12 +224,24 @@ namespace _Rules.Rules
                     }
 
                     //Actualizo
+                    entity.TipoInhabilitacion = tipo;
                     entity.Usuario = usuario;
                     entity.FechaInicio = fechaInicio;
                     entity.FechaFin = fechaFin;
                     entity.DtoRes = comando.DtoRes;
                     entity.Expediente = comando.Expediente;
                     entity.Observaciones = comando.Observaciones;
+                    entity.ObservacionesAutoChapa = comando.ObservacionesAutoChapa;
+                    entity.ObservacionesTipoAuto = comando.ObservacionesTipoAuto;
+                    entity.Error = null;
+
+                    //Valido
+                    var resultadoValidar = ValidarConsistencia(entity);
+                    if (!resultadoValidar.Ok)
+                    {
+                        resultado.Error = resultadoValidar.Error;
+                        return false;
+                    }
 
                     //Actualizo
                     var resultadoUpdate = base.Update(entity);
@@ -192,6 +250,7 @@ namespace _Rules.Rules
                         resultado.Error = resultadoUpdate.Error;
                         return false;
                     }
+
 
                     resultado.Return = resultadoUpdate.Return;
                     return true;
@@ -239,6 +298,72 @@ namespace _Rules.Rules
             }
 
             resultado.Return = true;
+            return resultado;
+        }
+
+        public Resultado<bool> ValidarConsistencia(Inhabilitacion entity)
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                List<string> errores = new List<string>();
+
+                //Usuario
+                //Es error cuando no tiene usuario o cuando su usuario tiene error
+                bool conUsuario = entity.Usuario != null;
+                bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;
+                if (!conUsuario || conUsuarioConError)
+                {
+                    if (!conUsuario)
+                    {
+                        errores.Add("Sin usuario");
+                    }
+                    else
+                    {
+                        errores.Add("Usuario con error: " + entity.Usuario.Error);
+                    }
+                }
+
+                //Tipo
+                //Cuando no tiene
+                //Cuando tiene pero es invalido
+                //Cuando tiene pero es permanente y no tiene fecha fin
+                bool conTipo = entity.TipoInhabilitacion != null;
+                if (!conTipo)
+                {
+                    errores.Add("Sin tipo inhabilitacion");
+                }
+                else
+                {
+                    bool esValido = !entity.TipoInhabilitacion.Invalido;
+                    if (!esValido)
+                    {
+                        errores.Add("Tipo inhabilitacion inválido");
+                    }
+                    else
+                    {
+                        //No es permanente y no tiene fecha fin
+                        if (!entity.TipoInhabilitacion.Permanente && !entity.FechaFin.HasValue)
+                        {
+                            errores.Add("Inhabilitacion no permanente y sin fecha de fin");
+                        }
+                    }
+                }
+
+                if (errores.Count != 0)
+                {
+                    resultado.Error = string.Join(" - ", errores);
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
             return resultado;
         }
     }
