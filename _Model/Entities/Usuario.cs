@@ -11,7 +11,7 @@ namespace _Model.Entities
         public virtual string Nombre { get; set; }
         public virtual string Apellido { get; set; }
         public virtual DateTime? FechaNacimiento { get; set; }
-        public virtual bool SexoMasculino { get; set; }
+        public virtual bool? SexoMasculino { get; set; }
         public virtual int? Dni { get; set; }
         public virtual string DomicilioBarrio { get; set; }
         public virtual string DomicilioCalle { get; set; }

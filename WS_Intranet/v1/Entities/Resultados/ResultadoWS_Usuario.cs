@@ -13,14 +13,17 @@ namespace WS_Intranet.v1.Entities.Resultados
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public int? Dni { get; set; }
-        public bool SexoMasculino { get; set; }
+        public bool? SexoMasculino { get; set; }
         public DateTime? FechaNacimiento { get; set; }
         public string DomicilioBarrio { get; set; }
         public string DomicilioCalle { get; set; }
         public string DomicilioAltura { get; set; }
         public string DomicilioObservaciones { get; set; }
         public string Observaciones { get; set; }
-
+        public string DomicilioPiso { get; set; }
+        public string DomicilioDepto { get; set; }
+        public string DomicilioCodigoPostal { get; set; }
+        public string Error { get; set; }
 
         public ResultadoWS_Usuario(Usuario usuario)
         {
@@ -37,6 +40,10 @@ namespace WS_Intranet.v1.Entities.Resultados
             DomicilioAltura = usuario.DomicilioAltura;
             DomicilioObservaciones = usuario.DomicilioObservaciones;
             Observaciones = usuario.Observaciones;
+            DomicilioPiso = usuario.DomicilioPiso;
+            DomicilioDepto = usuario.DomicilioDepto;
+            DomicilioCodigoPostal = usuario.DomicilioCodigoPostal;
+            Error = usuario.Error;
         }
 
         public static List<ResultadoWS_Usuario> ToList(IList<Usuario> list)

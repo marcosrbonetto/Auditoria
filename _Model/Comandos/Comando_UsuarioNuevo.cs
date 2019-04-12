@@ -18,6 +18,9 @@ namespace _Model.Comandos
         public string DomicilioAltura { get; set; }
         public string DomicilioObservaciones { get; set; }
         public string Observaciones { get; set; }
+        public string DomicilioPiso { get; set; }
+        public string DomicilioDepto { get; set; }
+        public string DomicilioCodigoPostal { get; set; }
 
     }
 }

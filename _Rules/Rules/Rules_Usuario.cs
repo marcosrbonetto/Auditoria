@@ -6,6 +6,7 @@ using _Model.Entities;
 using System.Configuration;
 using System.Collections.Generic;
 using _Rules._WsVecinoVirtual;
+using System.Text;
 
 namespace _Rules.Rules
 {
@@ -87,6 +88,16 @@ namespace _Rules.Rules
                 usuario.DomicilioAltura = comando.DomicilioAltura;
                 usuario.DomicilioObservaciones = comando.DomicilioObservaciones;
                 usuario.Observaciones = comando.Observaciones;
+                usuario.DomicilioPiso = comando.DomicilioPiso;
+                usuario.DomicilioDepto = comando.DomicilioDepto;
+                usuario.DomicilioCodigoPostal = comando.DomicilioCodigoPostal;
+
+                var validarUsuario = ValidarConsistenciaUsuario(usuario);
+                if (!validarUsuario.Ok)
+                {
+                    resultado.Error = validarUsuario.Error;
+                    return resultado;
+                }
 
                 //Inserto o update
                 Resultado<Usuario> resultadoInsert = base.Insert(usuario);
@@ -104,6 +115,43 @@ namespace _Rules.Rules
                 resultado.Error = "Error procesando la solicitud";
                 return resultado;
             }
+        }
+
+        private Resultado<bool> ValidarConsistenciaUsuario(Usuario u) 
+        {
+            var resultado = new Resultado<bool>();
+            List<string> errores = new List<string>();
+            try
+            {
+                //Nombre
+                bool conNombre = u.Nombre != null && u.Nombre.Trim() != "";
+                bool conApellido = u.Apellido != null && u.Apellido.Trim() != "";
+                if (!conNombre && !conApellido)
+                {
+                    errores.Add("El campo nombre y/o apellido es requerido");
+                }
+
+                //DNI
+                bool dniValido = u.Dni.HasValue && u.Dni.Value > 0 && u.Dni.Value < 200000000;
+                if (!dniValido)
+                {
+                    errores.Add("El campo DNI es inválido");
+                }
+
+                if (errores.Count != 0)
+                {
+                    resultado.Error = string.Join(" - ", errores);
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception ex)
+            {
+                resultado.SetError(ex.Message);
+            }
+
+            return resultado;
         }
 
         public Resultado<Usuario> Actualizar(_Model.Comandos.Comando_UsuarioActualizar comando)
@@ -169,6 +217,17 @@ namespace _Rules.Rules
                 usuario.DomicilioAltura = comando.DomicilioAltura;
                 usuario.DomicilioObservaciones = comando.DomicilioObservaciones;
                 usuario.Observaciones = comando.Observaciones;
+                usuario.DomicilioPiso = comando.DomicilioPiso;
+                usuario.DomicilioDepto = comando.DomicilioDepto;
+                usuario.DomicilioCodigoPostal = comando.DomicilioCodigoPostal;
+
+                var validarUsuario = ValidarConsistenciaUsuario(usuario);
+                if (!validarUsuario.Ok)
+                {
+                    resultado.Error = validarUsuario.Error;
+                    return resultado;
+                }
+                usuario.Error = null;
 
                 //Inserto o update
                 Resultado<Usuario> resultadoInsert = base.Insert(usuario);
