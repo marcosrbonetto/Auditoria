@@ -151,31 +151,6 @@ namespace _DAO.DAO
                             var orderBy = query.OrderBy(x => (x.FechaFin));
                             query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
                         } break;
-                    case Enums.InscripcionOrderBy.FechaTelegrama:
-                        {
-                            var orderBy = query.OrderBy(x => (x.FechaTelegrama));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
-                    case Enums.InscripcionOrderBy.FechaVencimientoLicencia:
-                        {
-                            var orderBy = query.OrderBy(x => (x.FechaVencimientoLicencia));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
-                    case Enums.InscripcionOrderBy.ArtCompañia:
-                        {
-                            var orderBy = query.OrderBy(x => (x.ArtCompañia));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
-                    case Enums.InscripcionOrderBy.ArtFechaVencimiento:
-                        {
-                            var orderBy = query.OrderBy(x => (x.ArtFechaVencimiento));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
-                    case Enums.InscripcionOrderBy.Caja:
-                        {
-                            var orderBy = query.OrderBy(x => (x.Caja));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
                     case Enums.InscripcionOrderBy.UsuarioApellidoNombre:
                         {
                             var join = query.JoinQueryOver<Usuario>(x => x.Usuario);

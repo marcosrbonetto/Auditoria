@@ -13,12 +13,7 @@ namespace _Model
             TipoAuto = 3,
             FechaInicio = 4,
             FechaFin = 5,
-            FechaTelegrama = 6,
-            FechaVencimientoLicencia = 7,
-            ArtCompañia = 8,
-            ArtFechaVencimiento = 9,
-            Caja = 10,
-            UsuarioApellidoNombre = 11
+            UsuarioApellidoNombre = 6
         }
 
         public enum InhabilitacionOrderBy

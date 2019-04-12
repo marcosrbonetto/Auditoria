@@ -12,13 +12,6 @@ namespace WS_Intranet.v1.Entities.Resultados
         public string Identificador { get; set; }
         public DateTime? FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
-        public DateTime? FechaTelegrama { get; set; }
-        public DateTime? FechaVencimientoLicencia { get; set; }
-        public string ArtCompañia { get; set; }
-        public DateTime? ArtFechaVencimiento { get; set; }
-        public string Caja { get; set; }
-        public string Observaciones { get; set; }
-
         
         //Tipo Auto
         public string TipoAutoNombre { get; set; }
@@ -41,6 +34,8 @@ namespace WS_Intranet.v1.Entities.Resultados
         public int? UsuarioDni { get; set; }
         public bool? UsuarioSexoMasculino { get; set; }
 
+        public string Error { get; set; }
+
         public ResultadoWS_InscripcionListado(_Model.Entities.Inscripcion entity)
         {
             if (entity == null) return;
@@ -48,13 +43,7 @@ namespace WS_Intranet.v1.Entities.Resultados
             Identificador = entity.Identificador;
             FechaInicio = entity.FechaInicio;
             FechaFin = entity.FechaFin;
-            FechaTelegrama = entity.FechaTelegrama;
-            FechaVencimientoLicencia = entity.FechaVencimientoLicencia;
-            ArtCompañia = entity.ArtCompañia;
-            ArtFechaVencimiento = entity.ArtFechaVencimiento;
-            Caja = entity.Caja;
-            Observaciones = entity.Observaciones;
-
+ 
             if (entity.TipoAuto != null)
             {
                 TipoAutoNombre = entity.TipoAuto.Nombre;
@@ -82,6 +71,8 @@ namespace WS_Intranet.v1.Entities.Resultados
                 UsuarioDni = entity.Usuario.Dni;
                 UsuarioSexoMasculino = entity.Usuario.SexoMasculino;
             }
+
+            Error = entity.Error;
         }
 
         public static List<ResultadoWS_InscripcionListado> ToList(IList<_Model.Entities.Inscripcion> entities)
