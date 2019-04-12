@@ -12,6 +12,9 @@ namespace _DAO.Maps
             Table("TipoInhabilitacion");
 
             Map(x => x.Nombre, "nombre");
+            Map(x => x.Permanente, "permanente");
+            Map(x => x.Invalido, "invalido");
+
         }
     }
 }

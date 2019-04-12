@@ -28,6 +28,8 @@ namespace _DAO.Maps
             Map(x => x.Observaciones, "observaciones");
             Map(x => x.ObservacionesAutoChapa, "observacionesAutoChapa");
             Map(x => x.ObservacionesTipoAuto, "observacionesTipoAuto");
+            Map(x => x.Error, "error");
+
         }
     }
 }
