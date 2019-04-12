@@ -232,6 +232,7 @@ namespace _DAO.DAO
 
             try
             {
+
                 using (var s = SessionManager.Instance.SessionFactory.OpenSession())
                 {
                     s.SetBatchSize(1000);
