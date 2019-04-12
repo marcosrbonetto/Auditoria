@@ -24,6 +24,10 @@ namespace WS_Intranet.v1.Entities.Resultados
         public string TipoAutoNombre { get; set; }
         public int TipoAutoKeyValue { get; set; }
 
+        //Condicion
+        public string TipoCondicion { get; set; }
+        public int TipoCondicionKeyValue { get; set; }
+
 
         //Tipo Inscripcion
         public string TipoInscripcionNombre { get; set; }
@@ -62,6 +66,12 @@ namespace WS_Intranet.v1.Entities.Resultados
             {
                 TipoInscripcionNombre = entity.TipoInscripcion.Nombre;
                 TipoInscripcionKeyValue = (int)entity.TipoInscripcion.KeyValue;
+            }
+
+            if (entity.TipoCondicionInscripcion != null)
+            {
+                TipoCondicion = entity.TipoCondicionInscripcion.Nombre;
+                TipoCondicionKeyValue = (int)entity.TipoCondicionInscripcion.KeyValue;
             }
 
             if (entity.Usuario != null)
