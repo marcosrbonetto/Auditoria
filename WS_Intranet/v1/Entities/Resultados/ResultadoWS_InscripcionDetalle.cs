@@ -25,8 +25,8 @@ namespace WS_Intranet.v1.Entities.Resultados
         public int TipoAutoKeyValue { get; set; }
 
         //Condicion
-        public string TipoCondicion { get; set; }
-        public int TipoCondicionKeyValue { get; set; }
+        public string TipoCondicionInscripcionNombre { get; set; }
+        public int TipoCondicionInscripcionKeyValue { get; set; }
 
 
         //Tipo Inscripcion
@@ -42,6 +42,7 @@ namespace WS_Intranet.v1.Entities.Resultados
         public int? UsuarioDni { get; set; }
         public bool? UsuarioSexoMasculino { get; set; }
 
+        public string Error { get; set; }
         public ResultadoWS_InscripcionDetalle(_Model.Entities.Inscripcion entity)
         {
             if (entity == null) return;
@@ -70,8 +71,8 @@ namespace WS_Intranet.v1.Entities.Resultados
 
             if (entity.TipoCondicionInscripcion != null)
             {
-                TipoCondicion = entity.TipoCondicionInscripcion.Nombre;
-                TipoCondicionKeyValue = (int)entity.TipoCondicionInscripcion.KeyValue;
+                TipoCondicionInscripcionNombre = entity.TipoCondicionInscripcion.Nombre;
+                TipoCondicionInscripcionKeyValue = (int)entity.TipoCondicionInscripcion.KeyValue;
             }
 
             if (entity.Usuario != null)
@@ -83,6 +84,7 @@ namespace WS_Intranet.v1.Entities.Resultados
                 UsuarioDni = entity.Usuario.Dni;
                 UsuarioSexoMasculino = entity.Usuario.SexoMasculino;
             }
+            Error = entity.Error;
         }
 
         public static List<ResultadoWS_InscripcionDetalle> ToList(IList<_Model.Entities.Inscripcion> entities)
