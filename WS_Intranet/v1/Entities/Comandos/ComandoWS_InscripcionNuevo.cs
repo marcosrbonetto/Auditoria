@@ -20,7 +20,7 @@ namespace WS_Intranet.v1.Entities.Comandos
         public string ArtVce { get; set; }
         public string Caja { get; set; }
         public string Observaciones { get; set; }
-        public Enums.TipoCondicionInscripcion CondicionKeyValue { get; set; }
+        public Enums.TipoCondicionInscripcion? TipoCondicionInscripcionKeyValue { get; set; }
 
         public _Model.Comandos.Comando_InscripcionNuevo Convertir()
         {
@@ -38,7 +38,7 @@ namespace WS_Intranet.v1.Entities.Comandos
                 ArtFechaVencimiento = ArtVce,
                 Caja = Caja,
                 Observaciones = Observaciones,
-                CondicionKeyValue = CondicionKeyValue
+                TipoCondicionInscripcionKeyValue = TipoCondicionInscripcionKeyValue
             };
         }
     }

@@ -37,6 +37,13 @@ namespace _Rules.Rules
             {
                 try
                 {
+                    var validarComando = ValidarComandoInsertar(comando);
+                    if (!validarComando.Ok)
+                    {
+                        resultado.Error = validarComando.Error;
+                        return false;
+                    }
+
                     //Busco el usuario
                     var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario);
                     if (!resultadoUsuario.Ok)
@@ -82,17 +89,21 @@ namespace _Rules.Rules
                     }
 
                     //Busco el tipo condicion
-                    var resultadoCondicion = new Rules_TipoCondicionInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.CondicionKeyValue);
-                    if (!resultadoCondicion.Ok)
+                    TipoCondicionInscripcion condicion = null;
+                    if (comando.TipoCondicionInscripcionKeyValue.HasValue)
                     {
-                        resultado.Error = resultadoCondicion.Error;
-                        return false;
-                    }
-                    var condicion = resultadoCondicion.Return;
-                    if (condicion == null || condicion.FechaBaja != null)
-                    {
-                        resultado.Error = "La condicion de inscripción no existe o esta dada de baja";
-                        return false;
+                        var resultadoCondicion = new Rules_TipoCondicionInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoCondicionInscripcionKeyValue.Value);
+                        if (!resultadoCondicion.Ok)
+                        {
+                            resultado.Error = resultadoCondicion.Error;
+                            return false;
+                        }
+                        condicion = resultadoCondicion.Return;
+                        if (condicion == null || condicion.FechaBaja != null)
+                        {
+                            resultado.Error = "La condicion de inscripción no existe o esta dada de baja";
+                            return false;
+                        }
                     }
 
                     //Valido las fechas
@@ -213,6 +224,13 @@ namespace _Rules.Rules
             {
                 try
                 {
+                    var validarComando = ValidarComandoActualizar(comando);
+                    if (!validarComando.Ok)
+                    {
+                        resultado.Error = validarComando.Error;
+                        return false;
+                    }
+
                     //Busco el usuario
                     var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario);
                     if (!resultadoUsuario.Ok)
@@ -258,17 +276,21 @@ namespace _Rules.Rules
                     }
 
                     //Busco el tipo condicion
-                    var resultadoCondicion = new Rules_TipoCondicionInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.CondicionKeyValue);
-                    if (!resultadoCondicion.Ok)
+                    TipoCondicionInscripcion condicion = null;
+                    if (comando.TipoCondicionInscripcionKeyValue.HasValue)
                     {
-                        resultado.Error = resultadoCondicion.Error;
-                        return false;
-                    }
-                    var condicion = resultadoCondicion.Return;
-                    if (condicion == null || condicion.FechaBaja != null)
-                    {
-                        resultado.Error = "La condicion de inscripción no existe o esta dada de baja";
-                        return false;
+                        var resultadoCondicion = new Rules_TipoCondicionInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoCondicionInscripcionKeyValue.Value);
+                        if (!resultadoCondicion.Ok)
+                        {
+                            resultado.Error = resultadoCondicion.Error;
+                            return false;
+                        }
+                        condicion = resultadoCondicion.Return;
+                        if (condicion == null || condicion.FechaBaja != null)
+                        {
+                            resultado.Error = "La condicion de inscripción no existe o esta dada de baja";
+                            return false;
+                        }
                     }
 
                     //Valido las fechas
@@ -430,8 +452,7 @@ namespace _Rules.Rules
             {
                 List<string> errores = new List<string>();
 
-                //Usuario
-                //Es error cuando no tiene usuario o cuando su usuario tiene error
+                //Usuario: Es error cuando no tiene usuario o cuando su usuario tiene error
                 bool conUsuario = entity.Usuario != null;
                 bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;
                 if (!conUsuario || conUsuarioConError)
@@ -446,16 +467,14 @@ namespace _Rules.Rules
                     }
                 }
 
-                //Tipo auto
-                //Cuando no tiene tipo de auto
+                //Tipo auto: Cuando no tiene tipo de auto
                 bool conTipoAuto = entity.TipoAuto != null;
                 if (!conTipoAuto)
                 {
                     errores.Add("Sin tipo de auto");
                 }
 
-                //Identificador
-                //Cuando no tiene identificador
+                //Identificador: Cuando no tiene identificador
                 bool conIdentificador = entity.Identificador != null && entity.Identificador.Trim() != "";
                 if (!conIdentificador)
                 {
@@ -477,5 +496,116 @@ namespace _Rules.Rules
 
             return resultado;
         }
+
+        public Resultado<bool> ValidarComandoActualizar(_Model.Comandos.Comando_InscripcionActualizar comando)
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                if (comando.Id==0 || comando.Id<0)
+                {
+                    resultado.Error = "El Id de la inscripción a actualizar es requerido";
+                    return resultado;
+                }
+
+                if (comando.IdUsuario == 0 || comando.IdUsuario < 0)
+                {
+                    resultado.Error = "El Id Usuario es requerido";
+                    return resultado;
+                }
+
+                if (!Enum.IsDefined(typeof(_Model.Enums.TipoAuto), comando.TipoAutoKeyValue))
+                {
+                    resultado.Error = "El identificador del Tipo Auto esta fuera de rango";
+                    return resultado;
+                }
+
+                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInscripcion), comando.TipoInscripcionKeyValue))
+                {
+                    resultado.Error = "El identificador del Tipo Inscripción esta fuera de rango";
+                    return resultado;
+                }
+                
+                if (string.IsNullOrEmpty(comando.Identificador))
+                {
+                    resultado.Error = "El campo Identificador es requerido";
+                    return resultado;
+                }
+
+                if (string.IsNullOrEmpty(comando.FechaInicio))
+                {
+                    resultado.Error = "El campo Fecha Inicio es requerido";
+                    return resultado;
+                }
+
+                if (string.IsNullOrEmpty(comando.FechaFin))
+                {
+                    resultado.Error = "El campo Fecha Fin es requerido";
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
+            return resultado;
+        }
+
+        public Resultado<bool> ValidarComandoInsertar(_Model.Comandos.Comando_InscripcionNuevo comando)
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {             
+                if (string.IsNullOrEmpty(comando.Identificador))
+                {
+                    resultado.Error = "El campo Identificador es requerido";
+                    return resultado;
+                }
+
+                if (comando.IdUsuario == 0 || comando.IdUsuario < 0)
+                {
+                    resultado.Error = "El Id Usuario es requerido";
+                    return resultado;
+                }
+
+                if (!Enum.IsDefined(typeof(_Model.Enums.TipoAuto), comando.TipoAutoKeyValue))
+                {
+                    resultado.Error = "El identificador del Tipo Auto esta fuera de rango";
+                    return resultado;
+                }
+
+                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInscripcion), comando.TipoInscripcionKeyValue))
+                {
+                    resultado.Error = "El identificador del Tipo Inscripción esta fuera de rango";
+                    return resultado;
+                }
+
+                if (string.IsNullOrEmpty(comando.FechaInicio))
+                {
+                    resultado.Error = "El campo Fecha Inicio es requerido";
+                    return resultado;
+                }
+
+                if (string.IsNullOrEmpty(comando.FechaFin))
+                {
+                    resultado.Error = "El campo Fecha Fin es requerido";
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
+            return resultado;
+        }
+
     }
 }
