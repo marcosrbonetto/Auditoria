@@ -20,5 +20,6 @@ namespace _Model.Entities
         public virtual string ObservacionesAutoChapa { get; set; }
         public virtual string ObservacionesTipoAuto { get; set; }
         public virtual string Observaciones { get; set; }
+        public virtual string Error { get; set; }
     }
 }

@@ -21,5 +21,6 @@ namespace _Model.Entities
         public virtual DateTime? ArtFechaVencimiento { get; set; }
         public virtual string Caja { get; set; }
         public virtual string Observaciones { get; set; }
+        public virtual string Error { get; set; }
     }
 }

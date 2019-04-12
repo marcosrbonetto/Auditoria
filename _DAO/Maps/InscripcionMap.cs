@@ -27,6 +27,8 @@ namespace _DAO.Maps
             Map(x => x.ArtFechaVencimiento, "artFechaVencimiento");
             Map(x => x.Caja, "caja");
             Map(x => x.Observaciones, "observaciones");
+            Map(x => x.Error, "error");
+
         }
     }
 }
