@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WS_Intranet.v1.Entities.Comandos
+{
+    public class ComandoWS_UsuarioActualizar
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Apellido { get; set; }
+        public int Dni { get; set; }
+        public bool SexoMasculino { get; set; }
+        public string FechaNacimiento { get; set; }
+        public string DomicilioBarrio { get; set; }
+        public string DomicilioCalle { get; set; }
+        public string DomicilioAltura { get; set; }
+        public string DomicilioObservaciones { get; set; }
+        public string Observaciones { get; set; }
+
+        public _Model.Comandos.Comando_UsuarioActualizar Convertir()
+        {
+            return new _Model.Comandos.Comando_UsuarioActualizar()
+            {
+                Id = Id,
+                Nombre = Nombre,
+                Apellido = Apellido,
+                Dni = Dni,
+                SexoMasculino = SexoMasculino,
+                FechaNacimiento = FechaNacimiento,
+                DomicilioBarrio = DomicilioBarrio,
+                DomicilioCalle = DomicilioCalle,
+                DomicilioAltura = DomicilioAltura,
+                DomicilioObservaciones = DomicilioObservaciones,
+                Observaciones = Observaciones
+            };
+        }
+    }
+}

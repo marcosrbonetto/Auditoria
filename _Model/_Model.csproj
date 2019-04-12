@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E99C5E8A-755A-49BA-A606-DDE171B8CCEF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>_Model</RootNamespace>
+    <AssemblyName>_Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseEntity.cs" />
+    <Compile Include="Comandos\Comando_InhabilitacionActualizar.cs" />
+    <Compile Include="Comandos\Comando_InscripcionActualizar.cs" />
+    <Compile Include="Comandos\Comando_InhabilitacionNuevo.cs" />
+    <Compile Include="Comandos\Comando_UsuarioActualizar.cs" />
+    <Compile Include="Comandos\Comando_UsuarioNuevo.cs" />
+    <Compile Include="Comandos\Comando_InscripcionNuevo.cs" />
+    <Compile Include="Consultas\Consulta_Inhabilitacion.cs" />
+    <Compile Include="Consultas\Consulta_InhabilitacionPaginada.cs" />
+    <Compile Include="Consultas\Consulta_UsuarioPaginado.cs" />
+    <Compile Include="Consultas\Consulta_InscripcionPaginada.cs" />
+    <Compile Include="Consultas\Consulta_Usuario.cs" />
+    <Compile Include="Consultas\Consulta_Inscripcion.cs" />
+    <Compile Include="Consultas\Consulta_MuniOnlineUsuario.cs" />
+    <Compile Include="Entities\Inhabilitacion.cs" />
+    <Compile Include="Entities\TipoInhabilitacion.cs" />
+    <Compile Include="Entities\Usuario.cs" />
+    <Compile Include="Entities\MuniOnlineUsuario.cs" />
+    <Compile Include="Entities\Inscripcion.cs" />
+    <Compile Include="Entities\TipoInscripcion.cs" />
+    <Compile Include="Entities\TipoAuto.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resultado.cs" />
+    <Compile Include="Resultados\Resultado_Paginador.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
