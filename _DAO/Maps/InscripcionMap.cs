@@ -15,7 +15,7 @@ namespace _DAO.Maps
             Map(x => x.UsuarioDni, "usuarioDni");
             
             References<TipoInscripcion>(x => x.TipoInscripcion, "idTipoInscripcion");
-
+            References<TipoCondicionInscripcion>(x => x.TipoCondicionInscripcion, "idCondicion");
             References<TipoAuto>(x => x.TipoAuto, "idTipoAuto");
 
             Map(x => x.Identificador, "identificador");

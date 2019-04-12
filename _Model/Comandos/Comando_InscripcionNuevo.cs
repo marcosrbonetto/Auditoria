@@ -20,6 +20,6 @@ namespace _Model.Comandos
         public virtual string ArtFechaVencimiento { get; set; }
         public virtual string Caja { get; set; }
         public virtual string Observaciones { get; set; }
-        public Enums.TipoCondicionInscripcion? CondicionKeyValue { get; set; }
+        public Enums.TipoCondicionInscripcion CondicionKeyValue { get; set; }
     }
 }

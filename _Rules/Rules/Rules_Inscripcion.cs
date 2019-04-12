@@ -74,11 +74,24 @@ namespace _Rules.Rules
                         resultado.Error = resultadoTipoAuto.Error;
                         return false;
                     }
-
                     var tipoAuto = resultadoTipoAuto.Return;
                     if (tipoAuto == null || tipoAuto.FechaBaja != null)
                     {
                         resultado.Error = "El tipo de auto no existe o esta dado de baja";
+                        return false;
+                    }
+
+                    //Busco el tipo condicion
+                    var resultadoCondicion = new Rules_TipoCondicionInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.CondicionKeyValue);
+                    if (!resultadoCondicion.Ok)
+                    {
+                        resultado.Error = resultadoCondicion.Error;
+                        return false;
+                    }
+                    var condicion = resultadoCondicion.Return;
+                    if (condicion == null || condicion.FechaBaja != null)
+                    {
+                        resultado.Error = "La condicion de inscripción no existe o esta dada de baja";
                         return false;
                     }
 
@@ -154,8 +167,16 @@ namespace _Rules.Rules
                         ArtCompañia = comando.ArtCompañia,
                         ArtFechaVencimiento = artVce,
                         Caja = comando.Caja,
-                        Observaciones = comando.Observaciones
+                        Observaciones = comando.Observaciones,
+                        TipoCondicionInscripcion = condicion
                     };
+
+                    var validarInscripcion = ValidarConsistencia(entity);
+                    if (!validarInscripcion.Ok)
+                    {
+                        resultado.Error = validarInscripcion.Error;
+                        return false;
+                    }
 
                     //Inserto
                     var resultadoInsertar = base.Insert(entity);
@@ -229,11 +250,24 @@ namespace _Rules.Rules
                         resultado.Error = resultadoTipoAuto.Error;
                         return false;
                     }
-
                     var tipoAuto = resultadoTipoAuto.Return;
                     if (tipoAuto == null || tipoAuto.FechaBaja != null)
                     {
                         resultado.Error = "El tipo de auto no existe o esta dado de baja";
+                        return false;
+                    }
+
+                    //Busco el tipo condicion
+                    var resultadoCondicion = new Rules_TipoCondicionInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.CondicionKeyValue);
+                    if (!resultadoCondicion.Ok)
+                    {
+                        resultado.Error = resultadoCondicion.Error;
+                        return false;
+                    }
+                    var condicion = resultadoCondicion.Return;
+                    if (condicion == null || condicion.FechaBaja != null)
+                    {
+                        resultado.Error = "La condicion de inscripción no existe o esta dada de baja";
                         return false;
                     }
 
@@ -301,7 +335,6 @@ namespace _Rules.Rules
                         resultado.Error = resultadoEntity.Error;
                         return false;
                     }
-
                     var entity = resultadoEntity.Return;
                     if (entity == null || entity.FechaBaja != null)
                     {
@@ -322,6 +355,15 @@ namespace _Rules.Rules
                     entity.ArtFechaVencimiento = artFechaVencimiento;
                     entity.Caja = comando.Caja;
                     entity.Observaciones = comando.Observaciones;
+                    entity.TipoCondicionInscripcion = condicion;
+                    entity.Error = null;
+
+                    var validarInscripcion = ValidarConsistencia(entity);
+                    if (!validarInscripcion.Ok)
+                    {
+                        resultado.Error = validarInscripcion.Error;
+                        return false;
+                    }
 
                     //Actualizo
                     var resultadoUpdate = base.Update(entity);

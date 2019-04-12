@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,14 +12,15 @@ namespace WS_Intranet.v1.Entities.Comandos
         public string Identificador { get; set; }
         public string FechaInicio { get; set; }
         public string FechaFin { get; set; }
-        public _Model.Enums.TipoAuto TipoAutoKeyValue { get; set; }
-        public _Model.Enums.TipoInscripcion TipoInscripcionKeyValue { get; set; }
-        public virtual string FechaTelegrama { get; set; }
-        public virtual string RcondVce { get; set; }
-        public virtual string ArtComp { get; set; }
-        public virtual string ArtVce { get; set; }
-        public virtual string Caja { get; set; }
-        public virtual string Observaciones { get; set; }
+        public Enums.TipoAuto TipoAutoKeyValue { get; set; }
+        public Enums.TipoInscripcion TipoInscripcionKeyValue { get; set; }
+        public string FechaTelegrama { get; set; }
+        public string RcondVce { get; set; }
+        public string ArtComp { get; set; }
+        public string ArtVce { get; set; }
+        public string Caja { get; set; }
+        public string Observaciones { get; set; }
+        public Enums.TipoCondicionInscripcion CondicionKeyValue { get; set; }
 
         public _Model.Comandos.Comando_InscripcionNuevo Convertir()
         {
@@ -35,7 +37,8 @@ namespace WS_Intranet.v1.Entities.Comandos
                 ArtCompañia = ArtComp,
                 ArtFechaVencimiento = ArtVce,
                 Caja = Caja,
-                Observaciones = Observaciones
+                Observaciones = Observaciones,
+                CondicionKeyValue = CondicionKeyValue
             };
         }
     }

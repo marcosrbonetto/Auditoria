@@ -135,7 +135,12 @@ namespace _Rules.Rules
                 bool dniValido = u.Dni.HasValue && u.Dni.Value > 0 && u.Dni.Value < 200000000;
                 if (!dniValido)
                 {
-                    errores.Add("El campo DNI es inválido");
+                    errores.Add("El campo N° de DNI es inválido");
+                }
+                //SEXO
+                if (!u.SexoMasculino.HasValue)
+                {
+                    errores.Add("El campo sexo es requerido");
                 }
 
                 if (errores.Count != 0)
@@ -220,6 +225,7 @@ namespace _Rules.Rules
                 usuario.DomicilioPiso = comando.DomicilioPiso;
                 usuario.DomicilioDepto = comando.DomicilioDepto;
                 usuario.DomicilioCodigoPostal = comando.DomicilioCodigoPostal;
+                usuario.Error = null;
 
                 var validarUsuario = ValidarConsistenciaUsuario(usuario);
                 if (!validarUsuario.Ok)
@@ -227,7 +233,6 @@ namespace _Rules.Rules
                     resultado.Error = validarUsuario.Error;
                     return resultado;
                 }
-                usuario.Error = null;
 
                 //Inserto o update
                 Resultado<Usuario> resultadoInsert = base.Insert(usuario);
