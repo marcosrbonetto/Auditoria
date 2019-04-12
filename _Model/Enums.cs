@@ -42,13 +42,43 @@ namespace _Model
             Chofer = 2
         }
 
+        public enum TipoInhabilitacion
+        {
+            Definitivo = 1,
+            Provisorio = 2,
+            Prescripto = 3,
+            Fallecido = 4,
+            Sobreseido = 5
+        }
+
         public enum TipoAuto
         {
-            Taxi = 1,
-            Remis = 2,
-            TaxiDiscap = 3,
-            RemisDiscap = 4,
+            AutoTaxi = 1,
+            AutoRemis = 2,
+            AutoTaxiDiscap = 3,
+            AutoRemisDiscap = 4,
+            AutoTaxiLujo = 5,
+            AutoRemisLujo = 6,
+            Escolar = 7,
+            EscolarPrivado = 8,
+            Privado = 9,
+            E = 10,
+            S = 11,
+            L = 12
         }
+
+        public enum TipoCondicionInscripcion
+        {
+            Aspirante = 1,
+            Caducidad = 2,
+            Habilitado = 3,
+            TRPFALLE = 4,
+            Vacante = 5,
+            Deposito = 6,
+            Suspendido = 7,
+            Transferen = 8
+        }
+
 
     }
 }

@@ -18,5 +18,10 @@ namespace _Rules.Rules
         {
             dao = DAO_TipoInhabilitacion.Instance;
         }
+
+        public Resultado<TipoInhabilitacion> GetByKeyValue(Enums.TipoInhabilitacion keyValue)
+        {
+            return dao.GetByKeyValue(keyValue);
+        }
     }
 }

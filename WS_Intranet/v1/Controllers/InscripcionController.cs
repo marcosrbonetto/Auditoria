@@ -14,23 +14,7 @@ namespace WS_Intranet.v1.Controllers
     [RoutePrefix("v1/Inscripcion")]
     public class Inscripcion_v1Controller : _Control
     {
-        [HttpPut]
-        [ConToken]
-        [EsOperador]
-        [Route("CorregirFechaInicio")]
-        public ResultadoServicio<bool> CorregirFechaInicio()
-        {
-            var usuarioLogeado = GetUsuarioLogeado();
-            if (!usuarioLogeado.Ok)
-            {
-                var resultado = new ResultadoServicio<bool>();
-                resultado.Error = usuarioLogeado.Error;
-                return resultado;
-            }
-
-            return new WSRules_Inscripcion(usuarioLogeado.Return).CorregirFechaInicio();
-        }
-
+      
         [HttpPut]
         [ConToken]
         [EsOperador]

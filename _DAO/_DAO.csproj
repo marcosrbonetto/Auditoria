@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\DAO_Inhabilitacion.cs" />
+    <Compile Include="DAO\DAO_TipoCondicionInscripcion.cs" />
     <Compile Include="DAO\DAO_TipoInhabilitacion.cs" />
     <Compile Include="DAO\DAO_Usuario.cs" />
     <Compile Include="DAO\DAO_TipoAuto.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="DAO\_BaseDAO.cs" />
     <Compile Include="Maps\InhabilitacionMap.cs" />
     <Compile Include="Maps\InscripcionMap.cs" />
+    <Compile Include="Maps\TipoCondicionInscripcionMap.cs" />
     <Compile Include="Maps\TipoInhabilitacionMap.cs" />
     <Compile Include="Maps\TipoInscripcionMap.cs" />
     <Compile Include="Maps\TipoAutoMap.cs" />

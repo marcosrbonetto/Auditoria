@@ -21,6 +21,23 @@ namespace _DAO.DAO
                 }
                 return instance;
             }
-        }    
+        }
+
+        public Resultado<TipoInhabilitacion> GetByKeyValue(Enums.TipoInhabilitacion keyValue)
+        {
+            var resultado = new Resultado<TipoInhabilitacion>();
+
+            try
+            {
+                var entity = GetSession().QueryOver<TipoInhabilitacion>().Where(x => x.KeyValue == keyValue && x.FechaBaja == null).SingleOrDefault();
+                resultado.Return = entity;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+            return resultado;
+
+        }
     }
 }

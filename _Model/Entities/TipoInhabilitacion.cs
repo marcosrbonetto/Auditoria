@@ -9,6 +9,7 @@ namespace _Model.Entities
     public class TipoInhabilitacion : BaseEntity
     {
         public virtual string Nombre { get; set; }
+        public virtual Enums.TipoInhabilitacion KeyValue { get; set; }
         public virtual bool Permanente { get; set; }
         public virtual bool Invalido { get; set; }
     }

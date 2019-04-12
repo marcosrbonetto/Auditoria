@@ -380,10 +380,60 @@ namespace _Rules.Rules
             return resultado;
         }
 
-
-        public Resultado<bool> CorregirFechaInicio()
+        public Resultado<bool> ValidarConsistencia(Inscripcion entity)
         {
-            return dao.CorregirFechaInicio();
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                List<string> errores = new List<string>();
+
+                //Usuario
+                //Es error cuando no tiene usuario o cuando su usuario tiene error
+                bool conUsuario = entity.Usuario != null;
+                bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;
+                if (!conUsuario || conUsuarioConError)
+                {
+                    if (!conUsuario)
+                    {
+                        errores.Add("Sin usuario");
+                    }
+                    else
+                    {
+                        errores.Add("Usuario con error: " + entity.Usuario.Error);
+                    }
+                }
+
+                //Tipo auto
+                //Cuando no tiene tipo de auto
+                bool conTipoAuto = entity.TipoAuto != null;
+                if (!conTipoAuto)
+                {
+                    errores.Add("Sin tipo de auto");
+                }
+
+                //Identificador
+                //Cuando no tiene identificador
+                bool conIdentificador = entity.Identificador != null && entity.Identificador.Trim() != "";
+                if (!conIdentificador)
+                {
+                    errores.Add("Sin identificador");
+                }
+
+                if (errores.Count != 0)
+                {
+                    resultado.Error = string.Join(" - ", errores);
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
+            return resultado;
         }
     }
 }

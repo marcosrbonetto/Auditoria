@@ -117,19 +117,5 @@ namespace WS_Intranet.v1.Rules
             resultado.Return = true;
             return resultado;
         }
-
-        public ResultadoServicio<bool> CorregirFechaInicio()
-        {
-            var resultado = new ResultadoServicio<bool>();
-            var resultadoQ = new Rules_Inscripcion(getUsuarioLogueado()).CorregirFechaInicio();
-            if (!resultadoQ.Ok)
-            {
-                resultado.Error = resultadoQ.Error;
-                return resultado;
-            }
-
-            resultado.Return = resultadoQ.Return;
-            return resultado;
-        }
     }
 }
