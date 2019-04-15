@@ -15,9 +15,9 @@ namespace WS_Intranet.v1.Entities.Comandos
         public Enums.TipoAuto TipoAutoKeyValue { get; set; }
         public Enums.TipoInscripcion TipoInscripcionKeyValue { get; set; }
         public string FechaTelegrama { get; set; }
-        public string RcondVce { get; set; }
-        public string ArtComp { get; set; }
-        public string ArtVce { get; set; }
+        public string FechaVencimientoLicencia { get; set; }
+        public string ArtCompañia { get; set; }
+        public string ArtFechaVencimiento { get; set; }
         public string Caja { get; set; }
         public string Observaciones { get; set; }
         public Enums.TipoCondicionInscripcion? TipoCondicionInscripcionKeyValue { get; set; }
@@ -33,9 +33,9 @@ namespace WS_Intranet.v1.Entities.Comandos
                 TipoAutoKeyValue = TipoAutoKeyValue,
                 TipoInscripcionKeyValue = TipoInscripcionKeyValue,
                 FechaTelegrama = FechaTelegrama,
-                FechaVencimientoLicencia = RcondVce,
-                ArtCompañia = ArtComp,
-                ArtFechaVencimiento = ArtVce,
+                FechaVencimientoLicencia = FechaVencimientoLicencia,
+                ArtCompañia = ArtCompañia,
+                ArtFechaVencimiento = ArtFechaVencimiento,
                 Caja = Caja,
                 Observaciones = Observaciones,
                 TipoCondicionInscripcionKeyValue = TipoCondicionInscripcionKeyValue
