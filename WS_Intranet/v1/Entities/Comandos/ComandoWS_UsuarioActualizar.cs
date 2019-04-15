@@ -11,7 +11,7 @@ namespace WS_Intranet.v1.Entities.Comandos
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public int Dni { get; set; }
-        public bool SexoMasculino { get; set; }
+        public bool? SexoMasculino { get; set; }
         public string FechaNacimiento { get; set; }
         public string DomicilioBarrio { get; set; }
         public string DomicilioCalle { get; set; }

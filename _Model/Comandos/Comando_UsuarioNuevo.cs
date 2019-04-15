@@ -12,7 +12,7 @@ namespace _Model.Comandos
         public string Apellido { get; set; }
         public int Dni { get; set; }
         public string FechaNacimiento { get; set; }
-        public bool SexoMasculino { get; set; }
+        public bool? SexoMasculino { get; set; }
         public string DomicilioBarrio { get; set; }
         public string DomicilioCalle { get; set; }
         public string DomicilioAltura { get; set; }

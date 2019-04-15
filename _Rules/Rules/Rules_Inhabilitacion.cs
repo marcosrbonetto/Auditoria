@@ -37,6 +37,13 @@ namespace _Rules.Rules
             {
                 try
                 {
+                    var validarComando = ValidarComandoInsertar(comando);
+                    if (!validarComando.Ok)
+                    {
+                        resultado.Error = validarComando.Error;
+                        return false;
+                    }
+
                     //Busco el usuario
                     var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario);
                     if (!resultadoUsuario.Ok)
@@ -152,6 +159,13 @@ namespace _Rules.Rules
             {
                 try
                 {
+                    var validarComando = ValidarComandoActualizar(comando);
+                    if (!validarComando.Ok)
+                    {
+                        resultado.Error = validarComando.Error;
+                        return false;
+                    }
+
                     //Busco el usuario
                     var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario);
                     if (!resultadoUsuario.Ok)
@@ -354,6 +368,102 @@ namespace _Rules.Rules
                 if (errores.Count != 0)
                 {
                     resultado.Error = string.Join(" - ", errores);
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
+            return resultado;
+        }
+
+        public Resultado<bool> ValidarComandoInsertar(_Model.Comandos.Comando_InhabilitacionNuevo comando)
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                //Usuario
+                if (comando.IdUsuario == 0 || comando.IdUsuario < 0)
+                {
+                    resultado.Error = "El Id Usuario es requerido";
+                    return resultado;
+                }
+
+                //Tipo
+                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInhabilitacion), comando.TipoInhabilitacionKeyValue))
+                {
+                    resultado.Error = "El identificador del Tipo Inhabilitación esta fuera de rango";
+                    return resultado;
+                }
+                else 
+                {
+                    if ((comando.TipoInhabilitacionKeyValue.Value != Enums.TipoInhabilitacion.Definitivo && comando.TipoInhabilitacionKeyValue.Value != Enums.TipoInhabilitacion.Fallecido) && string.IsNullOrEmpty(comando.FechaFin))
+                    {
+                         resultado.Error = "Las Inhabilitaciones definitivas requieren fechas de finalización";
+                         return resultado;
+                    }
+                }
+
+                //Fecha
+                if (string.IsNullOrEmpty(comando.FechaInicio))
+                {
+                    resultado.Error = "El campo Fecha Inicio es requerido";
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
+            return resultado;
+        }
+
+        public Resultado<bool> ValidarComandoActualizar(_Model.Comandos.Comando_InhabilitacionActualizar comando)
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                if (comando.Id == 0 || comando.Id < 0)
+                {
+                    resultado.Error = "El Id de la inhabilitación a actualizar es requerido";
+                    return resultado;
+                }
+
+                //Usuario
+                if (comando.IdUsuario == 0 || comando.IdUsuario < 0)
+                {
+                    resultado.Error = "El Id Usuario es requerido";
+                    return resultado;
+                }
+
+                //Tipo
+                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInhabilitacion), comando.TipoInhabilitacionKeyValue))
+                {
+                    resultado.Error = "El identificador del Tipo Inhabilitación esta fuera de rango";
+                    return resultado;
+                }
+                else
+                {
+                    if ((comando.TipoInhabilitacionKeyValue.Value != Enums.TipoInhabilitacion.Definitivo && comando.TipoInhabilitacionKeyValue.Value != Enums.TipoInhabilitacion.Fallecido) && string.IsNullOrEmpty(comando.FechaFin))
+                    {
+                        resultado.Error = "Las Inhabilitaciones no definitivas requieren fechas de finalización";
+                        return resultado;
+                    }
+                }
+
+                //Fecha
+                if (string.IsNullOrEmpty(comando.FechaInicio))
+                {
+                    resultado.Error = "El campo Fecha Inicio es requerido";
                     return resultado;
                 }
 

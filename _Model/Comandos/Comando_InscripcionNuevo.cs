@@ -22,4 +22,5 @@ namespace _Model.Comandos
         public virtual string Observaciones { get; set; }
         public Enums.TipoCondicionInscripcion? TipoCondicionInscripcionKeyValue { get; set; }
     }
+
 }

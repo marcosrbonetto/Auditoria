@@ -38,9 +38,10 @@ namespace _Rules.Rules
 
             try
             {
-                if (comando.Dni <= 0)
+                var validarComando = ValidarComandoInsertar(comando);
+                if (!validarComando.Ok)
                 {
-                    resultado.Error = "Ingrese el dni";
+                    resultado.Error = validarComando.Error;
                     return resultado;
                 }
 
@@ -56,15 +57,12 @@ namespace _Rules.Rules
                     resultado.Error = resultadoQueryUsuario.Error;
                     return resultado;
                 }
-
-
                 bool existeUsuario = resultadoQueryUsuario.Return.Count != 0;
                 if (existeUsuario)
                 {
                     resultado.Error = "Ya existe un usuario con ese DNI y sexo";
                     return resultado;
                 }
-
 
                 DateTime? fechaNacimiento = null;
                 if (!string.IsNullOrEmpty(comando.FechaNacimiento))
@@ -118,7 +116,7 @@ namespace _Rules.Rules
             }
         }
 
-        private Resultado<bool> ValidarConsistenciaUsuario(Usuario u) 
+        private Resultado<bool> ValidarConsistenciaUsuario(Usuario u)
         {
             var resultado = new Resultado<bool>();
             List<string> errores = new List<string>();
@@ -166,6 +164,13 @@ namespace _Rules.Rules
 
             try
             {
+                var validarComando = ValidarComandoActualizar(comando);
+                if (!validarComando.Ok)
+                {
+                    resultado.Error = validarComando.Error;
+                    return resultado;
+                }
+
                 //Busco el usuario
                 var resultadoQueryUsuario = GetById(comando.Id);
                 if (!resultadoQueryUsuario.Ok)
@@ -279,6 +284,89 @@ namespace _Rules.Rules
             }
 
             resultado.Return = true;
+            return resultado;
+        }
+
+        public Resultado<bool> ValidarComandoInsertar(_Model.Comandos.Comando_UsuarioNuevo comando)
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                //NombreApellido
+                if (string.IsNullOrEmpty(comando.Nombre) || string.IsNullOrEmpty(comando.Apellido))
+                {
+                    resultado.Error = "El nombre y apellido son requeridos";
+                    return resultado;
+                }
+
+                //Sexo
+                if (!comando.SexoMasculino.HasValue)
+                {
+                    resultado.Error = "El campo sexo es requerido";
+                    return resultado;
+                }
+
+                //DNI
+                bool dniValido = comando.Dni > 0 && comando.Dni < 200000000;
+                if (!dniValido)
+                {
+                    resultado.Error = "El campo N° de DNI es inválido";
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
+            return resultado;
+        }
+
+        public Resultado<bool> ValidarComandoActualizar(_Model.Comandos.Comando_UsuarioActualizar comando)
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                //ID
+                if (comando.Id==0)
+                {
+                    resultado.Error = "El Id del usuario a actualizar es requerido";
+                    return resultado;
+                }
+
+                //NombreApellido
+                if (string.IsNullOrEmpty(comando.Nombre) || string.IsNullOrEmpty(comando.Apellido))
+                {
+                    resultado.Error = "El nombre y apellido son requeridos";
+                    return resultado;
+                }
+
+                //Sexo
+                if (!comando.SexoMasculino.HasValue)
+                {
+                    resultado.Error = "El campo sexo es requerido";
+                    return resultado;
+                }
+
+                //DNI
+                bool dniValido = comando.Dni > 0 && comando.Dni < 200000000;
+                if (!dniValido)
+                {
+                    resultado.Error = "El campo N° de DNI es inválido";
+                    return resultado;
+                }
+
+                resultado.Return = true;
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
             return resultado;
         }
     }
