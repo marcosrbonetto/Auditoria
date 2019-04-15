@@ -161,6 +161,7 @@
     <Compile Include="v1\Controllers\InhabilitacionController.cs" />
     <Compile Include="v1\Controllers\MuniOnlineUsuarioController.cs" />
     <Compile Include="v1\Controllers\InscripcionController.cs" />
+    <Compile Include="v1\Controllers\TipoCondicionInscripcionController.cs" />
     <Compile Include="v1\Controllers\TipoInscripcionController.cs" />
     <Compile Include="v1\Controllers\TipoAutoController.cs" />
     <Compile Include="v1\Controllers\UsuarioController.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="v1\Entities\Resultados\ResultadoWS_InscripcionListado.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_MuniOnlineUsuario.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_Paginador.cs" />
+    <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoCondicionInscripcion.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoAuto.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoInscripcion.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_Usuario.cs" />

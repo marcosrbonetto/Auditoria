@@ -218,6 +218,7 @@ namespace _Rules.Rules
                 }
 
                 //Creo el usuario
+                usuario.Id = comando.Id;
                 usuario.Dni = comando.Dni;
                 usuario.SexoMasculino = comando.SexoMasculino;
                 usuario.Nombre = comando.Nombre;
@@ -241,7 +242,7 @@ namespace _Rules.Rules
                 }
 
                 //Inserto o update
-                Resultado<Usuario> resultadoInsert = base.Insert(usuario);
+                Resultado<Usuario> resultadoInsert = base.Update(usuario);
                 if (!resultadoInsert.Ok)
                 {
                     resultado.Error = resultadoInsert.Error;
