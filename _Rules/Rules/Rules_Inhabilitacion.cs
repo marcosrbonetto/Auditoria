@@ -238,6 +238,7 @@ namespace _Rules.Rules
                     }
 
                     //Actualizo
+                    entity.Id = comando.Id;
                     entity.TipoInhabilitacion = tipo;
                     entity.Usuario = usuario;
                     entity.FechaInicio = fechaInicio;

@@ -365,6 +365,7 @@ namespace _Rules.Rules
                     }
 
                     //Actualizo
+                    entity.Id = comando.Id;
                     entity.Identificador = comando.Identificador;
                     entity.Usuario = usuario;
                     entity.TipoInscripcion = tipoInscripcion;
