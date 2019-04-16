@@ -128,7 +128,7 @@ namespace _DAO.DAO
                     entity.Id = id;
                     GetSession().Merge(entity);
                     GetSession().Flush();
-                    //GetSession().Refresh(entity);
+                    GetSession().Refresh(entity);
                     result.Return = entity;
                 }
                 catch (Exception e)

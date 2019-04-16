@@ -18,6 +18,9 @@ namespace WS_Intranet.v1.Entities.Comandos
         public string DomicilioAltura { get; set; }
         public string DomicilioObservaciones { get; set; }
         public string Observaciones { get; set; }
+        public string DomicilioPiso { get; set; }
+        public string DomicilioDepto { get; set; }
+        public string DomicilioCodigoPostal { get; set; }
 
         public _Model.Comandos.Comando_UsuarioActualizar Convertir()
         {
@@ -33,7 +36,10 @@ namespace WS_Intranet.v1.Entities.Comandos
                 DomicilioCalle = DomicilioCalle,
                 DomicilioAltura = DomicilioAltura,
                 DomicilioObservaciones = DomicilioObservaciones,
-                Observaciones = Observaciones
+                Observaciones = Observaciones,
+                DomicilioPiso = DomicilioPiso,
+                DomicilioDepto = DomicilioDepto,
+                DomicilioCodigoPostal = DomicilioCodigoPostal
             };
         }
     }
