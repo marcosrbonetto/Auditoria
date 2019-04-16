@@ -7,7 +7,7 @@ namespace WS_Internet.v1.Entities.Comandos
 {
     public class ComandoWS_IniciarSesion
     {
-        public virtual string Username { get; set; }
-        public virtual string Password { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

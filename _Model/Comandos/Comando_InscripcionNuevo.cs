@@ -14,12 +14,12 @@ namespace _Model.Comandos
         public string FechaInicio { get; set; }
         public string FechaFin { get; set; }
         public Enums.TipoInscripcion? TipoInscripcionKeyValue { get; set; }
-        public virtual string FechaTelegrama { get; set; }
-        public virtual string FechaVencimientoLicencia { get; set; }
-        public virtual string ArtCompañia { get; set; }
-        public virtual string ArtFechaVencimiento { get; set; }
-        public virtual string Caja { get; set; }
-        public virtual string Observaciones { get; set; }
+        public string FechaTelegrama { get; set; }
+        public string FechaVencimientoLicencia { get; set; }
+        public string ArtCompañia { get; set; }
+        public string ArtFechaVencimiento { get; set; }
+        public string Caja { get; set; }
+        public string Observaciones { get; set; }
         public Enums.TipoCondicionInscripcion? TipoCondicionInscripcionKeyValue { get; set; }
     }
 

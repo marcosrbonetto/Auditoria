@@ -8,13 +8,13 @@ namespace WS_Intranet.v1.Entities.Comandos
 {
     public class ComandoWS_InscripcionActualizar
     {
-        public int Id { get; set; }
-        public int IdUsuario { get; set; }
+        public int? Id { get; set; }
+        public int? IdUsuario { get; set; }
         public string Identificador { get; set; }
         public string FechaInicio { get; set; }
         public string FechaFin { get; set; }
-        public Enums.TipoAuto TipoAutoKeyValue { get; set; }
-        public Enums.TipoInscripcion TipoInscripcionKeyValue { get; set; }
+        public Enums.TipoAuto? TipoAutoKeyValue { get; set; }
+        public Enums.TipoInscripcion? TipoInscripcionKeyValue { get; set; }
         public string FechaTelegrama { get; set; }
         public string FechaVencimientoLicencia { get; set; }
         public string ArtCompañia { get; set; }

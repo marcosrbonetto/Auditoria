@@ -11,21 +11,19 @@ namespace WS_Internet.v1.Entities.Resultados
         public string Identificador { get; set; }
         public DateTime? FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
-        public int? AñosExperiencia { get; set; }
-        public DateTime? FechaTelegrama { get; set; }
-        public DateTime? RcondVce { get; set; }
-        public string ArtComp { get; set; }
-        public DateTime? ArtVce { get; set; }
-        public string Caja { get; set; }
-        public string Observaciones { get; set; }
 
         //Tipo Auto
         public string TipoAutoNombre { get; set; }
         public int TipoAutoKeyValue { get; set; }
 
+        //Condicion
+        public string TipoCondicion { get; set; }
+        public int TipoCondicionKeyValue { get; set; }
+
         //Tipo Inscripcion
         public string TipoInscripcionNombre { get; set; }
         public int TipoInscripcionKeyValue { get; set; }
+
 
         //Usuario
         public int UsuarioId { get; set; }
@@ -34,5 +32,7 @@ namespace WS_Internet.v1.Entities.Resultados
         public string UsuarioApellidoNombre { get; set; }
         public int? UsuarioDni { get; set; }
         public bool? UsuarioSexoMasculino { get; set; }
+
+        public string Error { get; set; }
     }
 }

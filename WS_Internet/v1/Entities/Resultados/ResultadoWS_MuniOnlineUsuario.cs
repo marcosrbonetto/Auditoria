@@ -21,7 +21,7 @@ namespace WS_Internet.v1.Entities.Resultados
         //Datos acceso
         public string Username { get; set; }
 
-        
+
         //Datos contacto
         public string Email { get; set; }
         public string TelefonoCelular { get; set; }

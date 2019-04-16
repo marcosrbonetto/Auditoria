@@ -7,8 +7,8 @@ namespace WS_Intranet.v1.Entities.Comandos
 {
     public class ComandoWS_InhabilitacionActualizar
     {
-        public int Id { get; set; }
-        public int IdUsuario { get; set; }
+        public int? Id { get; set; }
+        public int? IdUsuario { get; set; }
         public string FechaInicio { get; set; }
         public string FechaFin { get; set; }
         public string DtoRes { get; set; }

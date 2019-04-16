@@ -10,6 +10,7 @@ namespace WS_Internet.v1.Entities.Consultas
     {
         public int? Dni { get; set; }
         public string Identificador { get; set; }
+        public bool? ConFechaInicio { get; set; }
 
         //Paginada
         public int Pagina { get; set; }
