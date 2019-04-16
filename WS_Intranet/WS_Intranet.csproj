@@ -160,6 +160,7 @@
     <Compile Include="v0\Rules\WSRules_Base.cs" />
     <Compile Include="v1\Controllers\FilterAtributtes\ConToken.cs" />
     <Compile Include="v1\Controllers\InhabilitacionController.cs" />
+    <Compile Include="v1\Controllers\TipoInhabilitacionController.cs" />
     <Compile Include="v1\Controllers\TipoCondicionInscripcionController.cs" />
     <Compile Include="v1\Controllers\TipoInscripcionController.cs" />
     <Compile Include="v1\Controllers\TipoAutoController.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="v1\Entities\Resultados\ResultadoWS_InhabilitacionDetalle.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_InscripcionDetalle.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_InhabilitacionListado.cs" />
+    <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoInhabilitacion.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoCondicionInscripcion.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoInscripcion.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoAuto.cs" />
@@ -189,6 +191,7 @@
     <Compile Include="v1\Entities\Resultados\ResultadoWS_MuniOnlineUsuario.cs" />
     <Compile Include="v1\Rules\WSRules_Inhabilitacion.cs" />
     <Compile Include="v1\Rules\WSRules_Inscripcion.cs" />
+    <Compile Include="v1\Rules\WSRules_TipoInhabilitacion.cs" />
     <Compile Include="v1\Rules\WSRules_TipoCondicionInscripcion.cs" />
     <Compile Include="v1\Rules\WSRules_TipoInscripcion.cs" />
     <Compile Include="v1\Rules\WSRules_TipoAuto.cs" />
