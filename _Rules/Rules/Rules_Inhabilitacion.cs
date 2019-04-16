@@ -37,7 +37,7 @@ namespace _Rules.Rules
             {
                 try
                 {
-                    var validarComando = ValidarComandoInsertar(comando);
+                    var validarComando = ValidarComandoInsertarActualizar(comando);
                     if (!validarComando.Ok)
                     {
                         resultado.Error = validarComando.Error;
@@ -45,7 +45,7 @@ namespace _Rules.Rules
                     }
 
                     //Busco el usuario
-                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario);
+                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
                     if (!resultadoUsuario.Ok)
                     {
                         resultado.Error = resultadoUsuario.Error;
@@ -60,28 +60,8 @@ namespace _Rules.Rules
                     }
 
                     //Valido las fechas
-                    DateTime? fechaInicio = null;
-                    DateTime? fechaFin = null;
-
-                    if (!string.IsNullOrEmpty(comando.FechaInicio))
-                    {
-                        fechaInicio = Utils.StringToDate(comando.FechaInicio);
-                        if (fechaInicio == null)
-                        {
-                            resultado.Error = "El formato de la fecha de inicio es inválida";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.FechaFin))
-                    {
-                        fechaFin = Utils.StringToDate(comando.FechaFin);
-                        if (fechaFin == null)
-                        {
-                            resultado.Error = "El formato de la fecha de inicio es inválida";
-                            return false;
-                        }
-                    }
+                    DateTime? fechaInicio = Utils.StringToDate(comando.FechaInicio);
+                    DateTime? fechaFin = Utils.StringToDate(comando.FechaFin);
 
 
                     //Tipo
@@ -101,6 +81,18 @@ namespace _Rules.Rules
 
                     var tipo = resultadoConsultaTipo.Return;
 
+
+                    if (tipo.Invalido)
+                    {
+                        resultado.Error = "El tipo de inhabilitación es inválido. Seleccione otro por favor";
+                        return false;
+                    }
+
+                    if (!tipo.Permanente && !fechaFin.HasValue)
+                    {
+                        resultado.Error = "Si selecciona el tipo " + tipo.Nombre + " debe seleccionar una fecha de fin";
+                        return false;
+                    }
 
                     //Creo la entidad
                     var entity = new Inhabilitacion()
@@ -159,7 +151,7 @@ namespace _Rules.Rules
             {
                 try
                 {
-                    var validarComando = ValidarComandoActualizar(comando);
+                    var validarComando = ValidarComandoInsertarActualizar(comando);
                     if (!validarComando.Ok)
                     {
                         resultado.Error = validarComando.Error;
@@ -167,7 +159,7 @@ namespace _Rules.Rules
                     }
 
                     //Busco el usuario
-                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario);
+                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
                     if (!resultadoUsuario.Ok)
                     {
                         resultado.Error = resultadoUsuario.Error;
@@ -182,28 +174,8 @@ namespace _Rules.Rules
                     }
 
                     //Valido las fechas
-                    DateTime? fechaInicio = null;
-                    DateTime? fechaFin = null;
-
-                    if (!string.IsNullOrEmpty(comando.FechaInicio))
-                    {
-                        fechaInicio = Utils.StringToDate(comando.FechaInicio);
-                        if (fechaInicio == null)
-                        {
-                            resultado.Error = "El formato de la fecha de inicio es inválida";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.FechaFin))
-                    {
-                        fechaFin = Utils.StringToDate(comando.FechaFin);
-                        if (fechaFin == null)
-                        {
-                            resultado.Error = "El formato de la fecha de inicio es inválida";
-                            return false;
-                        }
-                    }
+                    DateTime? fechaInicio = Utils.StringToDate(comando.FechaInicio);
+                    DateTime? fechaFin = Utils.StringToDate(comando.FechaFin);
 
                     //Tipo
                     var resultadoConsultaTipo = new Rules.Rules_TipoInhabilitacion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInhabilitacionKeyValue.Value);
@@ -221,9 +193,20 @@ namespace _Rules.Rules
 
 
                     var tipo = resultadoConsultaTipo.Return;
+                    if (tipo.Invalido)
+                    {
+                        resultado.Error = "El tipo de inhabilitación es inválido. Seleccione otro por favor";
+                        return false;
+                    }
+
+                    if (!tipo.Permanente && !fechaFin.HasValue)
+                    {
+                        resultado.Error = "Si selecciona el tipo " + tipo.Nombre + " debe seleccionar una fecha de fin";
+                        return false;
+                    }
 
                     //Busco la entidad
-                    var resultadoEntity = GetByIdObligatorio(comando.Id);
+                    var resultadoEntity = GetByIdObligatorio(comando.Id.Value);
                     if (!resultadoEntity.Ok)
                     {
                         resultado.Error = resultadoEntity.Error;
@@ -238,7 +221,6 @@ namespace _Rules.Rules
                     }
 
                     //Actualizo
-                    entity.Id = comando.Id;
                     entity.TipoInhabilitacion = tipo;
                     entity.Usuario = usuario;
                     entity.FechaInicio = fechaInicio;
@@ -382,89 +364,60 @@ namespace _Rules.Rules
             return resultado;
         }
 
-        public Resultado<bool> ValidarComandoInsertar(_Model.Comandos.Comando_InhabilitacionNuevo comando)
+        public Resultado<bool> ValidarComandoInsertarActualizar(_Model.Comandos.Comando_InhabilitacionNuevo comando)
         {
             var resultado = new Resultado<bool>();
 
             try
             {
-                //Usuario
-                if (comando.IdUsuario == 0 || comando.IdUsuario < 0)
-                {
-                    resultado.Error = "El Id Usuario es requerido";
-                    return resultado;
-                }
 
-                //Tipo
-                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInhabilitacion), comando.TipoInhabilitacionKeyValue))
+                if (comando is _Model.Comandos.Comando_InhabilitacionActualizar)
                 {
-                    resultado.Error = "El identificador del Tipo Inhabilitación esta fuera de rango";
-                    return resultado;
-                }
-                else 
-                {
-                    if ((comando.TipoInhabilitacionKeyValue.Value != Enums.TipoInhabilitacion.Definitivo && comando.TipoInhabilitacionKeyValue.Value != Enums.TipoInhabilitacion.Fallecido) && string.IsNullOrEmpty(comando.FechaFin))
+                    _Model.Comandos.Comando_InhabilitacionActualizar c = (_Model.Comandos.Comando_InhabilitacionActualizar)comando;
+                    if (!c.Id.HasValue || c.Id.Value <= 0)
                     {
-                         resultado.Error = "Las Inhabilitaciones definitivas requieren fechas de finalización";
-                         return resultado;
-                    }
-                }
-
-                //Fecha
-                if (string.IsNullOrEmpty(comando.FechaInicio))
-                {
-                    resultado.Error = "El campo Fecha Inicio es requerido";
-                    return resultado;
-                }
-
-                resultado.Return = true;
-            }
-            catch (Exception e)
-            {
-                resultado.SetError(e);
-            }
-
-            return resultado;
-        }
-
-        public Resultado<bool> ValidarComandoActualizar(_Model.Comandos.Comando_InhabilitacionActualizar comando)
-        {
-            var resultado = new Resultado<bool>();
-
-            try
-            {
-                if (comando.Id == 0 || comando.Id < 0)
-                {
-                    resultado.Error = "El Id de la inhabilitación a actualizar es requerido";
-                    return resultado;
-                }
-
-                //Usuario
-                if (comando.IdUsuario == 0 || comando.IdUsuario < 0)
-                {
-                    resultado.Error = "El Id Usuario es requerido";
-                    return resultado;
-                }
-
-                //Tipo
-                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInhabilitacion), comando.TipoInhabilitacionKeyValue))
-                {
-                    resultado.Error = "El identificador del Tipo Inhabilitación esta fuera de rango";
-                    return resultado;
-                }
-                else
-                {
-                    if ((comando.TipoInhabilitacionKeyValue.Value != Enums.TipoInhabilitacion.Definitivo && comando.TipoInhabilitacionKeyValue.Value != Enums.TipoInhabilitacion.Fallecido) && string.IsNullOrEmpty(comando.FechaFin))
-                    {
-                        resultado.Error = "Las Inhabilitaciones no definitivas requieren fechas de finalización";
+                        resultado.Error = "El id de la inhabilitacion es requerido";
                         return resultado;
                     }
                 }
 
-                //Fecha
+                //Usuario
+                if (!comando.IdUsuario.HasValue || comando.IdUsuario <= 0)
+                {
+                    resultado.Error = "El usuario es requerido";
+                    return resultado;
+                }
+
+                //Tipo
+                if (!comando.TipoInhabilitacionKeyValue.HasValue)
+                {
+                    resultado.Error = "El tipo de inhabilitacion es requerido";
+                    return resultado;
+                }
+
+                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInhabilitacion), comando.TipoInhabilitacionKeyValue))
+                {
+                    resultado.Error = "Tipo inhabilitación inválido";
+                    return resultado;
+                }
+
+                //Fecha de inicio
                 if (string.IsNullOrEmpty(comando.FechaInicio))
                 {
-                    resultado.Error = "El campo Fecha Inicio es requerido";
+                    resultado.Error = "La fecha de inicio es requerido";
+                    return resultado;
+                }
+
+                if (!Utils.StringToDate(comando.FechaInicio).HasValue)
+                {
+                    resultado.Error = "Fecha de inicio inválida";
+                    return resultado;
+                }
+
+                //fecha de fin
+                if (!string.IsNullOrEmpty(comando.FechaFin) && !Utils.StringToDate(comando.FechaFin).HasValue)
+                {
+                    resultado.Error = "Fecha de fin inválida";
                     return resultado;
                 }
 
@@ -477,5 +430,7 @@ namespace _Rules.Rules
 
             return resultado;
         }
+
+       
     }
 }

@@ -23,7 +23,6 @@ namespace _Rules.Rules
 
         public Resultado<_Model.Resultados.Resultado_Paginador<Usuario>> GetPaginado(_Model.Consultas.Consulta_UsuarioPaginado consulta)
         {
-            //DAO_Inscripcion.Instance.GenerarErroresUsuario();
             return dao.GetPaginado(consulta);
         }
 
@@ -38,7 +37,7 @@ namespace _Rules.Rules
 
             try
             {
-                var validarComando = ValidarComandoInsertar(comando);
+                var validarComando = ValidarComandoInsertarActualizar(comando);
                 if (!validarComando.Ok)
                 {
                     resultado.Error = validarComando.Error;
@@ -64,16 +63,7 @@ namespace _Rules.Rules
                     return resultado;
                 }
 
-                DateTime? fechaNacimiento = null;
-                if (!string.IsNullOrEmpty(comando.FechaNacimiento))
-                {
-                    fechaNacimiento = Utils.StringToDate(comando.FechaNacimiento);
-                    if (fechaNacimiento == null)
-                    {
-                        resultado.Error = "El formato de la fecha de nacimiento es inválida";
-                        return resultado;
-                    }
-                }
+                DateTime? fechaNacimiento =  Utils.StringToDate(comando.FechaNacimiento);
 
                 //Creo el usuario
                 Usuario usuario = new Usuario();
@@ -86,10 +76,10 @@ namespace _Rules.Rules
                 usuario.DomicilioCalle = comando.DomicilioCalle;
                 usuario.DomicilioAltura = comando.DomicilioAltura;
                 usuario.DomicilioObservaciones = comando.DomicilioObservaciones;
-                usuario.Observaciones = comando.Observaciones;
                 usuario.DomicilioPiso = comando.DomicilioPiso;
                 usuario.DomicilioDepto = comando.DomicilioDepto;
                 usuario.DomicilioCodigoPostal = comando.DomicilioCodigoPostal;
+                usuario.Observaciones = comando.Observaciones;
 
                 var validarUsuario = ValidarConsistenciaUsuario(usuario);
                 if (!validarUsuario.Ok)
@@ -116,55 +106,13 @@ namespace _Rules.Rules
             }
         }
 
-        private Resultado<bool> ValidarConsistenciaUsuario(Usuario u)
-        {
-            var resultado = new Resultado<bool>();
-            List<string> errores = new List<string>();
-            try
-            {
-                //Nombre
-                bool conNombre = u.Nombre != null && u.Nombre.Trim() != "";
-                bool conApellido = u.Apellido != null && u.Apellido.Trim() != "";
-                if (!conNombre && !conApellido)
-                {
-                    errores.Add("El campo nombre y/o apellido es requerido");
-                }
-
-                //DNI
-                bool dniValido = u.Dni.HasValue && u.Dni.Value > 0 && u.Dni.Value < 200000000;
-                if (!dniValido)
-                {
-                    errores.Add("El campo N° de DNI es inválido");
-                }
-                //SEXO
-                if (!u.SexoMasculino.HasValue)
-                {
-                    errores.Add("El campo sexo es requerido");
-                }
-
-                if (errores.Count != 0)
-                {
-                    resultado.Error = string.Join(" - ", errores);
-                    return resultado;
-                }
-
-                resultado.Return = true;
-            }
-            catch (Exception ex)
-            {
-                resultado.SetError(ex.Message);
-            }
-
-            return resultado;
-        }
-
         public Resultado<Usuario> Actualizar(_Model.Comandos.Comando_UsuarioActualizar comando)
         {
             var resultado = new Resultado<Usuario>();
 
             try
             {
-                var validarComando = ValidarComandoActualizar(comando);
+                var validarComando = ValidarComandoInsertarActualizar(comando);
                 if (!validarComando.Ok)
                 {
                     resultado.Error = validarComando.Error;
@@ -172,7 +120,7 @@ namespace _Rules.Rules
                 }
 
                 //Busco el usuario
-                var resultadoQueryUsuario = GetById(comando.Id);
+                var resultadoQueryUsuario = GetById(comando.Id.Value);
                 if (!resultadoQueryUsuario.Ok)
                 {
                     resultado.Error = resultadoQueryUsuario.Error;
@@ -206,19 +154,10 @@ namespace _Rules.Rules
                     return resultado;
                 }
 
-                DateTime? fechaNacimiento = null;
-                if (!string.IsNullOrEmpty(comando.FechaNacimiento))
-                {
-                    fechaNacimiento = Utils.StringToDate(comando.FechaNacimiento);
-                    if (fechaNacimiento == null)
-                    {
-                        resultado.Error = "El formato de la fecha de nacimiento es inválida";
-                        return resultado;
-                    }
-                }
+                DateTime? fechaNacimiento = Utils.StringToDate(comando.FechaNacimiento);
 
                 //Creo el usuario
-                usuario.Id = comando.Id;
+                usuario.Id = comando.Id.Value;
                 usuario.Dni = comando.Dni;
                 usuario.SexoMasculino = comando.SexoMasculino;
                 usuario.Nombre = comando.Nombre;
@@ -228,10 +167,10 @@ namespace _Rules.Rules
                 usuario.DomicilioCalle = comando.DomicilioCalle;
                 usuario.DomicilioAltura = comando.DomicilioAltura;
                 usuario.DomicilioObservaciones = comando.DomicilioObservaciones;
-                usuario.Observaciones = comando.Observaciones;
                 usuario.DomicilioPiso = comando.DomicilioPiso;
                 usuario.DomicilioDepto = comando.DomicilioDepto;
                 usuario.DomicilioCodigoPostal = comando.DomicilioCodigoPostal;
+                usuario.Observaciones = comando.Observaciones;
                 usuario.Error = null;
 
                 var validarUsuario = ValidarConsistenciaUsuario(usuario);
@@ -288,58 +227,66 @@ namespace _Rules.Rules
             return resultado;
         }
 
-        public Resultado<bool> ValidarComandoInsertar(_Model.Comandos.Comando_UsuarioNuevo comando)
+        private Resultado<bool> ValidarConsistenciaUsuario(Usuario u)
         {
             var resultado = new Resultado<bool>();
-
+            List<string> errores = new List<string>();
             try
             {
-                //NombreApellido
-                if (string.IsNullOrEmpty(comando.Nombre) || string.IsNullOrEmpty(comando.Apellido))
+                //Nombre
+                bool conNombre = u.Nombre != null && u.Nombre.Trim() != "";
+                bool conApellido = u.Apellido != null && u.Apellido.Trim() != "";
+                if (!conNombre && !conApellido)
                 {
-                    resultado.Error = "El nombre y apellido son requeridos";
-                    return resultado;
-                }
-
-                //Sexo
-                if (!comando.SexoMasculino.HasValue)
-                {
-                    resultado.Error = "El campo sexo es requerido";
-                    return resultado;
+                    errores.Add("El campo nombre y/o apellido es requerido");
                 }
 
                 //DNI
-                bool dniValido = comando.Dni > 0 && comando.Dni < 200000000;
+                bool dniValido = u.Dni.HasValue && u.Dni.Value > 0 && u.Dni.Value < 200000000;
                 if (!dniValido)
                 {
-                    resultado.Error = "El campo N° de DNI es inválido";
+                    errores.Add("El campo N° de DNI es inválido");
+                }
+                //SEXO
+                if (!u.SexoMasculino.HasValue)
+                {
+                    errores.Add("El campo sexo es requerido");
+                }
+
+                if (errores.Count != 0)
+                {
+                    resultado.Error = string.Join(" - ", errores);
                     return resultado;
                 }
 
                 resultado.Return = true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                resultado.SetError(e);
+                resultado.SetError(ex.Message);
             }
 
             return resultado;
         }
 
-        public Resultado<bool> ValidarComandoActualizar(_Model.Comandos.Comando_UsuarioActualizar comando)
+        public Resultado<bool> ValidarComandoInsertarActualizar(_Model.Comandos.Comando_UsuarioNuevo comando)
         {
             var resultado = new Resultado<bool>();
 
             try
             {
-                //ID
-                if (comando.Id==0)
+                //id entidad
+                if (comando is _Model.Comandos.Comando_UsuarioActualizar)
                 {
-                    resultado.Error = "El Id del usuario a actualizar es requerido";
-                    return resultado;
+                    _Model.Comandos.Comando_UsuarioActualizar c = (_Model.Comandos.Comando_UsuarioActualizar)comando;
+                    if (!c.Id.HasValue)
+                    {
+                        resultado.Error = "El id del usuario requerido";
+                        return resultado;
+                    }
                 }
 
-                //NombreApellido
+                //Nombre Apellido
                 if (string.IsNullOrEmpty(comando.Nombre) || string.IsNullOrEmpty(comando.Apellido))
                 {
                     resultado.Error = "El nombre y apellido son requeridos";
@@ -349,15 +296,21 @@ namespace _Rules.Rules
                 //Sexo
                 if (!comando.SexoMasculino.HasValue)
                 {
-                    resultado.Error = "El campo sexo es requerido";
+                    resultado.Error = "El sexo es requerido";
                     return resultado;
                 }
 
                 //DNI
-                bool dniValido = comando.Dni > 0 && comando.Dni < 200000000;
-                if (!dniValido)
+                if (!comando.Dni.HasValue || comando.Dni.Value <= 0 || comando.Dni >= 200000000)
                 {
-                    resultado.Error = "El campo N° de DNI es inválido";
+                    resultado.Error = "N° de DNI inválido";
+                    return resultado;
+                }
+
+                //Si manda fecha de nacimiento, debe ser valida
+                if (!string.IsNullOrEmpty(comando.FechaNacimiento) && !Utils.StringToDate(comando.FechaNacimiento).HasValue)
+                {
+                    resultado.Error = "Fecha de nacimiento inválida";
                     return resultado;
                 }
 

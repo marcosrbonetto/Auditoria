@@ -8,7 +8,7 @@ namespace _Model.Comandos
 {
     public class Comando_InhabilitacionNuevo
     {
-        public int IdUsuario { get; set; }
+        public int? IdUsuario { get; set; }
         public string FechaInicio { get; set; }
         public string FechaFin { get; set; }
         public virtual string DtoRes { get; set; }

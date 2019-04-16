@@ -37,7 +37,7 @@ namespace _Rules.Rules
             {
                 try
                 {
-                    var validarComando = ValidarComandoInsertar(comando);
+                    var validarComando = ValidarComandoInsertarActualizar(comando);
                     if (!validarComando.Ok)
                     {
                         resultado.Error = validarComando.Error;
@@ -45,7 +45,7 @@ namespace _Rules.Rules
                     }
 
                     //Busco el usuario
-                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario);
+                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
                     if (!resultadoUsuario.Ok)
                     {
                         resultado.Error = resultadoUsuario.Error;
@@ -60,7 +60,7 @@ namespace _Rules.Rules
                     }
 
                     //Busco el tipo inscripcion
-                    var resultadoTipoInscripcion = new Rules_TipoInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInscripcionKeyValue);
+                    var resultadoTipoInscripcion = new Rules_TipoInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInscripcionKeyValue.Value);
                     if (!resultadoTipoInscripcion.Ok)
                     {
                         resultado.Error = resultadoTipoInscripcion.Error;
@@ -75,7 +75,7 @@ namespace _Rules.Rules
                     }
 
                     //Busco el tipo de auto
-                    var resultadoTipoAuto = new Rules_TipoAuto(getUsuarioLogueado()).GetByKeyValue(comando.TipoAutoKeyValue);
+                    var resultadoTipoAuto = new Rules_TipoAuto(getUsuarioLogueado()).GetByKeyValue(comando.TipoAutoKeyValue.Value);
                     if (!resultadoTipoAuto.Ok)
                     {
                         resultado.Error = resultadoTipoAuto.Error;
@@ -106,63 +106,12 @@ namespace _Rules.Rules
                         }
                     }
 
-                    //Valido las fechas
-                    DateTime? fechaInicio = null;
-                    DateTime? fechaFin = null;
-                    DateTime? fechaTelegrama = null;
-                    DateTime? rcondVce = null;
-                    DateTime? artVce = null;
-
-                    if (!string.IsNullOrEmpty(comando.FechaInicio))
-                    {
-                        fechaInicio = Utils.StringToDate(comando.FechaInicio);
-                        if (fechaInicio == null)
-                        {
-                            resultado.Error = "El formato de la fecha de inicio es inválida";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.FechaFin))
-                    {
-                        fechaFin = Utils.StringToDate(comando.FechaFin);
-                        if (fechaFin == null)
-                        {
-                            resultado.Error = "El formato de la fecha de inicio es inválida";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.FechaTelegrama))
-                    {
-                        fechaTelegrama = Utils.StringToDate(comando.FechaTelegrama);
-                        if (fechaTelegrama == null)
-                        {
-                            resultado.Error = "El formato de la fecha de telegrama es inválida";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.FechaVencimientoLicencia))
-                    {
-                        rcondVce = Utils.StringToDate(comando.FechaVencimientoLicencia);
-                        if (rcondVce == null)
-                        {
-                            resultado.Error = "El formato de la fecha de RconVce es inválida";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.ArtFechaVencimiento))
-                    {
-                        artVce = Utils.StringToDate(comando.ArtFechaVencimiento);
-                        if (artVce == null)
-                        {
-                            resultado.Error = "El formato de la fecha de ArtVce es inválida";
-                            return false;
-                        }
-                    }
-
+                    //Fechas
+                    DateTime? fechaInicio = Utils.StringToDate(comando.FechaInicio);
+                    DateTime? fechaFin = Utils.StringToDate(comando.FechaFin);
+                    DateTime? fechaTelegrama = Utils.StringToDate(comando.FechaTelegrama);
+                    DateTime? rcondVce = Utils.StringToDate(comando.FechaVencimientoLicencia);
+                    DateTime? artVce = Utils.StringToDate(comando.ArtFechaVencimiento);
 
                     //Creo la entidad
                     var entity = new Inscripcion()
@@ -224,7 +173,7 @@ namespace _Rules.Rules
             {
                 try
                 {
-                    var validarComando = ValidarComandoActualizar(comando);
+                    var validarComando = ValidarComandoInsertarActualizar(comando);
                     if (!validarComando.Ok)
                     {
                         resultado.Error = validarComando.Error;
@@ -232,7 +181,7 @@ namespace _Rules.Rules
                     }
 
                     //Busco el usuario
-                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario);
+                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
                     if (!resultadoUsuario.Ok)
                     {
                         resultado.Error = resultadoUsuario.Error;
@@ -247,7 +196,7 @@ namespace _Rules.Rules
                     }
 
                     //Busco el tipo inscripcion
-                    var resultadoTipoInscripcion = new Rules_TipoInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInscripcionKeyValue);
+                    var resultadoTipoInscripcion = new Rules_TipoInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInscripcionKeyValue.Value);
                     if (!resultadoTipoInscripcion.Ok)
                     {
                         resultado.Error = resultadoTipoInscripcion.Error;
@@ -262,7 +211,7 @@ namespace _Rules.Rules
                     }
 
                     //Busco el tipo de auto
-                    var resultadoTipoAuto = new Rules_TipoAuto(getUsuarioLogueado()).GetByKeyValue(comando.TipoAutoKeyValue);
+                    var resultadoTipoAuto = new Rules_TipoAuto(getUsuarioLogueado()).GetByKeyValue(comando.TipoAutoKeyValue.Value);
                     if (!resultadoTipoAuto.Ok)
                     {
                         resultado.Error = resultadoTipoAuto.Error;
@@ -294,64 +243,14 @@ namespace _Rules.Rules
                     }
 
                     //Valido las fechas
-                    DateTime? fechaInicio = null;
-                    DateTime? fechaFin = null;
-                    DateTime? fechaTelegrama = null;
-                    DateTime? fechaVencimientoLicencia = null;
-                    DateTime? artFechaVencimiento = null;
-
-                    if (!string.IsNullOrEmpty(comando.FechaInicio))
-                    {
-                        fechaInicio = Utils.StringToDate(comando.FechaInicio);
-                        if (fechaInicio == null)
-                        {
-                            resultado.Error = "El formato de la fecha de inicio es inválido";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.FechaFin))
-                    {
-                        fechaFin = Utils.StringToDate(comando.FechaFin);
-                        if (fechaFin == null)
-                        {
-                            resultado.Error = "El formato de la fecha de inicio es inválido";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.FechaTelegrama))
-                    {
-                        fechaTelegrama = Utils.StringToDate(comando.FechaTelegrama);
-                        if (fechaTelegrama == null)
-                        {
-                            resultado.Error = "El formato de la fecha de telegrama es inválido";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.FechaVencimientoLicencia))
-                    {
-                        fechaVencimientoLicencia = Utils.StringToDate(comando.FechaVencimientoLicencia);
-                        if (fechaVencimientoLicencia == null)
-                        {
-                            resultado.Error = "El formato de la fecha de vencimiento de la licencia es inválido";
-                            return false;
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(comando.ArtFechaVencimiento))
-                    {
-                        artFechaVencimiento = Utils.StringToDate(comando.ArtFechaVencimiento);
-                        if (artFechaVencimiento == null)
-                        {
-                            resultado.Error = "El formato de la fecha de vencimiento de la ART es inválido";
-                            return false;
-                        }
-                    }
+                    DateTime? fechaInicio = Utils.StringToDate(comando.FechaInicio); ;
+                    DateTime? fechaFin = Utils.StringToDate(comando.FechaFin); ;
+                    DateTime? fechaTelegrama = Utils.StringToDate(comando.FechaTelegrama); ;
+                    DateTime? fechaVencimientoLicencia = Utils.StringToDate(comando.FechaVencimientoLicencia); ;
+                    DateTime? artFechaVencimiento = Utils.StringToDate(comando.ArtFechaVencimiento); ;
 
                     //Busco la entidad
-                    var resultadoEntity = GetByIdObligatorio(comando.Id);
+                    var resultadoEntity = GetByIdObligatorio(comando.Id.Value);
                     if (!resultadoEntity.Ok)
                     {
                         resultado.Error = resultadoEntity.Error;
@@ -365,7 +264,7 @@ namespace _Rules.Rules
                     }
 
                     //Actualizo
-                    entity.Id = comando.Id;
+                    entity.Id = comando.Id.Value;
                     entity.Identificador = comando.Identificador;
                     entity.Usuario = usuario;
                     entity.TipoInscripcion = tipoInscripcion;
@@ -498,53 +397,101 @@ namespace _Rules.Rules
             return resultado;
         }
 
-        public Resultado<bool> ValidarComandoActualizar(_Model.Comandos.Comando_InscripcionActualizar comando)
+        public Resultado<bool> ValidarComandoInsertarActualizar(_Model.Comandos.Comando_InscripcionNuevo comando)
         {
             var resultado = new Resultado<bool>();
 
             try
             {
-                if (comando.Id==0 || comando.Id<0)
+
+                //Si es actualizar, valido el id
+                if (comando is _Model.Comandos.Comando_InscripcionActualizar)
                 {
-                    resultado.Error = "El Id de la inscripción a actualizar es requerido";
-                    return resultado;
+                    _Model.Comandos.Comando_InscripcionActualizar c = (_Model.Comandos.Comando_InscripcionActualizar)comando;
+                    if (!c.Id.HasValue || c.Id.Value <= 0)
+                    {
+                        resultado.Error = "El id de la inscripcion es requerido";
+                        return resultado;
+                    }
                 }
 
-                if (comando.IdUsuario == 0 || comando.IdUsuario < 0)
-                {
-                    resultado.Error = "El Id Usuario es requerido";
-                    return resultado;
-                }
-
-                if (!Enum.IsDefined(typeof(_Model.Enums.TipoAuto), comando.TipoAutoKeyValue))
-                {
-                    resultado.Error = "El identificador del Tipo Auto esta fuera de rango";
-                    return resultado;
-                }
-
-                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInscripcion), comando.TipoInscripcionKeyValue))
-                {
-                    resultado.Error = "El identificador del Tipo Inscripción esta fuera de rango";
-                    return resultado;
-                }
-                
+                //Identificador requerdio
                 if (string.IsNullOrEmpty(comando.Identificador))
                 {
-                    resultado.Error = "El campo Identificador es requerido";
+                    resultado.Error = "El identificador es requerido";
                     return resultado;
                 }
 
+                //Id usuario requerido
+                if (!comando.IdUsuario.HasValue || comando.IdUsuario <= 0)
+                {
+                    resultado.Error = "El usuario es requerido";
+                    return resultado;
+                }
+
+                //Tipo de auto requerido
+                if (!comando.TipoAutoKeyValue.HasValue)
+                {
+                    resultado.Error = "El tipo de auto es requerido";
+                    return resultado;
+                }
+
+                //Tipo de auto valido
+                if (!Enum.IsDefined(typeof(_Model.Enums.TipoAuto), comando.TipoAutoKeyValue))
+                {
+                    resultado.Error = "Tipo de auto inválido";
+                    return resultado;
+                }
+
+                //Si manda tipo inscripcion, debe ser valida
+                if (comando.TipoInscripcionKeyValue.HasValue && !Enum.IsDefined(typeof(_Model.Enums.TipoInscripcion), comando.TipoInscripcionKeyValue))
+                {
+                    resultado.Error = "Tipo de inscripción inválido";
+                    return resultado;
+                }
+
+                //FEcha de inicio requerida
                 if (string.IsNullOrEmpty(comando.FechaInicio))
                 {
-                    resultado.Error = "El campo Fecha Inicio es requerido";
+                    resultado.Error = "La fecha de inicio es requerida";
                     return resultado;
                 }
 
-                if (string.IsNullOrEmpty(comando.FechaFin))
+                //Fecha de inicio valida
+                if (!Utils.StringToDate(comando.FechaInicio).HasValue)
                 {
-                    resultado.Error = "El campo Fecha Fin es requerido";
+                    resultado.Error = "Fecha de inicio inválida";
                     return resultado;
                 }
+
+                //Si manda fecha de fin, debe ser valida
+                if (!string.IsNullOrEmpty(comando.FechaFin) && !Utils.StringToDate(comando.FechaFin).HasValue)
+                {
+                    resultado.Error = "Fecha de fin inválida";
+                    return resultado;
+                }
+
+                //Si manda fecha de telegrama, debe ser valida
+                if (!string.IsNullOrEmpty(comando.FechaTelegrama) && !Utils.StringToDate(comando.FechaTelegrama).HasValue)
+                {
+                    resultado.Error = "Fecha de telegrama inválida";
+                    return resultado;
+                }
+
+                //Si manda fecha de vencimiento de licencia, debe ser valida
+                if (!string.IsNullOrEmpty(comando.FechaVencimientoLicencia) && !Utils.StringToDate(comando.FechaVencimientoLicencia).HasValue)
+                {
+                    resultado.Error = "Fecha de vencimiento de licencia inválida";
+                    return resultado;
+                }
+
+                //Si manda fecha de vencimiento de ART, debe ser valida
+                if (!string.IsNullOrEmpty(comando.ArtFechaVencimiento) && !Utils.StringToDate(comando.ArtFechaVencimiento).HasValue)
+                {
+                    resultado.Error = "Fecha de vencimiento de ART inválida";
+                    return resultado;
+                }
+
 
                 resultado.Return = true;
             }
@@ -555,58 +502,5 @@ namespace _Rules.Rules
 
             return resultado;
         }
-
-        public Resultado<bool> ValidarComandoInsertar(_Model.Comandos.Comando_InscripcionNuevo comando)
-        {
-            var resultado = new Resultado<bool>();
-
-            try
-            {             
-                if (string.IsNullOrEmpty(comando.Identificador))
-                {
-                    resultado.Error = "El campo Identificador es requerido";
-                    return resultado;
-                }
-
-                if (comando.IdUsuario == 0 || comando.IdUsuario < 0)
-                {
-                    resultado.Error = "El Id Usuario es requerido";
-                    return resultado;
-                }
-
-                if (!Enum.IsDefined(typeof(_Model.Enums.TipoAuto), comando.TipoAutoKeyValue))
-                {
-                    resultado.Error = "El identificador del Tipo Auto esta fuera de rango";
-                    return resultado;
-                }
-
-                if (!Enum.IsDefined(typeof(_Model.Enums.TipoInscripcion), comando.TipoInscripcionKeyValue))
-                {
-                    resultado.Error = "El identificador del Tipo Inscripción esta fuera de rango";
-                    return resultado;
-                }
-
-                if (string.IsNullOrEmpty(comando.FechaInicio))
-                {
-                    resultado.Error = "El campo Fecha Inicio es requerido";
-                    return resultado;
-                }
-
-                if (string.IsNullOrEmpty(comando.FechaFin))
-                {
-                    resultado.Error = "El campo Fecha Fin es requerido";
-                    return resultado;
-                }
-
-                resultado.Return = true;
-            }
-            catch (Exception e)
-            {
-                resultado.SetError(e);
-            }
-
-            return resultado;
-        }
-
     }
 }
