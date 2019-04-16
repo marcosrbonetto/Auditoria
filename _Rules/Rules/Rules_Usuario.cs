@@ -81,13 +81,6 @@ namespace _Rules.Rules
                 usuario.DomicilioCodigoPostal = comando.DomicilioCodigoPostal;
                 usuario.Observaciones = comando.Observaciones;
 
-                var validarUsuario = ValidarConsistenciaUsuario(usuario);
-                if (!validarUsuario.Ok)
-                {
-                    resultado.Error = validarUsuario.Error;
-                    return resultado;
-                }
-
                 //Inserto o update
                 Resultado<Usuario> resultadoInsert = base.Insert(usuario);
                 if (!resultadoInsert.Ok)
@@ -173,13 +166,6 @@ namespace _Rules.Rules
                 usuario.Observaciones = comando.Observaciones;
                 usuario.Error = null;
 
-                var validarUsuario = ValidarConsistenciaUsuario(usuario);
-                if (!validarUsuario.Ok)
-                {
-                    resultado.Error = validarUsuario.Error;
-                    return resultado;
-                }
-
                 //Inserto o update
                 Resultado<Usuario> resultadoInsert = base.Update(usuario);
                 if (!resultadoInsert.Ok)
@@ -224,48 +210,6 @@ namespace _Rules.Rules
             }
 
             resultado.Return = true;
-            return resultado;
-        }
-
-        private Resultado<bool> ValidarConsistenciaUsuario(Usuario u)
-        {
-            var resultado = new Resultado<bool>();
-            List<string> errores = new List<string>();
-            try
-            {
-                //Nombre
-                bool conNombre = u.Nombre != null && u.Nombre.Trim() != "";
-                bool conApellido = u.Apellido != null && u.Apellido.Trim() != "";
-                if (!conNombre && !conApellido)
-                {
-                    errores.Add("El campo nombre y/o apellido es requerido");
-                }
-
-                //DNI
-                bool dniValido = u.Dni.HasValue && u.Dni.Value > 0 && u.Dni.Value < 200000000;
-                if (!dniValido)
-                {
-                    errores.Add("El campo N° de DNI es inválido");
-                }
-                //SEXO
-                if (!u.SexoMasculino.HasValue)
-                {
-                    errores.Add("El campo sexo es requerido");
-                }
-
-                if (errores.Count != 0)
-                {
-                    resultado.Error = string.Join(" - ", errores);
-                    return resultado;
-                }
-
-                resultado.Return = true;
-            }
-            catch (Exception ex)
-            {
-                resultado.SetError(ex.Message);
-            }
-
             return resultado;
         }
 
