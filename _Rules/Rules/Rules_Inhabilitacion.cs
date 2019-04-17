@@ -222,6 +222,8 @@ namespace _Rules.Rules
                     entity.Observaciones = comando.Observaciones;
                     entity.ObservacionesAutoChapa = comando.ObservacionesAutoChapa;
                     entity.ObservacionesTipoAuto = comando.ObservacionesTipoAuto;
+                    entity.FechaFinString = null;
+                    entity.FechaInicioString = null;
                     entity.Error = null;
 
                     //Actualizo

@@ -9,6 +9,7 @@ namespace WS_Internet.v1.Entities.Consultas
     public class Consulta_InscripcionPaginada
     {
         public int? Dni { get; set; }
+        public string Nombre { get; set; }
         public string Identificador { get; set; }
         public bool? ConFechaInicio { get; set; }
 

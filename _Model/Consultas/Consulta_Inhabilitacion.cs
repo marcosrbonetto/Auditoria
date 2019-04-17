@@ -9,6 +9,7 @@ namespace _Model.Consultas
     public class Consulta_Inhabilitacion
     {
         public int? Dni { get; set; }
+        public string Nombre { get; set; }
         public bool? DadosDeBaja { get; set; }
 
         public Consulta_Inhabilitacion()

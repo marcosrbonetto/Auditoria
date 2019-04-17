@@ -6,6 +6,7 @@ using _Model.Entities;
 using NHibernate;
 using System.Collections.Generic;
 using _Model.Resultados;
+using NHibernate.Criterion;
 
 namespace _DAO.DAO
 {
@@ -25,16 +26,27 @@ namespace _DAO.DAO
             }
         }
 
+        IQueryOver<Inhabilitacion, Usuario> joinUsuario;
+
         public IQueryOver<Inhabilitacion, Inhabilitacion> GetQuery(_Model.Consultas.Consulta_Inhabilitacion consulta)
         {
+            joinUsuario = null;
+
             var query = GetSession().QueryOver<Inhabilitacion>();
-
-
+            joinUsuario = query.JoinQueryOver<Usuario>(x => x.Usuario);
 
             if (consulta.Dni.HasValue)
             {
-                var joinUsuario = query.JoinQueryOver<Usuario>(x => x.Usuario);
                 joinUsuario.Where(x => x.Dni == consulta.Dni.Value);
+            }
+
+            if (!string.IsNullOrEmpty(consulta.Nombre))
+            {
+                foreach (var palabra in consulta.Nombre.Split(' '))
+                {
+                    var p = palabra.Trim();
+                    joinUsuario.Where(x => x.Nombre.IsLike(p, MatchMode.Anywhere) || x.Apellido.IsLike(p, MatchMode.Anywhere));
+                }
             }
 
             if (consulta.DadosDeBaja.HasValue)
@@ -134,7 +146,15 @@ namespace _DAO.DAO
                         } break;
                     case Enums.InhabilitacionOrderBy.UsuarioApellidoNombre:
                         {
-                            var join = query.JoinQueryOver<Usuario>(x => x.Usuario);
+                            IQueryOver<Inhabilitacion, Usuario> join;
+                            if (joinUsuario == null)
+                            {
+                                join = query.JoinQueryOver<Usuario>(x => x.Usuario);
+                            }
+                            else
+                            {
+                                join = joinUsuario;
+                            }
 
                             var orderBy = join.OrderBy(x => x.Apellido);
                             var q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;

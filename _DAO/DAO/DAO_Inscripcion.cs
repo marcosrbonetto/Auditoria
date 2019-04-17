@@ -6,6 +6,7 @@ using NHibernate;
 using System.Collections.Generic;
 using _Model.Resultados;
 using NHibernate.Criterion.Lambda;
+using NHibernate.Criterion;
 
 namespace _DAO.DAO
 {
@@ -25,15 +26,31 @@ namespace _DAO.DAO
             }
         }
 
+        IQueryOver<Inscripcion, Usuario> joinUsuario;
+        IQueryOver<Inscripcion, TipoInscripcion> joinTipoInscripcion;
+        IQueryOver<Inscripcion, TipoAuto> joinTipoAuto;
+
         public IQueryOver<Inscripcion, Inscripcion> GetQuery(_Model.Consultas.Consulta_Inscripcion consulta)
         {
-            var query = GetSession().QueryOver<Inscripcion>();
+            joinUsuario = null;
+            joinTipoAuto = null;
+            joinTipoInscripcion = null;
 
+            var query = GetSession().QueryOver<Inscripcion>();
+            joinUsuario = query.JoinQueryOver<Usuario>(x => x.Usuario);
 
             if (consulta.Dni.HasValue)
             {
-                var joinUsuario = query.JoinQueryOver<Usuario>(x => x.Usuario);
                 joinUsuario.Where(x => x.Dni == consulta.Dni.Value);
+            }
+
+
+            if (!string.IsNullOrEmpty(consulta.Nombre))
+            {
+                foreach(var palabra in consulta.Nombre.Split(' ')){
+                    var p = palabra.Trim();
+                    joinUsuario.Where(x => x.Nombre.IsLike(p, MatchMode.Anywhere) || x.Apellido.IsLike(p, MatchMode.Anywhere));
+                }
             }
 
             if (consulta.ConFechaInicio.HasValue)
@@ -50,7 +67,7 @@ namespace _DAO.DAO
 
             if (!string.IsNullOrEmpty(consulta.Identificador))
             {
-                query = query.Where(x => x.Identificador == consulta.Identificador);
+                query = query.Where(x => x.Identificador.IsLike(consulta.Identificador, MatchMode.Anywhere));
             }
 
             if (consulta.DadosDeBaja.HasValue)
@@ -130,15 +147,35 @@ namespace _DAO.DAO
 
                     case Enums.InscripcionOrderBy.TipoInscripcion:
                         {
-                            var joinTipo = query.JoinQueryOver<TipoInscripcion>(x => x.TipoInscripcion);
-                            var orderBy = joinTipo.OrderBy(x => x.Nombre);
+                            IQueryOver<Inscripcion, TipoInscripcion> join;
+
+                            if (joinTipoInscripcion == null)
+                            {
+                                join = query.JoinQueryOver<TipoInscripcion>(x => x.TipoInscripcion);
+                            }
+                            else
+                            {
+                                join = joinTipoInscripcion;
+                            }
+
+                            var orderBy = join.OrderBy(x => x.Nombre);
                             var q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
                         } break;
 
                     case Enums.InscripcionOrderBy.TipoAuto:
                         {
-                            var joinTipo = query.JoinQueryOver<TipoAuto>(x => x.TipoAuto);
-                            var orderBy = joinTipo.OrderBy(x => x.Nombre);
+                            IQueryOver<Inscripcion, TipoAuto> join;
+
+                            if (joinTipoInscripcion == null)
+                            {
+                                join = query.JoinQueryOver<TipoAuto>(x => x.TipoAuto);
+                            }
+                            else
+                            {
+                                join = joinTipoAuto;
+                            }
+
+                            var orderBy = join.OrderBy(x => x.Nombre);
                             var q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
                         } break;
                     case Enums.InscripcionOrderBy.FechaInicio:
@@ -153,7 +190,16 @@ namespace _DAO.DAO
                         } break;
                     case Enums.InscripcionOrderBy.UsuarioApellidoNombre:
                         {
-                            var join = query.JoinQueryOver<Usuario>(x => x.Usuario);
+                            IQueryOver<Inscripcion, Usuario> join;
+
+                            if (joinUsuario == null)
+                            {
+                                join = query.JoinQueryOver<Usuario>(x => x.Usuario);
+                            }
+                            else
+                            {
+                                join = joinUsuario;
+                            }
 
                             var orderBy = join.OrderBy(x => x.Apellido);
                             var q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
@@ -266,7 +312,7 @@ namespace _DAO.DAO
         //                            }
         //                        }
 
-                               
+
 
         //                        if (errores.Count != 0)
         //                        {

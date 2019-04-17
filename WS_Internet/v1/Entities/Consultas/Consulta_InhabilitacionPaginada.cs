@@ -9,6 +9,7 @@ namespace WS_Internet.v1.Entities.Consultas
     public class Consulta_InhabilitacionPaginada
     {
         public int? Dni { get; set; }
+        public string Nombre { get; set; }
 
         //Paginada
         public int Pagina { get; set; }

@@ -31,7 +31,11 @@ namespace _DAO.DAO
 
             if (!string.IsNullOrEmpty(consulta.Nombre))
             {
-                query.Where(x => x.Nombre.IsLike(consulta.Nombre, MatchMode.Anywhere) || x.Apellido.IsLike(consulta.Nombre, MatchMode.Anywhere));
+                foreach (var palabra in consulta.Nombre.Split(' '))
+                {
+                    var p = palabra.Trim();
+                    query.Where(x => x.Nombre.IsLike(p, MatchMode.Anywhere) || x.Apellido.IsLike(p, MatchMode.Anywhere));
+                }
             }
 
 

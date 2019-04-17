@@ -10,6 +10,7 @@ namespace WS_Intranet.v1.Entities.Consultas
     {
         public int? Dni { get; set; }
         public string Identificador { get; set; }
+        public string Nombre { get; set; }
         public bool? ConFechaInicio { get; set; }
         
         //Paginada
@@ -24,6 +25,7 @@ namespace WS_Intranet.v1.Entities.Consultas
             return new _Model.Consultas.Consulta_InscripcionPaginada()
             {
                 Dni = Dni,
+                Nombre = Nombre,
                 Identificador = Identificador,
                 ConFechaInicio = ConFechaInicio,
                 Pagina = Pagina,

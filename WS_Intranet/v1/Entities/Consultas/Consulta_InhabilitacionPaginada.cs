@@ -9,6 +9,7 @@ namespace WS_Intranet.v1.Entities.Consultas
     public class Consulta_InhabilitacionPaginada
     {
         public int? Dni { get; set; }
+        public string Nombre { get; set; }
 
         //Paginada
         public int Pagina { get; set; }
@@ -22,6 +23,7 @@ namespace WS_Intranet.v1.Entities.Consultas
             return new _Model.Consultas.Consulta_InhabilitacionPaginada()
             {
                 Dni = Dni,
+                Nombre = Nombre,
                 Pagina = Pagina,
                 TamañoPagina = TamañoPagina,
                 OrderBy = (_Model.Enums.InhabilitacionOrderBy)OrderBy,
