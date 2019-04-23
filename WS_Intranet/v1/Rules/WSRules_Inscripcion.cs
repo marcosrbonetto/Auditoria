@@ -101,6 +101,23 @@ namespace WS_Intranet.v1.Rules
             return resultado;
         }
 
+        public ResultadoServicio<bool> ToggleFavorito(int id)
+        {
+            var resultado = new ResultadoServicio<bool>();
+
+            //Busco 
+            var resultadoQuery = new _Rules.Rules.Rules_Inscripcion(getUsuarioLogueado()).ToggleFavorito(id);
+            if (!resultadoQuery.Ok)
+            {
+                resultado.Error = resultadoQuery.Error;
+                return resultado;
+            }
+
+            //Convierto
+            resultado.Return = resultadoQuery.Return;
+            return resultado;
+        }
+
         public ResultadoServicio<bool> Borrar(int id)
         {
             var resultado = new ResultadoServicio<bool>();
@@ -117,5 +134,27 @@ namespace WS_Intranet.v1.Rules
             resultado.Return = true;
             return resultado;
         }
+
+        public ResultadoServicio<int> GetCantidadConError()
+        {
+            var resultado = new ResultadoServicio<int>();
+
+            //Busco 
+            var resultadoQuery = new _Rules.Rules.Rules_Inscripcion(getUsuarioLogueado()).GetCantidad(new _Model.Consultas.Consulta_Inscripcion()
+            {
+                ConError = true,
+                DadosDeBaja = false
+            });
+            if (!resultadoQuery.Ok)
+            {
+                resultado.Error = resultadoQuery.Error;
+                return resultado;
+            }
+
+            //Convierto
+            resultado.Return = resultadoQuery.Return;
+            return resultado;
+        }
+
     }
 }

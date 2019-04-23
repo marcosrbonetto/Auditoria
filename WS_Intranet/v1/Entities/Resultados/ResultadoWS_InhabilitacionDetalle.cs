@@ -21,6 +21,7 @@ namespace WS_Intranet.v1.Entities.Resultados
         public string ObservacionesTipoAuto { get; set; }
         public string ObservacionesAutoChapa { get; set; }
         public string Error { get; set; }
+        public bool Favorito { get; set; }
 
 
         //Usuario
@@ -45,6 +46,7 @@ namespace WS_Intranet.v1.Entities.Resultados
             ObservacionesTipoAuto = entity.ObservacionesTipoAuto;
             Observaciones = entity.Observaciones;
             Error = entity.Error;
+            Favorito = entity.Favorito;
 
             if (entity.TipoInhabilitacion != null)
             {

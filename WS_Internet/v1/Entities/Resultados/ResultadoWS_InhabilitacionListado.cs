@@ -24,5 +24,6 @@ namespace WS_Internet.v1.Entities.Resultados
         public bool? UsuarioSexoMasculino { get; set; }
 
         public string Error { get; set; }
+        public bool Favorito { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace _DAO.Maps
             Map(x => x.DomicilioObservaciones, "domicilioObservaciones");
             Map(x => x.Observaciones, "observaciones");
             Map(x => x.Error, "error");
+            Map(x => x.Favorito, "favorito");
 
         }
     }

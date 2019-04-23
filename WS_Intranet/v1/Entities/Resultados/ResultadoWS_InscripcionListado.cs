@@ -12,7 +12,8 @@ namespace WS_Intranet.v1.Entities.Resultados
         public string Identificador { get; set; }
         public DateTime? FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
-        
+        public bool Favorito { get; set; }
+
         //Tipo Auto
         public string TipoAutoNombre { get; set; }
         public int TipoAutoKeyValue { get; set; }
@@ -43,7 +44,8 @@ namespace WS_Intranet.v1.Entities.Resultados
             Identificador = entity.Identificador;
             FechaInicio = entity.FechaInicio;
             FechaFin = entity.FechaFin;
- 
+            Favorito = entity.Favorito;
+
             if (entity.TipoAuto != null)
             {
                 TipoAutoNombre = entity.TipoAuto.Nombre;

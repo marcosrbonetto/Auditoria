@@ -23,6 +23,7 @@ namespace WS_Internet.v1.Entities.Resultados
         //Tipo Inscripcion
         public string TipoInscripcionNombre { get; set; }
         public int TipoInscripcionKeyValue { get; set; }
+        public bool Favorito { get; set; }
 
 
         //Usuario

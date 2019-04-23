@@ -26,29 +26,93 @@ namespace _DAO.DAO
             }
         }
 
-        IQueryOver<Inhabilitacion, Usuario> joinUsuario;
+        Dictionary<string, bool> joins = new Dictionary<string, bool>();
+        Usuario joinUsuario;
+        TipoInhabilitacion joinTipoInhabilitacion;
+
+        private void ClearJoins()
+        {
+            joinTipoInhabilitacion = null;
+            joinUsuario = null;
+            joins = new Dictionary<string, bool>();
+        }
+
+        private void JoinUsuario(IQueryOver<Inhabilitacion, Inhabilitacion> query)
+        {
+            if (!joins.ContainsKey("usuario"))
+            {
+                query.Left.JoinAlias(x => x.Usuario, () => joinUsuario);
+                joins["usuario"] = true;
+            }
+        }
+        private void JoinTipoInhabilitacion(IQueryOver<Inhabilitacion, Inhabilitacion> query)
+        {
+            if (!joins.ContainsKey("tipoInhabilitacion"))
+            {
+                query.Left.JoinAlias(x => x.TipoInhabilitacion, () => joinTipoInhabilitacion);
+                joins["tipoInhabilitacion"] = true;
+            }
+        }
 
         public IQueryOver<Inhabilitacion, Inhabilitacion> GetQuery(_Model.Consultas.Consulta_Inhabilitacion consulta)
         {
-            joinUsuario = null;
 
+            ClearJoins();
             var query = GetSession().QueryOver<Inhabilitacion>();
-            joinUsuario = query.JoinQueryOver<Usuario>(x => x.Usuario);
 
-            if (consulta.Dni.HasValue)
+
+            //Tipo
+            if (consulta.TipoInhabilitacion.HasValue)
             {
-                joinUsuario.Where(x => x.Dni == consulta.Dni.Value);
+                JoinTipoInhabilitacion(query);
+                query = query.Where(() => joinTipoInhabilitacion.KeyValue == consulta.TipoInhabilitacion.Value);
             }
 
+            //DNI
+            if (consulta.Dni.HasValue)
+            {
+                JoinUsuario(query);
+                query = query.Where(() => joinUsuario.Dni == consulta.Dni.Value);
+            }
+
+            //Nombre
             if (!string.IsNullOrEmpty(consulta.Nombre))
             {
+                JoinUsuario(query);
                 foreach (var palabra in consulta.Nombre.Split(' '))
                 {
                     var p = palabra.Trim();
-                    joinUsuario.Where(x => x.Nombre.IsLike(p, MatchMode.Anywhere) || x.Apellido.IsLike(p, MatchMode.Anywhere));
+                    query.Where(() => (joinUsuario.Nombre != null && joinUsuario.Nombre.IsLike(p, MatchMode.Anywhere)) || (joinUsuario.Apellido != null && joinUsuario.Apellido.IsLike(p, MatchMode.Anywhere)));
                 }
             }
 
+            //Con error
+            if (consulta.ConError.HasValue)
+            {
+                if (consulta.ConError.Value)
+                {
+                    query.Where(x => x.Error != null && x.Error != "");
+                }
+                else
+                {
+                    query.Where(x => x.Error == null || x.Error == "");
+                }
+            }
+
+            //favorito
+            if (consulta.Favorito.HasValue)
+            {
+                if (consulta.Favorito.Value)
+                {
+                    query.Where(x => x.Favorito == true);
+                }
+                else
+                {
+                    query.Where(x => x.Favorito == false);
+                }
+            }
+
+            //Dado de baja
             if (consulta.DadosDeBaja.HasValue)
             {
                 if (consulta.DadosDeBaja.Value)
@@ -136,30 +200,52 @@ namespace _DAO.DAO
                 {
                     case Enums.InhabilitacionOrderBy.FechaInicio:
                         {
-                            var orderBy = query.OrderBy(x => (x.FechaInicio));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
-                    case Enums.InhabilitacionOrderBy.FechaFin:
-                        {
-                            var orderBy = query.OrderBy(x => (x.FechaFin));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
-                    case Enums.InhabilitacionOrderBy.UsuarioApellidoNombre:
-                        {
-                            IQueryOver<Inhabilitacion, Usuario> join;
-                            if (joinUsuario == null)
+                            if (consulta.OrderByAsc)
                             {
-                                join = query.JoinQueryOver<Usuario>(x => x.Usuario);
+                                query = query
+                                    .OrderBy((x) => x.FechaInicio).Asc
+                                    .ThenBy(x => x.Id).Asc;
+
                             }
                             else
                             {
-                                join = joinUsuario;
+                                query = query
+                                    .OrderBy((x) => x.FechaInicio).Desc
+                                    .ThenBy(x => x.Id).Desc;
                             }
-
-                            var orderBy = join.OrderBy(x => x.Apellido);
-                            var q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                            orderBy = join.ThenBy(x => x.Nombre);
-                            q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
+                        } break;
+                    case Enums.InhabilitacionOrderBy.FechaFin:
+                        {
+                            if (consulta.OrderByAsc)
+                            {
+                                query = query
+                                    .OrderBy((x) => x.FechaFin).Asc
+                                    .ThenBy(x => x.Id).Asc;
+                            }
+                            else
+                            {
+                                query = query
+                                    .OrderBy((x) => x.FechaFin).Desc
+                                    .ThenBy(x => x.Id).Desc;
+                            }
+                        } break;
+                    case Enums.InhabilitacionOrderBy.UsuarioApellidoNombre:
+                        {
+                            JoinUsuario(query);
+                            if (consulta.OrderByAsc)
+                            {
+                                query = query
+                                    .OrderBy(() => joinUsuario.Apellido).Asc
+                                    .ThenBy(() => joinUsuario.Nombre).Asc
+                                    .ThenBy(x => x.Id).Asc;
+                            }
+                            else
+                            {
+                                query = query
+                                    .OrderBy(() => joinUsuario.Apellido).Desc
+                                    .ThenBy(() => joinUsuario.Nombre).Desc
+                                    .ThenBy(x => x.Id).Desc;
+                            }
                         } break;
                 }
 

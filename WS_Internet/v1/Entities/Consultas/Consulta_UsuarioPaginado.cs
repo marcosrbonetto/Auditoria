@@ -11,6 +11,8 @@ namespace WS_Internet.v1.Entities.Consultas
         public int? Dni { get; set; }
         public bool? SexoMasculino { get; set; }
         public string FechaNacimiento { get; set; }
+        public bool? ConError { get; set; }
+        public bool? Favorito { get; set; }
 
         //Paginada
         public int Pagina { get; set; }

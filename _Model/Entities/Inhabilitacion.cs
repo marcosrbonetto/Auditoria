@@ -21,5 +21,6 @@ namespace _Model.Entities
         public virtual string ObservacionesTipoAuto { get; set; }
         public virtual string Observaciones { get; set; }
         public virtual string Error { get; set; }
+        public virtual bool Favorito { get; set; }
     }
 }

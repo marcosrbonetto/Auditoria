@@ -20,7 +20,7 @@ namespace WS_Internet.v1.Entities.Resultados
         public string ObservacionesTipoAuto { get; set; }
         public string ObservacionesAutoChapa { get; set; }
         public string Error { get; set; }
-
+        public bool Favorito { get; set; }
 
         //Usuario
         public int UsuarioId { get; set; }

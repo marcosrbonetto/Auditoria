@@ -28,6 +28,10 @@ namespace _Rules.Rules
         {
             return dao.Get(consulta);
         }
+        public Resultado<int> GetCantidad(_Model.Consultas.Consulta_Inscripcion consulta)
+        {
+            return dao.GetCantidad(consulta);
+        }
 
         public Resultado<Inscripcion> Insertar(_Model.Comandos.Comando_InscripcionNuevo comando)
         {
@@ -282,6 +286,57 @@ namespace _Rules.Rules
                     }
 
                     resultado.Return = resultadoUpdate.Return;
+                    return true;
+
+                }
+                catch (Exception e)
+                {
+                    resultado.Error = "Error procesando la solicitud";
+                    return false;
+                }
+            });
+
+            if (resultado.Ok && !resultadoTransaccion)
+            {
+                resultado.Error = "Error procesando la solicitud";
+                return resultado;
+            }
+
+            return resultado;
+        }
+
+        public Resultado<bool> ToggleFavorito(int id)
+        {
+            var resultado = new Resultado<bool>();
+
+            var resultadoTransaccion = dao.Transaction(() =>
+            {
+                try
+                {
+                    var resultadoEntity = GetByIdObligatorio(id);
+                    if (!resultadoEntity.Ok)
+                    {
+                        resultado.Error = resultadoEntity.Error;
+                        return false;
+                    }
+                    var entity = resultadoEntity.Return;
+                    if (entity == null || entity.FechaBaja != null)
+                    {
+                        resultado.Error = "La licencia no existe o esta dada de baja";
+                        return false;
+                    }
+
+                    entity.Favorito = !entity.Favorito;
+
+                    //Actualizo
+                    var resultadoUpdate = base.Update(entity);
+                    if (!resultadoUpdate.Ok)
+                    {
+                        resultado.Error = resultadoUpdate.Error;
+                        return false;
+                    }
+
+                    resultado.Return = true;
                     return true;
 
                 }

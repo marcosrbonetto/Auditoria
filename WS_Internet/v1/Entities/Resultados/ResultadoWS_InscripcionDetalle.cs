@@ -17,6 +17,7 @@ namespace WS_Internet.v1.Entities.Resultados
         public DateTime? ArtFechaVencimiento { get; set; }
         public string Caja { get; set; }
         public string Observaciones { get; set; }
+        public bool Favorito { get; set; }
 
 
         //Tipo Auto

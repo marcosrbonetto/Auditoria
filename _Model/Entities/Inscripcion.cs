@@ -23,5 +23,6 @@ namespace _Model.Entities
         public virtual string Observaciones { get; set; }
         public virtual string Error { get; set; }
         public virtual TipoCondicionInscripcion TipoCondicionInscripcion { get; set; }
+        public virtual bool Favorito { get; set; }
     }
 }

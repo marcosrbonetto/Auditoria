@@ -26,50 +26,138 @@ namespace _DAO.DAO
             }
         }
 
-        IQueryOver<Inscripcion, Usuario> joinUsuario;
-        IQueryOver<Inscripcion, TipoInscripcion> joinTipoInscripcion;
-        IQueryOver<Inscripcion, TipoAuto> joinTipoAuto;
+
+        Dictionary<string, bool> joins = new Dictionary<string, bool>();
+        Usuario joinUsuario;
+        TipoInscripcion joinTipoInscripcion;
+        TipoAuto joinTipoAuto;
+
+
+        private void ClearJoins()
+        {
+            joinUsuario = null;
+            joinTipoInscripcion = null;
+            joinTipoAuto = null;
+            joins = new Dictionary<string, bool>();
+        }
+
+        private void JoinUsuario(IQueryOver<Inscripcion, Inscripcion> query)
+        {
+            if (!joins.ContainsKey("usuario"))
+            {
+                query.Left.JoinAlias(x => x.Usuario, () => joinUsuario);
+                joins["usuario"] = true;
+            }
+        }
+
+        private void JoinTipoInscripcion(IQueryOver<Inscripcion, Inscripcion> query)
+        {
+            if (!joins.ContainsKey("tipoInscripcion"))
+            {
+                query.Left.JoinAlias(x => x.TipoInscripcion, () => joinTipoInscripcion);
+                joins["tipoInscripcion"] = true;
+            }
+        }
+
+        private void JoinTipoAuto(IQueryOver<Inscripcion, Inscripcion> query)
+        {
+            if (!joins.ContainsKey("tipoAuto"))
+            {
+                query.Left.JoinAlias(x => x.TipoAuto, () => joinTipoAuto);
+                joins["tipoAuto"] = true;
+            }
+        }
 
         public IQueryOver<Inscripcion, Inscripcion> GetQuery(_Model.Consultas.Consulta_Inscripcion consulta)
         {
-            joinUsuario = null;
-            joinTipoAuto = null;
-            joinTipoInscripcion = null;
+            ClearJoins();
 
             var query = GetSession().QueryOver<Inscripcion>();
-            joinUsuario = query.JoinQueryOver<Usuario>(x => x.Usuario);
 
+            //DNI
             if (consulta.Dni.HasValue)
             {
-                joinUsuario.Where(x => x.Dni == consulta.Dni.Value);
+                JoinUsuario(query);
+                query.Where(() => joinUsuario.Dni == consulta.Dni.Value);
             }
 
-
+            //Nombre
             if (!string.IsNullOrEmpty(consulta.Nombre))
             {
-                foreach(var palabra in consulta.Nombre.Split(' ')){
+                JoinUsuario(query);
+                foreach (var palabra in consulta.Nombre.Split(' '))
+                {
                     var p = palabra.Trim();
-                    joinUsuario.Where(x => x.Nombre.IsLike(p, MatchMode.Anywhere) || x.Apellido.IsLike(p, MatchMode.Anywhere));
+                    query.Where(() => (joinUsuario.Nombre != null && joinUsuario.Nombre.IsLike(p, MatchMode.Anywhere)) || joinUsuario.Apellido != null && joinUsuario.Apellido.IsLike(p, MatchMode.Anywhere));
                 }
             }
 
+            //Identificador
+            if (!string.IsNullOrEmpty(consulta.Identificador))
+            {
+                foreach (var palabra in consulta.Identificador.Split(' '))
+                {
+                    var p = palabra.Trim();
+                    query.Where(x => x.Identificador.IsLike(p, MatchMode.Anywhere));
+                }
+            }
+
+            //Tipo auto
+            if (consulta.TipoAuto.HasValue)
+            {
+                JoinTipoAuto(query);
+                query = query.Where(x => joinTipoAuto.KeyValue == consulta.TipoAuto.Value);
+            }
+
+            //Tipo inscripcion
+            if (consulta.TipoInscripcion.HasValue)
+            {
+                JoinTipoInscripcion(query);
+                query = query.Where(x => joinTipoInscripcion.KeyValue == consulta.TipoInscripcion.Value);
+            }
+
+            //Con fecha inicio
             if (consulta.ConFechaInicio.HasValue)
             {
                 if (consulta.ConFechaInicio.Value)
                 {
-                    query = query.Where(x => x.FechaInicio != null);
+                    query.Where(x => x.FechaInicio != null);
                 }
                 else
                 {
-                    query = query.Where(x => x.FechaInicio == null);
+                    query.Where(x => x.FechaInicio == null);
                 }
             }
 
-            if (!string.IsNullOrEmpty(consulta.Identificador))
+
+            //Con error
+            if (consulta.ConError.HasValue)
             {
-                query = query.Where(x => x.Identificador.IsLike(consulta.Identificador, MatchMode.Anywhere));
+                if (consulta.ConError.Value)
+                {
+                    query.Where(x => x.Error != null && x.Error != "");
+                }
+                else
+                {
+                    query.Where(x => x.Error == null || x.Error == "");
+                }
             }
 
+            //favorito
+            if (consulta.Favorito.HasValue)
+            {
+                if (consulta.Favorito.Value)
+                {
+                    query.Where(x => x.Favorito == true);
+                }
+                else
+                {
+                    query.Where(x => x.Favorito == false);
+                }
+            }
+
+
+            //Dados de baja
             if (consulta.DadosDeBaja.HasValue)
             {
                 if (consulta.DadosDeBaja.Value)
@@ -99,7 +187,6 @@ namespace _DAO.DAO
                 resultado.SetError(e);
             }
             return resultado;
-
         }
 
         public Resultado<Resultado_Paginador<Inscripcion>> GetPaginado(_Model.Consultas.Consulta_InscripcionPaginada consulta)
@@ -141,70 +228,120 @@ namespace _DAO.DAO
                 {
                     case Enums.InscripcionOrderBy.Identificador:
                         {
-                            var orderBy = query.OrderBy(x => x.Identificador);
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
+                            //JoinTipoInscripcion(query);
+                            //JoinTipoAuto(query);
+                            //JoinUsuario(query);
+                            if (consulta.OrderByAsc)
+                            {
+                                query = query
+                                    .OrderBy(x => x.Identificador).Asc
+                                    //.ThenBy(() => joinUsuario.Apellido).Asc
+                                    //.ThenBy(() => joinUsuario.Nombre).Asc
+                                    //.ThenBy(() => joinTipoInscripcion.Nombre).Asc
+                                    //.ThenBy(() => joinTipoAuto.Nombre).Asc
+                                    //.ThenBy((x) => x.FechaInicio).Asc
+                                    //.ThenBy((x) => x.FechaFin).Asc
+                                    .ThenBy(x => x.Id).Asc;
+
+                            }
+                            else
+                            {
+                                query = query
+                                    .OrderBy(x => x.Identificador).Desc
+                                    //.ThenBy(() => joinUsuario.Apellido).Desc
+                                    //.ThenBy(() => joinUsuario.Nombre).Desc
+                                    //.ThenBy(() => joinTipoInscripcion.Nombre).Desc
+                                    //.ThenBy(() => joinTipoAuto.Nombre).Desc
+                                    //.ThenBy((x) => x.FechaInicio).Desc
+                                    //.ThenBy((x) => x.FechaFin).Desc
+                                    .ThenBy(x => x.Id).Desc;
+
+                            }
+
                         } break;
 
                     case Enums.InscripcionOrderBy.TipoInscripcion:
                         {
-                            IQueryOver<Inscripcion, TipoInscripcion> join;
-
-                            if (joinTipoInscripcion == null)
+                            JoinTipoInscripcion(query);
+                            if (consulta.OrderByAsc)
                             {
-                                join = query.JoinQueryOver<TipoInscripcion>(x => x.TipoInscripcion);
+                                query = query
+                                    .OrderBy(() => joinTipoInscripcion.Nombre).Asc
+                                    .ThenBy(x => x.Id).Asc;
                             }
                             else
                             {
-                                join = joinTipoInscripcion;
+                                query = query
+                                    .OrderBy(() => joinTipoInscripcion.Nombre).Desc
+                                    .ThenBy(x => x.Id).Desc;
                             }
 
-                            var orderBy = join.OrderBy(x => x.Nombre);
-                            var q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
                         } break;
 
                     case Enums.InscripcionOrderBy.TipoAuto:
                         {
-                            IQueryOver<Inscripcion, TipoAuto> join;
-
-                            if (joinTipoInscripcion == null)
+                            JoinTipoAuto(query);
+                            if (consulta.OrderByAsc)
                             {
-                                join = query.JoinQueryOver<TipoAuto>(x => x.TipoAuto);
+                                query = query
+                                    .OrderBy(() => joinTipoAuto.Nombre).Asc
+                                    .ThenBy(x => x.Id).Asc;
                             }
                             else
                             {
-                                join = joinTipoAuto;
+                                query = query
+                                    .OrderBy(() => joinTipoAuto.Nombre).Desc
+                                    .ThenBy(x => x.Id).Desc;
                             }
-
-                            var orderBy = join.OrderBy(x => x.Nombre);
-                            var q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
                         } break;
                     case Enums.InscripcionOrderBy.FechaInicio:
                         {
-                            var orderBy = query.OrderBy(x => (x.FechaInicio));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
-                    case Enums.InscripcionOrderBy.FechaFin:
-                        {
-                            var orderBy = query.OrderBy(x => (x.FechaFin));
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                        } break;
-                    case Enums.InscripcionOrderBy.UsuarioApellidoNombre:
-                        {
-                            IQueryOver<Inscripcion, Usuario> join;
-
-                            if (joinUsuario == null)
+                            if (consulta.OrderByAsc)
                             {
-                                join = query.JoinQueryOver<Usuario>(x => x.Usuario);
+                                query = query
+                                    .OrderBy((x) => x.FechaInicio).Asc
+                                    .ThenBy(x => x.Id).Asc;
+
                             }
                             else
                             {
-                                join = joinUsuario;
+                                query = query
+                                    .OrderBy((x) => x.FechaInicio).Desc
+                                    .ThenBy(x => x.Id).Desc;
                             }
-
-                            var orderBy = join.OrderBy(x => x.Apellido);
-                            var q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                            orderBy = join.ThenBy(x => x.Nombre);
-                            q = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
+                        } break;
+                    case Enums.InscripcionOrderBy.FechaFin:
+                        {
+                            if (consulta.OrderByAsc)
+                            {
+                                query = query
+                                    .OrderBy((x) => x.FechaFin).Asc
+                                    .ThenBy(x => x.Id).Asc;
+                            }
+                            else
+                            {
+                                query = query
+                                    .OrderBy((x) => x.FechaFin).Desc
+                                    .ThenBy(x => x.Id).Desc;
+                            }
+                        } break;
+                    case Enums.InscripcionOrderBy.UsuarioApellidoNombre:
+                        {
+                            JoinUsuario(query);
+                            if (consulta.OrderByAsc)
+                            {
+                                query = query
+                                    .OrderBy(() => joinUsuario.Apellido).Asc
+                                    .ThenBy(() => joinUsuario.Nombre).Asc
+                                    .ThenBy(x => x.Id).Asc;
+                            }
+                            else
+                            {
+                                query = query
+                                    .OrderBy(() => joinUsuario.Apellido).Desc
+                                    .ThenBy(() => joinUsuario.Nombre).Desc
+                                    .ThenBy(x => x.Id).Desc;
+                            }
 
                         } break;
                 }

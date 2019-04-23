@@ -8,8 +8,11 @@ namespace WS_Internet.v1.Entities.Consultas
     [Serializable]
     public class Consulta_InhabilitacionPaginada
     {
+        public int? TipoInhabilitacion { get; set; }
         public int? Dni { get; set; }
         public string Nombre { get; set; }
+        public bool? ConError { get; set; }
+        public bool? Favorito { get; set; }
 
         //Paginada
         public int Pagina { get; set; }

@@ -23,5 +23,6 @@ namespace WS_Internet.v1.Entities.Resultados
         public string DomicilioDepto { get; set; }
         public string DomicilioCodigoPostal { get; set; }
         public string Error { get; set; }
+        public bool Favorito { get; set; }
     }
 }

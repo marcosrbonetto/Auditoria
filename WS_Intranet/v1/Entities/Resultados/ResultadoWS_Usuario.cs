@@ -24,6 +24,7 @@ namespace WS_Intranet.v1.Entities.Resultados
         public string DomicilioDepto { get; set; }
         public string DomicilioCodigoPostal { get; set; }
         public string Error { get; set; }
+        public bool Favorito { get; set; }
 
         public ResultadoWS_Usuario(Usuario usuario)
         {
@@ -44,6 +45,7 @@ namespace WS_Intranet.v1.Entities.Resultados
             DomicilioDepto = usuario.DomicilioDepto;
             DomicilioCodigoPostal = usuario.DomicilioCodigoPostal;
             Error = usuario.Error;
+            Favorito = usuario.Favorito;
         }
 
         public static List<ResultadoWS_Usuario> ToList(IList<Usuario> list)

@@ -25,6 +25,7 @@ namespace WS_Intranet.v1.Entities.Resultados
         public bool? UsuarioSexoMasculino { get; set; }
 
         public string Error { get; set; }
+        public bool Favorito { get; set; }
 
         public ResultadoWS_InhabilitacionListado(_Model.Entities.Inhabilitacion entity)
         {
@@ -35,6 +36,7 @@ namespace WS_Intranet.v1.Entities.Resultados
             FechaFin = entity.FechaFin;
             FechaFinString = entity.FechaFinString;
             Error = entity.Error;
+            Favorito = entity.Favorito;
 
             if (entity.TipoInhabilitacion != null)
             {

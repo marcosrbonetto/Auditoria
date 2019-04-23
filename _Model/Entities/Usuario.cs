@@ -17,10 +17,11 @@ namespace _Model.Entities
         public virtual string DomicilioCalle { get; set; }
         public virtual string DomicilioAltura { get; set; }
         public virtual string DomicilioPiso { get; set; }
-        public virtual string DomicilioDepto{ get; set; }
+        public virtual string DomicilioDepto { get; set; }
         public virtual string DomicilioCodigoPostal { get; set; }
         public virtual string DomicilioObservaciones { get; set; }
         public virtual string Observaciones { get; set; }
         public virtual string Error { get; set; }
+        public virtual bool Favorito { get; set; }
     }
 }

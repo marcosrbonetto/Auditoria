@@ -11,8 +11,12 @@ namespace _Model.Consultas
         public int? Dni { get; set; }
         public string Nombre { get; set; }
         public string Identificador { get; set; }
+        public Enums.TipoAuto? TipoAuto { get; set; }
+        public Enums.TipoInscripcion? TipoInscripcion { get; set; }
         public bool? DadosDeBaja { get; set; }
         public bool? ConFechaInicio { get; set; }
+        public bool? ConError{ get; set; }
+        public bool? Favorito { get; set; }
 
         public Consulta_Inscripcion()
         {

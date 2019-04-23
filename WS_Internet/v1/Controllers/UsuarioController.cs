@@ -57,6 +57,15 @@ namespace WS_Internet.v1.Controllers
 
         }
 
+        [HttpPut]
+        [ConToken]
+        [v1.Controllers.FilterAttributtes.EsOperador]
+        [Route("Favorito")]
+        public ResultadoServicio<bool> ToggleFavorito(int id)
+        {
+            return RestCall.Call<bool>(Request);
+        }
+
         [HttpGet]
         [ConToken]
         [v1.Controllers.FilterAttributtes.EsOperador]
@@ -64,6 +73,15 @@ namespace WS_Internet.v1.Controllers
         public ResultadoServicio<v1.Entities.Resultados.ResultadoWS_Usuario> GetDetalle(int id)
         {
             return RestCall.Call<v1.Entities.Resultados.ResultadoWS_Usuario>(Request);
+        }
+
+        [HttpGet]
+        [ConToken]
+        [v1.Controllers.FilterAttributtes.EsOperador]
+        [Route("CantidadConError")]
+        public ResultadoServicio<int> GetCantidadConError()
+        {
+            return RestCall.Call<int>(Request);
         }
     }
 }

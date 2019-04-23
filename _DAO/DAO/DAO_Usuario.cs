@@ -25,16 +25,25 @@ namespace _DAO.DAO
             }
         }
 
+        Dictionary<string, bool> joins = new Dictionary<string, bool>();
+
+        private void ClearJoins()
+        {
+            joins = new Dictionary<string, bool>();
+        }
+
         public IQueryOver<Usuario, Usuario> GetQuery(_Model.Consultas.Consulta_Usuario consulta)
         {
+            ClearJoins();
             var query = GetSession().QueryOver<Usuario>();
 
+            //Nombre
             if (!string.IsNullOrEmpty(consulta.Nombre))
             {
                 foreach (var palabra in consulta.Nombre.Split(' '))
                 {
                     var p = palabra.Trim();
-                    query.Where(x => x.Nombre.IsLike(p, MatchMode.Anywhere) || x.Apellido.IsLike(p, MatchMode.Anywhere));
+                    query.Where((x) => (x.Nombre != null && x.Nombre.IsLike(p, MatchMode.Anywhere)) || x.Apellido != null && x.Apellido.IsLike(p, MatchMode.Anywhere));
                 }
             }
 
@@ -57,6 +66,33 @@ namespace _DAO.DAO
                 query.Where(x => x.SexoMasculino == consulta.SexoMasculino.Value);
             }
 
+            //Con error
+            if (consulta.ConError.HasValue)
+            {
+                if (consulta.ConError.Value)
+                {
+                    query.Where(x => x.Error != null && x.Error != "");
+                }
+                else
+                {
+                    query.Where(x => x.Error == null || x.Error == "");
+                }
+            }
+
+            //favorito
+            if (consulta.Favorito.HasValue)
+            {
+                if (consulta.Favorito.Value)
+                {
+                    query.Where(x => x.Favorito == true);
+                }
+                else
+                {
+                    query.Where(x => x.Favorito == false);
+                }
+            }
+
+            //Dados de baja
             if (consulta.DadosDeBaja.HasValue)
             {
                 if (consulta.DadosDeBaja.Value)
@@ -128,22 +164,54 @@ namespace _DAO.DAO
                 {
                     case Enums.UsuarioOrderBy.Dni:
                         {
-                            var orderBy = query.OrderBy(x => x.Dni);
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
+                            if (consulta.OrderByAsc)
+                            {
+                                query = query
+                                    .OrderBy((x) => x.Dni).Asc
+                                    .ThenBy(x => x.Id).Asc;
+
+                            }
+                            else
+                            {
+                                query = query
+                                    .OrderBy((x) => x.Dni).Desc
+                                    .ThenBy(x => x.Id).Desc;
+                            }
                         } break;
 
                     case Enums.UsuarioOrderBy.FechaNacimiento:
                         {
-                            var orderBy = query.OrderBy(x => x.FechaNacimiento);
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
+                            if (consulta.OrderByAsc)
+                            {
+                                query = query
+                                    .OrderBy((x) => x.FechaNacimiento).Asc
+                                    .ThenBy(x => x.Id).Asc;
+
+                            }
+                            else
+                            {
+                                query = query
+                                    .OrderBy((x) => x.FechaNacimiento).Desc
+                                    .ThenBy(x => x.Id).Desc;
+                            }
                         } break;
 
                     case Enums.UsuarioOrderBy.Nombre:
                         {
-                            var orderBy = query.OrderBy(x => x.Apellido);
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
-                            orderBy = query.ThenBy(x => x.Nombre);
-                            query = consulta.OrderByAsc ? orderBy.Asc : orderBy.Desc;
+                            if (consulta.OrderByAsc)
+                            {
+                                query = query
+                                    .OrderBy((x) => x.Apellido).Asc
+                                    .ThenBy((x) => x.Nombre).Asc
+                                    .ThenBy(x => x.Id).Asc;
+                            }
+                            else
+                            {
+                                query = query
+                                   .OrderBy((x) => x.Apellido).Desc
+                                   .ThenBy((x) => x.Nombre).Desc
+                                   .ThenBy(x => x.Id).Desc;
+                            }
                         } break;
                 }
 

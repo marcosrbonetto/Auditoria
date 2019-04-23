@@ -84,6 +84,24 @@ namespace WS_Intranet.v1.Controllers
             return new WSRules_Inscripcion(usuarioLogeado.Return).Actualizar(comando);
         }
 
+
+        [HttpPut]
+        [ConToken]
+        [EsOperador]
+        [Route("Favorito")]
+        public ResultadoServicio<bool> ToggleFavorito(int id)
+        {
+            var usuarioLogeado = GetUsuarioLogeado();
+            if (!usuarioLogeado.Ok)
+            {
+                var resultado = new ResultadoServicio<bool>();
+                resultado.Error = usuarioLogeado.Error;
+                return resultado;
+            }
+
+            return new WSRules_Inscripcion(usuarioLogeado.Return).ToggleFavorito(id);
+        }
+
         [HttpDelete]
         [ConToken]
         [EsOperador]
@@ -99,6 +117,23 @@ namespace WS_Intranet.v1.Controllers
             }
 
             return new WSRules_Inscripcion(usuarioLogeado.Return).Borrar(id);
+        }
+
+        [HttpGet]
+        [ConToken]
+        [EsOperador]
+        [Route("CantidadConError")]
+        public ResultadoServicio<int> GetCantidadConError()
+        {
+            var usuarioLogeado = GetUsuarioLogeado();
+            if (!usuarioLogeado.Ok)
+            {
+                var resultado = new ResultadoServicio<int>();
+                resultado.Error = usuarioLogeado.Error;
+                return resultado;
+            }
+
+            return new v1.Rules.WSRules_Inscripcion(usuarioLogeado.Return).GetCantidadConError();
         }
     }
 }

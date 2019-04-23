@@ -12,6 +12,8 @@ namespace _Model.Consultas
         public int? Dni { get; set; }
         public bool? SexoMasculino { get; set; }
         public DateTime? FechaNacimiento { get; set; }
+        public bool? ConError { get; set; }
+        public bool? Favorito { get; set; }
         public bool? DadosDeBaja { get; set; }
 
         public Consulta_Usuario()

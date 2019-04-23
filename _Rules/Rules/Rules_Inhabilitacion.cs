@@ -29,6 +29,11 @@ namespace _Rules.Rules
             return dao.Get(consulta);
         }
 
+        public Resultado<int> GetCantidad(_Model.Consultas.Consulta_Inhabilitacion consulta)
+        {
+            return dao.GetCantidad(consulta);
+        }
+
         public Resultado<Inhabilitacion> Insertar(_Model.Comandos.Comando_InhabilitacionNuevo comando)
         {
             var resultado = new Resultado<Inhabilitacion>();
@@ -282,7 +287,58 @@ namespace _Rules.Rules
 
             resultado.Return = true;
             return resultado;
-        }  
+        }
+
+        public Resultado<bool> ToggleFavorito(int id)
+        {
+            var resultado = new Resultado<bool>();
+
+            var resultadoTransaccion = dao.Transaction(() =>
+            {
+                try
+                {
+                    var resultadoEntity = GetByIdObligatorio(id);
+                    if (!resultadoEntity.Ok)
+                    {
+                        resultado.Error = resultadoEntity.Error;
+                        return false;
+                    }
+                    var entity = resultadoEntity.Return;
+                    if (entity == null || entity.FechaBaja != null)
+                    {
+                        resultado.Error = "La inhabilitación no existe o esta dado de baja";
+                        return false;
+                    }
+
+                    entity.Favorito = !entity.Favorito;
+
+                    //Actualizo
+                    var resultadoUpdate = base.Update(entity);
+                    if (!resultadoUpdate.Ok)
+                    {
+                        resultado.Error = resultadoUpdate.Error;
+                        return false;
+                    }
+
+                    resultado.Return = true;
+                    return true;
+
+                }
+                catch (Exception e)
+                {
+                    resultado.Error = "Error procesando la solicitud";
+                    return false;
+                }
+            });
+
+            if (resultado.Ok && !resultadoTransaccion)
+            {
+                resultado.Error = "Error procesando la solicitud";
+                return resultado;
+            }
+
+            return resultado;
+        }
 
         public Resultado<bool> ValidarComandoInsertarActualizar(_Model.Comandos.Comando_InhabilitacionNuevo comando)
         {
