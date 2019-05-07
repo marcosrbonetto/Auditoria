@@ -490,5 +490,11 @@ namespace _Rules.Rules
 
             return resultado;
         }
+
+        public void calcularErrores()
+        {
+            var insc = dao.GenerarErroresInscripcion();
+            var usr = dao.GenerarErroresUsuario();
+        }
     }
 }

@@ -135,5 +135,21 @@ namespace WS_Intranet.v1.Controllers
 
             return new v1.Rules.WSRules_Inscripcion(usuarioLogeado.Return).GetCantidadConError();
         }
+
+        [HttpGet]
+        [ConToken]
+        [EsOperador]
+        [Route("CalcularErrores")]
+        public void CalcularErrores()
+        {
+            var usuarioLogeado = GetUsuarioLogeado();
+            if (!usuarioLogeado.Ok)
+            {
+                var resultado = new ResultadoServicio<int>();
+                resultado.Error = usuarioLogeado.Error;
+            }
+
+             new v1.Rules.WSRules_Inscripcion(usuarioLogeado.Return).CalcularError();
+        }
     }
 }

@@ -156,5 +156,10 @@ namespace WS_Intranet.v1.Rules
             return resultado;
         }
 
+        public void CalcularError()
+        {
+            new _Rules.Rules.Rules_Inscripcion(getUsuarioLogueado()).calcularErrores();
+        }
+
     }
 }
