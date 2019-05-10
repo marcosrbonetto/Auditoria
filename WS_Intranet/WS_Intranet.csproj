@@ -175,6 +175,7 @@
     <Compile Include="v1\Entities\Comandos\ComandoWS_UsuarioNuevo.cs" />
     <Compile Include="v1\Entities\Comandos\ComandoWS_IniciarSesion.cs" />
     <Compile Include="v1\Entities\Consultas\Consulta_InhabilitacionPaginada.cs" />
+    <Compile Include="v1\Entities\Consultas\Consulta_Inscripcion.cs" />
     <Compile Include="v1\Entities\Consultas\Consulta_InscripcionPaginada.cs" />
     <Compile Include="v1\Entities\Consultas\Consulta_UsuarioPaginado.cs" />
     <Compile Include="v1\Entities\Consultas\Consulta_Usuario.cs" />

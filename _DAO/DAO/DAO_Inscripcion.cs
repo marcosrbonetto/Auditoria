@@ -81,6 +81,12 @@ namespace _DAO.DAO
                 query.Where(() => joinUsuario.Dni == consulta.Dni.Value);
             }
 
+            //IdUsuario
+            if (consulta.IdUsuario.HasValue)
+            {
+                query.Where(x => x.Usuario.Id == consulta.IdUsuario.Value);
+            }
+
             //Nombre
             if (!string.IsNullOrEmpty(consulta.Nombre))
             {
@@ -129,6 +135,11 @@ namespace _DAO.DAO
                 }
             }
 
+            //Activo hasta x fecha (Con fecha fin superior a X fecha)
+            if (consulta.ActivoHasta.HasValue)
+            {
+                query.Where(x => x.FechaFin > consulta.ActivoHasta.Value);
+            }
 
             //Con error
             if (consulta.ConError.HasValue)
@@ -408,49 +419,49 @@ namespace _DAO.DAO
                                 //DateTime fechaAlta = entity.FechaAlta;
                                 //if (fechaAlta.Day == 7 && fechaAlta.Month == 5 && fechaAlta.Year == 2019)
                                 //{
-                                    List<string> errores = new List<string>();
+                                List<string> errores = new List<string>();
 
-                                    //Usuario
-                                    //Es error cuando no tiene usuario o cuando su usuario tiene error
-                                    bool conUsuario = entity.Usuario != null;
-                                    bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;
-                                    if (!conUsuario || conUsuarioConError)
+                                //Usuario
+                                //Es error cuando no tiene usuario o cuando su usuario tiene error
+                                bool conUsuario = entity.Usuario != null;
+                                bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;
+                                if (!conUsuario || conUsuarioConError)
+                                {
+                                    if (!conUsuario)
                                     {
-                                        if (!conUsuario)
-                                        {
-                                            errores.Add("Sin usuario");
-                                        }
-                                        else
-                                        {
-                                            errores.Add("Usuario con error: " + entity.Usuario.Error);
-                                        }
-                                    }
-
-                                    //Tipo auto
-                                    //Cuando no tiene tipo de auto
-                                    bool conTipoAuto = entity.TipoAuto != null;
-                                    if (!conTipoAuto)
-                                    {
-                                        errores.Add("Sin tipo de auto");
-                                    }
-
-                                    //Identificador
-                                    //Cuando no tiene identificador
-                                    bool conIdentificador = entity.Identificador != null && entity.Identificador.Trim() != "";
-                                    if (!conIdentificador)
-                                    {
-                                        errores.Add("Sin identificador");
-                                    }
-
-                                    if (errores.Count != 0)
-                                    {
-                                        entity.Error = string.Join(" - ", errores);
+                                        errores.Add("Sin usuario");
                                     }
                                     else
                                     {
-                                        entity.Error = null;
+                                        errores.Add("Usuario con error: " + entity.Usuario.Error);
                                     }
-                                    s.Update(entity);
+                                }
+
+                                //Tipo auto
+                                //Cuando no tiene tipo de auto
+                                bool conTipoAuto = entity.TipoAuto != null;
+                                if (!conTipoAuto)
+                                {
+                                    errores.Add("Sin tipo de auto");
+                                }
+
+                                //Identificador
+                                //Cuando no tiene identificador
+                                bool conIdentificador = entity.Identificador != null && entity.Identificador.Trim() != "";
+                                if (!conIdentificador)
+                                {
+                                    errores.Add("Sin identificador");
+                                }
+
+                                if (errores.Count != 0)
+                                {
+                                    entity.Error = string.Join(" - ", errores);
+                                }
+                                else
+                                {
+                                    entity.Error = null;
+                                }
+                                s.Update(entity);
                                 //}
                             }
                             catch (Exception ex)
@@ -491,45 +502,46 @@ namespace _DAO.DAO
                         {
                             try
                             {
+
                                 //DateTime fechaAlta = entity.FechaAlta;
                                 //if (fechaAlta.Day == 7 && fechaAlta.Month == 5 && fechaAlta.Year == 2019)
                                 //{
-                                    List<string> errores = new List<string>();
+                                List<string> errores = new List<string>();
 
-                                    //Nombre
-                                    bool conNombre = entity.Nombre != null && entity.Nombre.Trim() != "";
-                                    bool conApellido = entity.Apellido != null && entity.Apellido.Trim() != "";
-                                    if (!conNombre && !conApellido)
-                                    {
-                                        errores.Add("El nombre y/o apellido es requerido");
-                                    }
-
-
-                                    //Sexo
-                                    if (!entity.SexoMasculino.HasValue)
-                                    {
-                                        errores.Add("El campo sexo es requerido");
-                                    }
-
-                                    //DNI
-                                    bool conDni = entity.Dni.HasValue;
-                                    bool dniValido = conDni && entity.Dni.Value > 0 && entity.Dni.Value < 200000000;
-                                    if (!dniValido)
-                                    {
-                                        errores.Add("El campo N° de DNI es inválido");
-                                    }
-
-                                    if (errores.Count != 0)
-                                    {
-                                        entity.Error = string.Join(" - ", errores);
-                                    }
-                                    else
-                                    {
-                                        entity.Error = null;
-                                    }
-                                    s.Update(entity);
+                                //Nombre
+                                bool conNombre = entity.Nombre != null && entity.Nombre.Trim() != "";
+                                bool conApellido = entity.Apellido != null && entity.Apellido.Trim() != "";
+                                if (!conNombre && !conApellido)
+                                {
+                                    errores.Add("El nombre y/o apellido es requerido");
                                 }
-                            //}
+
+
+                                //Sexo
+                                if (!entity.SexoMasculino.HasValue)
+                                {
+                                    errores.Add("El campo sexo es requerido");
+                                }
+
+                                //DNI
+                                bool conDni = entity.Dni.HasValue;
+                                bool dniValido = conDni && entity.Dni.Value > 0 && entity.Dni.Value < 200000000;
+                                if (!dniValido)
+                                {
+                                    errores.Add("El campo N° de DNI es inválido");
+                                }
+
+                                if (errores.Count != 0)
+                                {
+                                    entity.Error = string.Join(" - ", errores);
+                                }
+                                else
+                                {
+                                    entity.Error = null;
+                                }
+                                s.Update(entity);
+
+                            }
                             catch (Exception ex)
                             {
                                 var e = ex;

@@ -161,5 +161,22 @@ namespace WS_Intranet.v1.Rules
             new _Rules.Rules.Rules_Inscripcion(getUsuarioLogueado()).calcularErrores();
         }
 
+        public ResultadoServicio<bool> EstaInscripto(v1.Entities.Consultas.Consulta_Inscripcion consulta)
+        {
+            var resultado = new ResultadoServicio<bool>();
+
+            //Busco la info
+            var resultadoData = new _Rules.Rules.Rules_Inscripcion(getUsuarioLogueado()).EstaInscripto(consulta.Convertir());
+            if (!resultadoData.Ok)
+            {
+                resultado.Error = resultadoData.Error;
+                return resultado;
+            }
+
+            //Resultado
+            resultado.Return = resultadoData.Return;
+            return resultado;
+        }
+
     }
 }

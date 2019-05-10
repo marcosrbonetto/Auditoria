@@ -21,6 +21,15 @@ namespace WS_Internet.v1.Controllers
             return RestCall.Call<v1.Entities.Resultados.ResultadoWS_Paginador<v1.Entities.Resultados.ResultadoWS_InscripcionListado>>(Request, consulta);
         }
 
+        [HttpPut]
+        [ConToken]
+        [EsOperador]
+        [Route("EstaInscripto")]
+        public ResultadoServicio<bool> EstaInscripto(v1.Entities.Consultas.Consulta_Inscripcion consulta)
+        {
+            return RestCall.Call<bool>(Request, consulta);
+        }
+
         [HttpGet]
         [ConToken]
         [EsOperador]

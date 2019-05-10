@@ -12,11 +12,13 @@ namespace _Rules.Rules
     public class Rules_Inscripcion : BaseRules<Inscripcion>
     {
         private readonly DAO_Inscripcion dao;
+        private readonly Rules_Usuario _UsuarioRules;
 
         public Rules_Inscripcion(UsuarioLogueado data)
             : base(data)
         {
             dao = DAO_Inscripcion.Instance;
+            _UsuarioRules = new Rules_Usuario(data);
         }
 
         public Resultado<_Model.Resultados.Resultado_Paginador<Inscripcion>> GetPaginado(_Model.Consultas.Consulta_InscripcionPaginada consulta)
@@ -28,6 +30,104 @@ namespace _Rules.Rules
         {
             return dao.Get(consulta);
         }
+
+        public Resultado<bool> EstaInscripto(_Model.Consultas.Consulta_Inscripcion consulta)
+        {
+            var result = new Resultado<bool>();
+
+            if(!consulta.Dni.HasValue)
+            {
+                result.Error = "Dni requerido";
+                return result;
+            }
+            if (string.IsNullOrEmpty(consulta.Nombre))
+            {
+                result.Error = "Nombre requerido";
+                return result;
+            }
+            if (!consulta.TipoInscripcion.HasValue || !Enum.IsDefined(typeof(_Model.Enums.TipoInscripcion),consulta.TipoInscripcion))
+            {
+                result.Error = "Tipo Inscripción requerida";
+                return result;
+            }
+
+            //Busco por DNI
+            var resultadoUsuarioPorDni = _UsuarioRules.Get(new _Model.Consultas.Consulta_Usuario
+            {
+                Dni = consulta.Dni,
+                DadosDeBaja = null
+            });
+            if (!resultadoUsuarioPorDni.Ok)
+            {
+                result.Error = resultadoUsuarioPorDni.Error;
+                return result;
+            }
+
+            if (resultadoUsuarioPorDni.Return.Count >= 1) 
+            {
+                //Hay usuarios con ese dni, busco inscripciones por tipoInscripcion
+                var resultadoInscripciones = dao.GetCantidad(new _Model.Consultas.Consulta_Inscripcion
+                {
+                    IdUsuario = resultadoUsuarioPorDni.Return.FirstOrDefault().Id,
+                    ActivoHasta = consulta.TipoInscripcion.Value==Enums.TipoInscripcion.Chofer ? (DateTime?)Convert.ToDateTime("31/12/2018"):null,
+                    TipoInscripcion = consulta.TipoInscripcion,
+                    DadosDeBaja = null
+                });
+                if (!resultadoUsuarioPorDni.Ok)
+                {
+                    result.Error = resultadoUsuarioPorDni.Error;
+                    return result;
+                }
+
+                result.Return = resultadoInscripciones.Return > 0 ? true : false;
+            }
+            else 
+            {
+                //No hay usuarios con ese DNI, busco por NOMBRE
+                var resultadoUsuarioPorNombre = _UsuarioRules.Get(new _Model.Consultas.Consulta_Usuario
+                {
+                    Nombre = consulta.Nombre,
+                    DadosDeBaja = null
+                });
+                if (!resultadoUsuarioPorNombre.Ok)
+                {
+                    result.Error = resultadoUsuarioPorNombre.Error;
+                    return result;
+                }
+
+                if (resultadoUsuarioPorNombre.Return.Count == 1)
+                {
+                    //Hay un usuario con ese nombre, busco inscripciones por tipoInscripcion
+                    var resultadoInscripciones = dao.GetCantidad(new _Model.Consultas.Consulta_Inscripcion
+                    {
+                        IdUsuario = resultadoUsuarioPorNombre.Return.FirstOrDefault().Id,
+                        ActivoHasta = consulta.TipoInscripcion.Value == Enums.TipoInscripcion.Chofer ? (DateTime?)Convert.ToDateTime("31/12/2018") : null,
+                        TipoInscripcion = consulta.TipoInscripcion,
+                        DadosDeBaja = null
+                    });
+                    if (!resultadoInscripciones.Ok)
+                    {
+                        result.Error = resultadoInscripciones.Error;
+                        return result;
+                    }
+                    
+                    result.Return = resultadoInscripciones.Return > 0 ? true : false;
+                }
+                else if (resultadoUsuarioPorNombre.Return.Count > 1)
+                {
+                    //No se puedo buscar por dni, y la consulta por nombre obtiene muchos resultados
+                    result.Error = "Error 1, No se pudo buscar por DNI, y la consulta por NOMBRE obtiene muchos resultados";
+                }
+                else
+                {
+                    //No se encuentra ni por DNI ni por Nombre
+                    result.Return = false;
+                }
+            }
+
+            return result;
+        }
+
         public Resultado<int> GetCantidad(_Model.Consultas.Consulta_Inscripcion consulta)
         {
             return dao.GetCantidad(consulta);
@@ -493,8 +593,9 @@ namespace _Rules.Rules
 
         public void calcularErrores()
         {
-            var insc = dao.GenerarErroresInscripcion();
             var usr = dao.GenerarErroresUsuario();
+            var insc = dao.GenerarErroresInscripcion();
+            
         }
     }
 }
