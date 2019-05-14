@@ -135,12 +135,6 @@ namespace _DAO.DAO
                 }
             }
 
-            //Activo hasta x fecha (Con fecha fin superior a X fecha)
-            if (consulta.ActivoHasta.HasValue)
-            {
-                query.Where(x => x.FechaFin > consulta.ActivoHasta.Value);
-            }
-
             //Con error
             if (consulta.ConError.HasValue)
             {
@@ -384,6 +378,36 @@ namespace _DAO.DAO
             try
             {
                 var query = GetQuery(consulta);
+                resultado.Return = query.RowCount();
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+            return resultado;
+
+        }
+
+        public Resultado<int> GetCantidadInscripto(_Model.Consultas.Consulta_Inscripcion consulta)
+        {
+            var resultado = new Resultado<int>();
+
+            try
+            {
+                var query = GetQuery(consulta);
+                
+                if (consulta.TipoInscripcion == Enums.TipoInscripcion.Chofer && consulta.ActivoHasta.HasValue)
+                {
+                    //Activo hasta x fecha (Con fecha fin superior a X fecha)
+                    query.Where(x => x.FechaFin == null || x.FechaFin > consulta.ActivoHasta.Value);
+                    var choferesSinFechaFin = query;
+                    choferesSinFechaFin.Where(x=> x.FechaFin == null);
+                    if (choferesSinFechaFin.RowCount() > 0) 
+                    {
+                        resultado.Error = "E2: Hay inscripcion/es de chofer sin fecha fin";
+                        return resultado;
+                    }
+                }
                 resultado.Return = query.RowCount();
             }
             catch (Exception e)

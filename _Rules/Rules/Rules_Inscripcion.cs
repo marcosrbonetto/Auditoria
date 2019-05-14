@@ -66,16 +66,16 @@ namespace _Rules.Rules
             if (resultadoUsuarioPorDni.Return.Count >= 1) 
             {
                 //Hay usuarios con ese dni, busco inscripciones por tipoInscripcion
-                var resultadoInscripciones = dao.GetCantidad(new _Model.Consultas.Consulta_Inscripcion
+                var resultadoInscripciones = dao.GetCantidadInscripto(new _Model.Consultas.Consulta_Inscripcion
                 {
                     IdUsuario = resultadoUsuarioPorDni.Return.FirstOrDefault().Id,
                     ActivoHasta = consulta.TipoInscripcion.Value==Enums.TipoInscripcion.Chofer ? (DateTime?)Convert.ToDateTime("31/12/2018"):null,
                     TipoInscripcion = consulta.TipoInscripcion,
                     DadosDeBaja = null
                 });
-                if (!resultadoUsuarioPorDni.Ok)
+                if (!resultadoInscripciones.Ok)
                 {
-                    result.Error = resultadoUsuarioPorDni.Error;
+                    result.Error = resultadoInscripciones.Error;
                     return result;
                 }
 
@@ -98,7 +98,7 @@ namespace _Rules.Rules
                 if (resultadoUsuarioPorNombre.Return.Count == 1)
                 {
                     //Hay un usuario con ese nombre, busco inscripciones por tipoInscripcion
-                    var resultadoInscripciones = dao.GetCantidad(new _Model.Consultas.Consulta_Inscripcion
+                    var resultadoInscripciones = dao.GetCantidadInscripto(new _Model.Consultas.Consulta_Inscripcion
                     {
                         IdUsuario = resultadoUsuarioPorNombre.Return.FirstOrDefault().Id,
                         ActivoHasta = consulta.TipoInscripcion.Value == Enums.TipoInscripcion.Chofer ? (DateTime?)Convert.ToDateTime("31/12/2018") : null,
@@ -116,7 +116,8 @@ namespace _Rules.Rules
                 else if (resultadoUsuarioPorNombre.Return.Count > 1)
                 {
                     //No se puedo buscar por dni, y la consulta por nombre obtiene muchos resultados
-                    result.Error = "Error 1, No se pudo buscar por DNI, y la consulta por NOMBRE obtiene muchos resultados";
+                    result.Error = "E1: No se pudo buscar por DNI, y la consulta por NOMBRE obtiene muchos resultados";
+                    return result;
                 }
                 else
                 {
