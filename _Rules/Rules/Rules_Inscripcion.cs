@@ -81,50 +81,51 @@ namespace _Rules.Rules
 
                 result.Return = resultadoInscripciones.Return > 0 ? true : false;
             }
-            else 
+            else
             {
-                //No hay usuarios con ese DNI, busco por NOMBRE
-                var resultadoUsuarioPorNombre = _UsuarioRules.Get(new _Model.Consultas.Consulta_Usuario
-                {
-                    Nombre = consulta.Nombre,
-                    DadosDeBaja = null
-                });
-                if (!resultadoUsuarioPorNombre.Ok)
-                {
-                    result.Error = resultadoUsuarioPorNombre.Error;
-                    return result;
-                }
-
-                if (resultadoUsuarioPorNombre.Return.Count == 1)
-                {
-                    //Hay un usuario con ese nombre, busco inscripciones por tipoInscripcion
-                    var resultadoInscripciones = dao.GetCantidadInscripto(new _Model.Consultas.Consulta_Inscripcion
-                    {
-                        IdUsuario = resultadoUsuarioPorNombre.Return.FirstOrDefault().Id,
-                        ActivoHasta = consulta.TipoInscripcion.Value == Enums.TipoInscripcion.Chofer ? (DateTime?)Convert.ToDateTime("31/12/2018") : null,
-                        TipoInscripcion = consulta.TipoInscripcion,
-                        DadosDeBaja = null
-                    });
-                    if (!resultadoInscripciones.Ok)
-                    {
-                        result.Error = resultadoInscripciones.Error;
-                        return result;
-                    }
-                    
-                    result.Return = resultadoInscripciones.Return > 0 ? true : false;
-                }
-                else if (resultadoUsuarioPorNombre.Return.Count > 1)
-                {
-                    //No se puedo buscar por dni, y la consulta por nombre obtiene muchos resultados
-                    result.Error = "E1: No se pudo buscar por DNI, y la consulta por NOMBRE obtiene muchos resultados";
-                    return result;
-                }
-                else
-                {
-                    //No se encuentra ni por DNI ni por Nombre
-                    result.Return = false;
-                }
+            //No se encuentra por DNI 
+                result.Return = false;
             }
+            //else 
+            //{
+            //    //No hay usuarios con ese DNI, busco por NOMBRE
+            //    var resultadoUsuarioPorNombre = _UsuarioRules.Get(new _Model.Consultas.Consulta_Usuario
+            //    {
+            //        Nombre = consulta.Nombre,
+            //        DadosDeBaja = null
+            //    });
+            //    if (!resultadoUsuarioPorNombre.Ok)
+            //    {
+            //        result.Error = resultadoUsuarioPorNombre.Error;
+            //        return result;
+            //    }
+
+            //    if (resultadoUsuarioPorNombre.Return.Count == 1)
+            //    {
+            //        //Hay un usuario con ese nombre, busco inscripciones por tipoInscripcion
+            //        var resultadoInscripciones = dao.GetCantidadInscripto(new _Model.Consultas.Consulta_Inscripcion
+            //        {
+            //            IdUsuario = resultadoUsuarioPorNombre.Return.FirstOrDefault().Id,
+            //            ActivoHasta = consulta.TipoInscripcion.Value == Enums.TipoInscripcion.Chofer ? (DateTime?)Convert.ToDateTime("31/12/2018") : null,
+            //            TipoInscripcion = consulta.TipoInscripcion,
+            //            DadosDeBaja = null
+            //        });
+            //        if (!resultadoInscripciones.Ok)
+            //        {
+            //            result.Error = resultadoInscripciones.Error;
+            //            return result;
+            //        }
+                    
+            //        result.Return = resultadoInscripciones.Return > 0 ? true : false;
+            //    }
+            //    else if (resultadoUsuarioPorNombre.Return.Count > 1)
+            //    {
+            //        //No se puedo buscar por dni, y la consulta por nombre obtiene muchos resultados
+            //        result.Error = "E1: No se pudo buscar por DNI, y la consulta por NOMBRE obtiene muchos resultados";
+            //        return result;
+            //    }
+
+            //}
 
             return result;
         }
