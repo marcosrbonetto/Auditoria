@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Telerik.Reporting.Processing;
 using _DAO.DAO;
 using _Model;
 using _Model.Entities;
@@ -27,10 +28,10 @@ namespace _Rules.Rules
             return dao.GetByKeyValue(keyValue);
         }
 
-        public Resultado<Telerik.Reporting.Report> GenerarReporte(_Model.Consultas.Consulta_Inscripcion consulta)
+        public Resultado<string> GenerarReporte(_Model.Consultas.Consulta_Inscripcion consulta)
         {
             var inscripcion =_InscripcionRules.Get(consulta);
-            var resultado = new Resultado<Telerik.Reporting.Report>();
+            var resultado = new Resultado<string>();
 
             try
             {
@@ -79,7 +80,16 @@ namespace _Rules.Rules
                 objectDataSourceInscripcion.DataSource = dtInscripcion;
                 reporte.DataSource = objectDataSourceInscripcion;
 
-                resultado.Return = reporte;
+                //resultado.Return = reporte;         
+
+             
+
+                Telerik.Reporting.Processing.ReportProcessor reportProcessor = new ReportProcessor();
+                RenderingResult result = reportProcessor.RenderReport("PDF", reporte, null);
+                var bytes = result.DocumentBytes;
+                var base64 = "data:application/pdf;base64," + Convert.ToBase64String(bytes);
+                resultado.Return = base64;
+
             }
             catch (Exception e)
             {
