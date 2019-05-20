@@ -60,6 +60,7 @@
     <Compile Include="Consultas\Consulta_Inscripcion.cs" />
     <Compile Include="Consultas\Consulta_MuniOnlineUsuario.cs" />
     <Compile Include="Entities\Inhabilitacion.cs" />
+    <Compile Include="Entities\Reportes\Reporte.cs" />
     <Compile Include="Entities\TipoCondicionInscripcion.cs" />
     <Compile Include="Entities\TipoInhabilitacion.cs" />
     <Compile Include="Entities\Usuario.cs" />
