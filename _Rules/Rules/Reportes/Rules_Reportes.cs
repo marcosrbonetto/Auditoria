@@ -27,6 +27,20 @@ namespace _Rules.Rules
             return dao.GetByKeyValue(keyValue);
         }
 
+        public Resultado<string> GetInscripcionesPorDni(_Model.Consultas.Consulta_Inscripcion consulta)
+        {
+            var resultado = new Resultado<string>();
+
+            return resultado;
+        }
+
+        public Resultado<string> GetInscripcionesPorChapa(_Model.Consultas.Consulta_Inscripcion consulta)
+        {
+            var resultado = new Resultado<string>();
+
+            return resultado;
+        }
+
         public Resultado<Telerik.Reporting.Report> GenerarReporte(_Model.Consultas.Consulta_Inscripcion consulta)
         {
             var inscripcion =_InscripcionRules.Get(consulta);
@@ -89,5 +103,6 @@ namespace _Rules.Rules
 
             return resultado;
         }
+
     }
 }

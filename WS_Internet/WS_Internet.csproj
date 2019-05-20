@@ -161,6 +161,7 @@
     <Compile Include="v1\Controllers\InhabilitacionController.cs" />
     <Compile Include="v1\Controllers\MuniOnlineUsuarioController.cs" />
     <Compile Include="v1\Controllers\InscripcionController.cs" />
+    <Compile Include="v1\Controllers\ReporteController.cs" />
     <Compile Include="v1\Controllers\TipoInhabilitacionController.cs" />
     <Compile Include="v1\Controllers\TipoCondicionInscripcionController.cs" />
     <Compile Include="v1\Controllers\TipoInscripcionController.cs" />

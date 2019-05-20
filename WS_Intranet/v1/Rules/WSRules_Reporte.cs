@@ -25,7 +25,7 @@ namespace WS_Intranet.v1.Rules
         {
             var resultado = new ResultadoServicio<string>();
 
-            var resultadoQuery = rules.GetInscripcionesPorDni(consulta);
+            var resultadoQuery = rules.GetInscripcionesPorDni(consulta.Convertir());
             if (!resultadoQuery.Ok)
             {
                 resultado.Error = resultadoQuery.Error;
@@ -40,7 +40,7 @@ namespace WS_Intranet.v1.Rules
         {
             var resultado = new ResultadoServicio<string>();
 
-            var resultadoQuery = rules.GetInscripcionesPorChapa(consulta);
+            var resultadoQuery = rules.GetInscripcionesPorChapa(consulta.Convertir());
             if (!resultadoQuery.Ok)
             {
                 resultado.Error = resultadoQuery.Error;
