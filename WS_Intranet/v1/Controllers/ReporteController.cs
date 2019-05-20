@@ -46,8 +46,8 @@ namespace WS_Intranet.v1.Controllers
                 resultado.Error = usuarioLogeado.Error;
                 return resultado;
             }
-
             return new v1.Rules.WSRules_Reporte(usuarioLogeado.Return).GetInscripcionesPorChapa(consulta);
         }
+   
     }
 }

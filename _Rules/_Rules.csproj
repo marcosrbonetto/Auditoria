@@ -110,7 +110,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\Reportes\Reporte_Inscripcion_Dni.trdx" />
+    <None Include="Resources\Reportes\Reporte_Inscripcion_Dni.trdx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\_DAO\_DAO.csproj">
