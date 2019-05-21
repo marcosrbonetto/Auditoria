@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report DataSourceName="General" Width="18.9735416068443cm" Name="ListadoRQ" SnapGridSize="0.1cm" xmlns="http://schemas.telerik.com/reporting/2012/3.8">
+<Report DataSourceName="General" Width="18.9735398910253cm" Name="ListadoRQ" Zoom="4" SnapGridSize="0.1cm" xmlns="http://schemas.telerik.com/reporting/2012/3.8">
   <Style BackgroundColor="" />
   <DataSources>
     <SqlDataSource ConnectionString="RequerimientosCiudad" SelectCommand="select &#xD;&#xA;'ZOVAK' as apellido,&#xD;&#xA;'Mauricio' as nombre,&#xD;&#xA;'36355449' as documento,&#xD;&#xA;'Los cipreses' as domicilioCalle,&#xD;&#xA;'4674' as domicilioAltura,&#xD;&#xA;'colinas del cerro' as domicilioBarrio,&#xD;&#xA;'AUTO TAXI' as tipoAuto,&#xD;&#xA;1 as idTipoAuto,&#xD;&#xA;'T521' as identificador" Name="General" />
@@ -49,88 +49,18 @@
             </HtmlTextBox>
           </Items>
         </Panel>
-        <TextBox Width="4.6629968999188cm" Height="0.999999979813894cm" Left="14.3104439378853cm" Top="0.00009996159593371cm" Value="Subdirección de Transporte" Name="textBox6">
+        <TextBox Width="4.6629968999188cm" Height="0.999999979813894cm" Left="14.3104439378853cm" Top="0cm" Value="Subdirección de Transporte" Name="textBox6">
           <Style VerticalAlign="Middle" />
         </TextBox>
       </Items>
     </PageHeaderSection>
-    <DetailSection Height="1.21787136505008cm" Name="detailSection1">
+    <DetailSection Height="0.132291662986909cm" Name="detailSection1">
       <Items>
-        <Table DataSourceName="dsTablaFechas" Width="18.9468790815476cm" Height="1.08517980575562cm" Left="0cm" Top="0.00019981553920747cm" Name="tablaFechas">
-          <Body>
-            <Cells>
-              <TableCell RowIndex="0" ColumnIndex="1" RowSpan="1" ColumnSpan="1">
-                <ReportItem>
-                  <TextBox Width="6.37024338382859cm" Height="0.61300220464625cm" Left="4.99989938735962cm" Top="1.29999816417694cm" Value="= Fields.fechaFin" Format="{0:g}" Name="textBox29" StyleName="">
-                    <Style TextAlign="Center" VerticalAlign="Middle" />
-                  </TextBox>
-                </ReportItem>
-              </TableCell>
-              <TableCell RowIndex="0" ColumnIndex="2" RowSpan="1" ColumnSpan="1">
-                <ReportItem>
-                  <TextBox Width="6.13561431635629cm" Height="0.61300220464625cm" Left="0cm" Top="0cm" Value="=Fields.fechaTelegrama" Format="" Name="textBox23" StyleName="">
-                    <Style TextAlign="Center" VerticalAlign="Middle" />
-                  </TextBox>
-                </ReportItem>
-              </TableCell>
-              <TableCell RowIndex="0" ColumnIndex="0" RowSpan="1" ColumnSpan="1">
-                <ReportItem>
-                  <TextBox Width="6.44102194602374cm" Height="0.61300220464625cm" Left="0cm" Top="0cm" Value="= Fields.fechaInicio" Name="textBox35" StyleName="">
-                    <Style TextAlign="Center" VerticalAlign="Middle" />
-                  </TextBox>
-                </ReportItem>
-              </TableCell>
-            </Cells>
-            <Columns>
-              <Column Width="6.44102194602374cm" />
-              <Column Width="6.37024338382859cm" />
-              <Column Width="6.13561431635629cm" />
-            </Columns>
-            <Rows>
-              <Row Height="0.61300220464625cm" />
-            </Rows>
-          </Body>
-          <Corner />
-          <RowGroups>
-            <TableGroup Name="detailTableGroup">
-              <Groupings>
-                <Grouping />
-              </Groupings>
-            </TableGroup>
-          </RowGroups>
-          <ColumnGroups>
-            <TableGroup Name="tableGroup1">
-              <ReportItem>
-                <TextBox Width="6.44102194602374cm" Height="0.472177601109365cm" Left="0cm" Top="0cm" Value="Fecha Alta" Name="textBox31">
-                  <Style BackgroundColor="224, 224, 224" TextAlign="Center" VerticalAlign="Middle" />
-                </TextBox>
-              </ReportItem>
-            </TableGroup>
-            <TableGroup Name="tableGroup2">
-              <ReportItem>
-                <TextBox Width="6.37024338382859cm" Height="0.472177601109365cm" Left="0cm" Top="0cm" Value="Fecha Baja" Name="textBox33">
-                  <Style BackgroundColor="224, 224, 224" TextAlign="Center" VerticalAlign="Middle" />
-                </TextBox>
-              </ReportItem>
-            </TableGroup>
-            <TableGroup Name="group1">
-              <ReportItem>
-                <TextBox Width="6.13561431635629cm" Height="0.472177601109365cm" Left="0cm" Top="0cm" Value="Fecha Telegrama" Name="textBox13" StyleName="">
-                  <Style BackgroundColor="224, 224, 224" TextAlign="Center" VerticalAlign="Middle" />
-                </TextBox>
-              </ReportItem>
-            </TableGroup>
-          </ColumnGroups>
-          <Sortings>
-            <Sorting Direction="Desc" />
-          </Sortings>
-        </Table>
-        <Shape Width="18.9469796615062cm" Height="0.132291659712791cm" Left="0.00010012308478013cm" Top="1.08557970206317cm" Name="shape2">
-          <Style BackgroundColor="Silver" Color="191, 191, 191" />
-          <ShapeType>
-            <LineShape Direction="EW" />
-          </ShapeType>
-        </Shape>
+        <SubReport Width="18.9733414464657cm" Height="0.132291659712791cm" Left="0.00010012308478013cm" Top="0cm" KeepTogether="False" Name="subreporteInsripciones">
+          <ReportSource>
+            <UriReportSource Uri="=ReportItem.DataObject" />
+          </ReportSource>
+        </SubReport>
       </Items>
     </DetailSection>
     <PageFooterSection Height="1.5cm" Name="pageFooterSection1">
@@ -217,50 +147,4 @@
   <Sortings>
     <Sorting Direction="Desc" />
   </Sortings>
-  <Groups>
-    <Group Name="group">
-      <GroupHeader>
-        <GroupHeaderSection Height="1.74716915603406cm" Name="groupHeaderSection">
-          <Items>
-            <TextBox Width="2.48599981442015cm" Height="0.396806925535202cm" Left="0.0266579328115561cm" Top="0.00009990776960374cm" Value="N° de Licencia:" Name="textBox3">
-              <Style TextAlign="Left" VerticalAlign="Top">
-                <Font Name="Lato" Bold="True" />
-              </Style>
-            </TextBox>
-            <TextBox Width="1.08416633061622cm" Height="0.396806925535202cm" Left="5.81573076983247cm" Top="0.00009990776960374cm" Value="Auto:" Name="textBox2">
-              <Style TextAlign="Left" VerticalAlign="Top">
-                <Font Name="Lato" Bold="True" />
-              </Style>
-            </TextBox>
-            <TextBox Width="2.48723880747686cm" Height="0.396806925535202cm" Left="2.60203102503531cm" Top="0.00009990776960374cm" Value="= Fields.identificador" Name="textBox5">
-              <Style VerticalAlign="Top">
-                <Font Name="Lato" />
-              </Style>
-            </TextBox>
-            <TextBox Width="4.9034359772839cm" Height="0.396806925535202cm" Left="6.90009736768134cm" Top="0.00009990776960374cm" Value="= Fields.tipoAuto" Name="textBox1">
-              <Style VerticalAlign="Top">
-                <Font Name="Lato" />
-              </Style>
-            </TextBox>
-            <Shape Width="18.9467832910689cm" Height="0.132291659712791cm" Left="0cm" Top="1.39999977795284cm" Name="shape1">
-              <Style Color="64, 64, 64" />
-              <ShapeType>
-                <LineShape Direction="EW" />
-              </ShapeType>
-            </Shape>
-          </Items>
-        </GroupHeaderSection>
-      </GroupHeader>
-      <GroupFooter>
-        <GroupFooterSection Height="0.105833380854791cm" Name="groupFooterSection" />
-      </GroupFooter>
-      <Groupings>
-        <Grouping Expression="= Fields.idTipoAuto" />
-        <Grouping Expression="= Fields.identificador" />
-      </Groupings>
-      <Sortings>
-        <Sorting Expression="= Fields.TipoAuto" Direction="Asc" />
-      </Sortings>
-    </Group>
-  </Groups>
 </Report>
