@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report DataSourceName="General" Width="18.9470806904254cm" Name="ListadoRQ" Zoom="3" SnapGridSize="0.1cm" xmlns="http://schemas.telerik.com/reporting/2012/3.8">
+<Report DataSourceName="General" Width="18.9470806904254cm" Name="ListadoRQ" Zoom="2" SnapGridSize="0.1cm" xmlns="http://schemas.telerik.com/reporting/2012/3.8">
   <Style BackgroundColor="" />
   <DataSources>
     <SqlDataSource ConnectionString="RequerimientosCiudad" SelectCommand="select &#xD;&#xA;'ZOVAK' as apellido,&#xD;&#xA;'Mauricio' as nombre,&#xD;&#xA;'36355449' as documento,&#xD;&#xA;'Los cipreses' as domicilioCalle,&#xD;&#xA;'4674' as domicilioAltura,&#xD;&#xA;'colinas del cerro' as domicilioBarrio,&#xD;&#xA;'AUTO TAXI' as tipoAuto,&#xD;&#xA;1 as idTipoAuto,&#xD;&#xA;'T521' as identificador" Name="General" />
@@ -18,7 +18,7 @@
         <TextBox Width="6.30000029269853cm" Height="0.589157093826534cm" Left="6.30030001599749cm" Top="0cm" Value="= Fields.fechaFin" Name="textBox4">
           <Style TextAlign="Center" VerticalAlign="Middle" />
         </TextBox>
-        <TextBox Width="6.30000013120969cm" Height="0.594266439438402cm" Left="0.00010012308478013cm" Top="0cm" Value="= Fields.fechaFin" Name="textBox6">
+        <TextBox Width="6.30000013120969cm" Height="0.594266439438402cm" Left="0.00010012308478013cm" Top="0cm" Value="= Fields.fechaInicio" Name="textBox6">
           <Style TextAlign="Center" VerticalAlign="Middle" />
         </TextBox>
         <TextBox Width="6.29999926320714cm" Height="0.594266439438402cm" Left="12.6005005548656cm" Top="0cm" Value="=Fields.fechaTelegrama" Name="textBox7">
