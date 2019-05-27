@@ -31,6 +31,20 @@ namespace _Rules.Rules
             return dao.Get(consulta);
         }
 
+        public Resultado<List<Inscripcion>> GetReporte(_Model.Enums.TipoAuto? tipoAuto, string chapa)
+        {
+            for (int i = 4 - chapa.Count(); i > 0; i--)
+            {
+                chapa = string.Format("{0}{1}", "0", chapa);
+            }
+
+            return dao.Get(new _Model.Consultas.Consulta_Inscripcion() 
+            { 
+                TipoAuto = tipoAuto,
+                Identificador = chapa
+            });
+        }
+
         public Resultado<bool> EstaInscripto(_Model.Consultas.Consulta_Inscripcion consulta)
         {
             var result = new Resultado<bool>();

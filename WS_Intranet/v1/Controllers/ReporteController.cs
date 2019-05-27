@@ -37,7 +37,7 @@ namespace WS_Intranet.v1.Controllers
         [ConToken]
         [EsOperador]
         [Route("GetInscripcionesPorChapa")]
-        public ResultadoServicio<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, int? numero)
+        public ResultadoServicio<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, string numero)
         {
             var usuarioLogeado = GetUsuarioLogeado();
             if (!usuarioLogeado.Ok)

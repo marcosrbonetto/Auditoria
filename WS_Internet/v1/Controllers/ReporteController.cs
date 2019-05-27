@@ -22,7 +22,7 @@ namespace WS_Internet.v1.Controllers
         [HttpPost]
         [ConToken]
         [Route("GetInscripcionesPorChapa")]
-        public ResultadoServicio<string> GetInscripcionesPorChapa(int? tipoAuto, int? numero)
+        public ResultadoServicio<string> GetInscripcionesPorChapa(int? tipoAuto, string numero)
         {
             return RestCall.Call<string>(Request);
         }

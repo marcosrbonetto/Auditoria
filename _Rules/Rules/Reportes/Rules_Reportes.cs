@@ -266,24 +266,17 @@ namespace _Rules.Rules
             return result;
         }
 
-        public Resultado<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, int? numero)
+        public Resultado<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, string numero)
         {
-
             var resultado = new Resultado<string>();
 
-            var consulta = new _Model.Consultas.Consulta_Inscripcion();
-            if (tipoAuto != null & numero != null)
-            {
-                consulta.TipoAuto = tipoAuto;
-                consulta.Identificador = numero.ToString();
-            }
-            else
+            if (tipoAuto == null || string.IsNullOrEmpty(numero) || numero.Count()>4)
             {
                 resultado.Error = "Ingrese datos válidos";
                 return resultado;
             }
 
-            var resultadoInscripcion = _InscripcionRules.Get(consulta);
+            var resultadoInscripcion = _InscripcionRules.GetReporte(tipoAuto,numero);
             if (!resultadoInscripcion.Ok)
             {
                 resultado.Error = resultadoInscripcion.Error;
