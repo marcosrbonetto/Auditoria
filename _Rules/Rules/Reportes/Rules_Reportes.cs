@@ -41,12 +41,18 @@ namespace _Rules.Rules
             }
             var inscripciones = resultadoInscripcion.Return;
 
+            if (inscripciones.Count == 0)
+            {
+                resultado.Error = "No se encontraron inscripciones con los filtros ingresados";
+                return resultado;
+            }
+
             try
             {
-                //var rutaReporte = HttpContext.Current.Server.MapPath("~/");
-                var rutaReportePadre = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/")).Parent.FullName;
+                var rutaReporte = HttpContext.Current.Server.MapPath("~/Resources/Reportes/Reporte_Inscripcion_Dni_encabezado.trdx");
+                //var rutaReportePadre = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/")).Parent.FullName;
 
-                var rutaReporte = rutaReportePadre + "/_Rules/Resources/Reportes/Reporte_Inscripcion_Dni_encabezado.trdx";
+                //var rutaReporte = rutaReportePadre + "/_Rules/Resources/Reportes/Reporte_Inscripcion_Dni_encabezado.trdx";
 
                 Telerik.Reporting.Report reporte = new Telerik.Reporting.Report();
                 System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();
@@ -82,7 +88,15 @@ namespace _Rules.Rules
 
                 //****************Encabezado*********************************
                 //****************USUARIO********************************
-                Usuario usuario = inscripciones[0].Usuario;
+                var usuario = inscripciones[0].Usuario;
+                if (usuario == null)
+                {
+                    resultado.Error = "No se encontro el usuario";
+                    return resultado;
+                }
+               
+              
+                
                 //Nombre
                 string nombre = usuario.Nombre;
                 if (string.IsNullOrEmpty(nombre))
@@ -162,10 +176,10 @@ namespace _Rules.Rules
 
             try
             {
-                //var rutaReporte = HttpContext.Current.Server.MapPath("~/");
-                var rutaReportePadre = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/")).Parent.FullName;
+                var rutaReporte = HttpContext.Current.Server.MapPath("~/Resources/Reportes/Reporte_Inscripcion_Dni_detalle.trdx");
+                //var rutaReportePadre = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/")).Parent.FullName;
 
-                var rutaReporte = rutaReportePadre + "/_Rules/Resources/Reportes/Reporte_Inscripcion_Dni_detalle.trdx";
+                //var rutaReporte = rutaReportePadre + "/_Rules/Resources/Reportes/Reporte_Inscripcion_Dni_detalle.trdx";
 
                 Telerik.Reporting.Report reporte = new Telerik.Reporting.Report();
                 System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();
@@ -251,13 +265,17 @@ namespace _Rules.Rules
                 return resultado;
             }
             var inscripciones = resultadoInscripcion.Return;
+            if (inscripciones.Count == 0)
+            {
+                resultado.Error = "No se encontraron inscripciones con los filtros ingresados";
+            }
 
             try
             {
-                //var rutaReporte = HttpContext.Current.Server.MapPath("~/");
-                var rutaReportePadre = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/")).Parent.FullName;
+                var rutaReporte = HttpContext.Current.Server.MapPath("~/Resources/Reportes/Reporte_Inscripcion_Licencia_encabezado.trdx");
+                //var rutaReportePadre = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/")).Parent.FullName;
 
-                var rutaReporte = rutaReportePadre + "/_Rules/Resources/Reportes/Reporte_Inscripcion_Licencia_encabezado.trdx";
+                //var rutaReporte = rutaReportePadre + "/_Rules/Resources/Reportes/Reporte_Inscripcion_Licencia_encabezado.trdx";
 
                 Telerik.Reporting.Report reporte = new Telerik.Reporting.Report();
                 System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();
@@ -321,7 +339,7 @@ namespace _Rules.Rules
             }
             catch (Exception e)
             {
-                resultado.Error = "Error procesando la solicitud";
+                resultado.Error = e.Message;
                 return resultado;
             }
 
@@ -333,10 +351,10 @@ namespace _Rules.Rules
 
             try
             {
-                //var rutaReporte = HttpContext.Current.Server.MapPath("~/");
-                var rutaReportePadre = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/")).Parent.FullName;
+                var rutaReporte = HttpContext.Current.Server.MapPath("~/Resources/Reportes/Reporte_Inscripcion_Licencia_detalle.trdx");
+                //var rutaReportePadre = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/")).Parent.FullName;
 
-                var rutaReporte = rutaReportePadre + "/_Rules/Resources/Reportes/Reporte_Inscripcion_Licencia_detalle.trdx";
+                //var rutaReporte = rutaReportePadre + "/_Rules/Resources/Reportes/Reporte_Inscripcion_Licencia_detalle.trdx";
 
                 Telerik.Reporting.Report reporte = new Telerik.Reporting.Report();
                 System.Xml.XmlReaderSettings settings = new System.Xml.XmlReaderSettings();

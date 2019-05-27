@@ -116,6 +116,17 @@
     <None Include="Properties\PublishProfiles\WS_Instranet_test.pubxml" />
     <None Include="Properties\PublishProfiles\WS_Intranet_Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WS_Produccion.pubxml" />
+    <Content Include="Resources\Reportes\Reporte_Inscripcion_Dni.trdx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Reportes\Reporte_Inscripcion_Dni_detalle.trdx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Reportes\Reporte_Inscripcion_Dni_encabezado.trdx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Reportes\Reporte_Inscripcion_Licencia_detalle.trdx" />
+    <Content Include="Resources\Reportes\Reporte_Inscripcion_Licencia_encabezado.trdx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
