@@ -13,13 +13,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/17/2019 14:46:42</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>05/23/2019 15:24:41</publishTime>
+      <publishTime>05/27/2019 15:00:45</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>05/23/2019 15:24:41</publishTime>
+      <publishTime>05/27/2019 15:00:45</publishTime>
     </File>
     <File Include="bin/Documentacion.XML">
-      <publishTime>05/23/2019 15:23:44</publishTime>
+      <publishTime>05/27/2019 15:00:42</publishTime>
     </File>
     <File Include="bin/es/System.Net.Http.Formatting.resources.dll">
       <publishTime>05/17/2019 14:46:43</publishTime>
@@ -58,7 +58,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/17/2019 14:46:46</publishTime>
     </File>
     <File Include="bin/Resources/Documentacion.XML">
-      <publishTime>05/23/2019 15:23:44</publishTime>
+      <publishTime>05/27/2019 15:00:42</publishTime>
     </File>
     <File Include="bin/Resources/Reportes/Reporte_Inscripcion_Dni.trdx">
       <publishTime>05/23/2019 13:06:00</publishTime>
@@ -106,7 +106,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/17/2019 14:46:46</publishTime>
     </File>
     <File Include="bin/WS_Intranet.dll">
-      <publishTime>05/23/2019 15:23:44</publishTime>
+      <publishTime>05/27/2019 15:00:42</publishTime>
     </File>
     <File Include="bin/_DAO.dll">
       <publishTime>05/23/2019 11:35:37</publishTime>
@@ -115,7 +115,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/23/2019 11:35:37</publishTime>
     </File>
     <File Include="bin/_Rules.dll">
-      <publishTime>05/23/2019 15:23:43</publishTime>
+      <publishTime>05/27/2019 15:00:42</publishTime>
     </File>
     <File Include="Default.aspx">
       <publishTime>05/17/2019 14:46:46</publishTime>
@@ -124,10 +124,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/17/2019 14:46:46</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>05/23/2019 15:24:39</publishTime>
+      <publishTime>05/27/2019 15:00:43</publishTime>
     </File>
     <File Include="Resources/Documentacion.XML">
-      <publishTime>05/23/2019 15:23:44</publishTime>
+      <publishTime>05/27/2019 15:00:42</publishTime>
     </File>
     <File Include="Resources/Reportes/Reporte_Inscripcion_Dni.trdx">
       <publishTime>05/23/2019 13:06:00</publishTime>

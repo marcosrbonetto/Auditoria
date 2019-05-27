@@ -30,11 +30,11 @@ namespace _Rules.Rules
         }
 
 
-        public Resultado<string> GetInscripcionesPorDni(int dni)
+        public Resultado<string> GetInscripcionesPorDni(int? dni)
         {           
             var resultado = new Resultado<string>();
             var consulta = new _Model.Consultas.Consulta_Inscripcion();
-            if (dni != null)
+            if (dni.HasValue)
             {
                 consulta.Dni = dni;
             }
@@ -266,11 +266,11 @@ namespace _Rules.Rules
             return result;
         }
 
-        public Resultado<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, string numero)
+        public Resultado<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, int? numero)
         {
             var resultado = new Resultado<string>();
 
-            if (tipoAuto == null || string.IsNullOrEmpty(numero) || numero.Count()>4)
+            if (tipoAuto == null || !numero.HasValue || numero.ToString().Count()>4)
             {
                 resultado.Error = "Ingrese datos válidos";
                 return resultado;

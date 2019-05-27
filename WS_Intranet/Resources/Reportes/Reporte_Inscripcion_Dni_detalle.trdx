@@ -94,32 +94,26 @@
       <GroupHeader>
         <GroupHeaderSection Height="1.29416686137848cm" Name="groupHeaderSection">
           <Items>
-            <TextBox Width="2.48599981442015cm" Height="0.396806925535202cm" Left="0.0266579328115561cm" Top="0cm" Value="N° de Licencia:" Name="textBox3">
+            <TextBox Width="2.59980010708729cm" Height="0.396806925535202cm" Left="0cm" Top="0.396960255071633cm" Value="N° de Licencia:" Name="textBox3">
               <Style TextAlign="Left" VerticalAlign="Top">
                 <Font Name="Lato" Bold="True" />
               </Style>
             </TextBox>
-            <TextBox Width="1.08416633061622cm" Height="0.396806925535202cm" Left="5.81573076983247cm" Top="0cm" Value="Auto:" Name="textBox2">
+            <TextBox Width="1.08416633061622cm" Height="0.396806925535202cm" Left="5.81573057174683cm" Top="0.396960258483887cm" Value="Auto:" Name="textBox2">
               <Style TextAlign="Left" VerticalAlign="Top">
                 <Font Name="Lato" Bold="True" />
               </Style>
             </TextBox>
-            <TextBox Width="2.48723880747686cm" Height="0.396806925535202cm" Left="2.60203102503531cm" Top="0cm" Value="= Fields.identificador" Name="textBox5">
+            <TextBox Width="2.48723880747686cm" Height="0.396806925535202cm" Left="2.59999981832505cm" Top="0.396960255071633cm" Value="= Fields.identificador" Name="textBox5">
               <Style VerticalAlign="Top">
                 <Font Name="Lato" />
               </Style>
             </TextBox>
-            <TextBox Width="4.9034359772839cm" Height="0.396806925535202cm" Left="6.90009736768134cm" Top="0cm" Value="= Fields.tipoAuto" Name="textBox1">
+            <TextBox Width="4.9034359772839cm" Height="0.396806925535202cm" Left="6.90009737014771cm" Top="0.396960258483887cm" Value="= Fields.tipoAuto" Name="textBox1">
               <Style VerticalAlign="Top">
                 <Font Name="Lato" />
               </Style>
             </TextBox>
-            <Shape Width="18.9467832910689cm" Height="0.132291659712791cm" Left="0cm" Top="0.49416668979658cm" Name="shape1">
-              <Style Color="64, 64, 64" />
-              <ShapeType>
-                <LineShape Direction="EW" />
-              </ShapeType>
-            </Shape>
             <TextBox Width="6.3cm" Height="0.5cm" Left="0.00010012308478013cm" Top="0.793967018931035cm" Value="Fecha Inicio" Multiline="False" Name="textBox11">
               <Style BackgroundColor="224, 224, 224" TextAlign="Center" VerticalAlign="Middle" LineStyle="Solid">
                 <BorderStyle Default="None" Top="None" Bottom="None" Left="None" />

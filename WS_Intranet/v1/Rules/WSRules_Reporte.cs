@@ -21,7 +21,7 @@ namespace WS_Intranet.v1.Rules
         }
 
 
-        public ResultadoServicio<string> GetInscripcionesPorDni(int dni)
+        public ResultadoServicio<string> GetInscripcionesPorDni(int? dni)
         {
             var resultado = new ResultadoServicio<string>();
 
@@ -36,7 +36,7 @@ namespace WS_Intranet.v1.Rules
             return resultado;
         }
 
-        public ResultadoServicio<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, string numero)
+        public ResultadoServicio<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, int? numero)
         {
             var resultado = new ResultadoServicio<string>();
 

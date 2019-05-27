@@ -31,11 +31,12 @@ namespace _Rules.Rules
             return dao.Get(consulta);
         }
 
-        public Resultado<List<Inscripcion>> GetReporte(_Model.Enums.TipoAuto? tipoAuto, string chapa)
+        public Resultado<List<Inscripcion>> GetReporte(_Model.Enums.TipoAuto? tipoAuto, int? numero)
         {
+            var chapa = numero.ToString();
             for (int i = 4 - chapa.Count(); i > 0; i--)
             {
-                chapa = string.Format("{0}{1}", "0", chapa);
+                chapa = string.Format("{0}{1}", "0", chapa.ToString());
             }
 
             return dao.Get(new _Model.Consultas.Consulta_Inscripcion() 

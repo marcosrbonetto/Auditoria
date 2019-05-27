@@ -20,7 +20,7 @@ namespace WS_Intranet.v1.Controllers
         [ConToken]
         [EsOperador]
         [Route("GetInscripcionesPorDni")]
-        public ResultadoServicio<string> GetInscripcionesPorDni(int dni)
+        public ResultadoServicio<string> GetInscripcionesPorDni(int? dni)
         {
             var usuarioLogeado = GetUsuarioLogeado();
             if (!usuarioLogeado.Ok)
@@ -37,7 +37,7 @@ namespace WS_Intranet.v1.Controllers
         [ConToken]
         [EsOperador]
         [Route("GetInscripcionesPorChapa")]
-        public ResultadoServicio<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, string numero)
+        public ResultadoServicio<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, int? numero)
         {
             var usuarioLogeado = GetUsuarioLogeado();
             if (!usuarioLogeado.Ok)
