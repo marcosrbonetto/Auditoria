@@ -21,11 +21,11 @@ namespace WS_Intranet.v1.Rules
         }
 
 
-        public ResultadoServicio<string> GetInscripcionesPorDni(Consulta_Inscripcion consulta)
+        public ResultadoServicio<string> GetInscripcionesPorDni(int dni)
         {
             var resultado = new ResultadoServicio<string>();
 
-            var resultadoQuery = rules.GetInscripcionesPorDni(consulta.Convertir());
+            var resultadoQuery = rules.GetInscripcionesPorDni(dni);
             if (!resultadoQuery.Ok)
             {
                 resultado.Error = resultadoQuery.Error;
@@ -36,11 +36,11 @@ namespace WS_Intranet.v1.Rules
             return resultado;
         }
 
-        public ResultadoServicio<string> GetInscripcionesPorChapa(Consulta_Inscripcion consulta)
+        public ResultadoServicio<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto , int? numero )
         {
             var resultado = new ResultadoServicio<string>();
 
-            var resultadoQuery = rules.GetInscripcionesPorChapa(consulta.Convertir());
+            var resultadoQuery = rules.GetInscripcionesPorChapa(tipoAuto, numero);
             if (!resultadoQuery.Ok)
             {
                 resultado.Error = resultadoQuery.Error;

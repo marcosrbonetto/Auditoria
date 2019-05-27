@@ -20,7 +20,7 @@ namespace WS_Intranet.v1.Controllers
         [ConToken]
         [EsOperador]
         [Route("GetInscripcionesPorDni")]
-        public ResultadoServicio<string> GetInscripcionesPorDni(Consulta_Inscripcion consulta)
+        public ResultadoServicio<string> GetInscripcionesPorDni(int dni)
         {
             var usuarioLogeado = GetUsuarioLogeado();
             if (!usuarioLogeado.Ok)
@@ -30,14 +30,14 @@ namespace WS_Intranet.v1.Controllers
                 return resultado;
             }
 
-            return new v1.Rules.WSRules_Reporte(usuarioLogeado.Return).GetInscripcionesPorDni(consulta);
+            return new v1.Rules.WSRules_Reporte(usuarioLogeado.Return).GetInscripcionesPorDni(dni);
         }
 
         [HttpPost]
         [ConToken]
         [EsOperador]
         [Route("GetInscripcionesPorChapa")]
-        public ResultadoServicio<string> GetInscripcionesPorChapa(Consulta_Inscripcion consulta)
+        public ResultadoServicio<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, int? numero)
         {
             var usuarioLogeado = GetUsuarioLogeado();
             if (!usuarioLogeado.Ok)
@@ -46,7 +46,7 @@ namespace WS_Intranet.v1.Controllers
                 resultado.Error = usuarioLogeado.Error;
                 return resultado;
             }
-            return new v1.Rules.WSRules_Reporte(usuarioLogeado.Return).GetInscripcionesPorChapa(consulta);
+            return new v1.Rules.WSRules_Reporte(usuarioLogeado.Return).GetInscripcionesPorChapa(tipoAuto ,numero);
         }
    
     }

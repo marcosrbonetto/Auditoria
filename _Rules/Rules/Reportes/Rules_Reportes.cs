@@ -30,9 +30,21 @@ namespace _Rules.Rules
         }
 
 
-        public Resultado<string> GetInscripcionesPorDni(_Model.Consultas.Consulta_Inscripcion consulta)
-        {
+        public Resultado<string> GetInscripcionesPorDni(int dni)
+        {           
             var resultado = new Resultado<string>();
+            var consulta = new _Model.Consultas.Consulta_Inscripcion();
+            if (dni != null)
+            {
+                consulta.Dni = dni;
+            }
+            else
+            {
+                resultado.Error = "Ingrese un DNI valido";
+                return resultado;
+            }
+                
+            
             var resultadoInscripcion = _InscripcionRules.Get(consulta);
             if (!resultadoInscripcion.Ok)
             {
@@ -114,10 +126,10 @@ namespace _Rules.Rules
                 filaInscripcion["Apellido"] = apellido;
 
                 //Dni
-                string dni = usuario.Dni.ToString();
-                if (string.IsNullOrEmpty(dni))
+                string documento = usuario.Dni.ToString();
+                if (string.IsNullOrEmpty(documento))
                 {
-                    dni = "Sin Datos";
+                    documento = "Sin Datos";
                 }
                 filaInscripcion["Documento"] = dni;
 
@@ -254,10 +266,23 @@ namespace _Rules.Rules
             return result;
         }
 
-        public Resultado<string> GetInscripcionesPorChapa(_Model.Consultas.Consulta_Inscripcion consulta)
+        public Resultado<string> GetInscripcionesPorChapa(_Model.Enums.TipoAuto? tipoAuto, int? numero)
         {
 
             var resultado = new Resultado<string>();
+
+            var consulta = new _Model.Consultas.Consulta_Inscripcion();
+            if (tipoAuto != null & numero != null)
+            {
+                consulta.TipoAuto = tipoAuto;
+                consulta.Identificador = numero.ToString();
+            }
+            else
+            {
+                resultado.Error = "Ingrese datos válidos";
+                return resultado;
+            }
+
             var resultadoInscripcion = _InscripcionRules.Get(consulta);
             if (!resultadoInscripcion.Ok)
             {
@@ -312,12 +337,12 @@ namespace _Rules.Rules
                 filaLicencia["Identificador"] = identificador;
 
                 //TipoAuto
-                string tipoAuto = inscripciones[0].TipoAuto.Nombre;
+                string tipoAutomovil = inscripciones[0].TipoAuto.Nombre;
                 if (string.IsNullOrEmpty(identificador))
                 {
-                    tipoAuto = "Sin Datos";
+                    tipoAutomovil = "Sin Datos";
                 }
-                filaLicencia["tipoAuto"] = tipoAuto;
+                filaLicencia["tipoAuto"] = tipoAutomovil;
 
 
                 Telerik.Reporting.SubReport subReportItem = (Telerik.Reporting.SubReport)(reporte.Items.Find("subreporteInsripcionesLicencia", true)[0]);
@@ -416,58 +441,73 @@ namespace _Rules.Rules
                         filaInscripcion["FechaTelegrama"] = fechaTelegrama.Value.ToString("dd/MM/yyyy");
                     }
                     //****************USUARIO********************************
+
+                    string nombre = "";
+                    string apellido = "";
+                    string dni = "";
+                    string calle = "";
+                    var altura = "";
+                    string barrio = "";
+                    
                     if (i.Usuario == null)
                     {
-                        return null;
-                    }
-                    
-                    var usuario = i.Usuario;
-       
-                    //Nombre
-                    string nombre = usuario.Nombre;
-                    if (string.IsNullOrEmpty(nombre))
-                    {
                         nombre = "Sin Datos";
-                    }
-                    filaInscripcion["Nombre"] = nombre;
-                    //Apellido
-                    string apellido = usuario.Apellido;
-                    if (string.IsNullOrEmpty(apellido))
-                    {
                         apellido = "Sin Datos";
-                    }
-                    filaInscripcion["Apellido"] = apellido;
-
-                    //Dni
-                    string dni = usuario.Dni.ToString();
-                    if (string.IsNullOrEmpty(dni))
-                    {
                         dni = "Sin Datos";
-                    }
-                    filaInscripcion["Documento"] = dni;
-
-                    //Calle
-                    string calle = usuario.DomicilioCalle;
-                    if (string.IsNullOrEmpty(calle))
-                    {
                         calle = "Sin Datos";
-                    }
-                    filaInscripcion["DomicilioCalle"] = calle;
-                    //Altura
-                    var altura = usuario.DomicilioAltura;
-                    if (altura == null)
-                    {
                         altura = "Sin Datos";
-                    }              
-                    filaInscripcion["DomicilioAltura"] = altura;
-                    //Barrio
-                    string barrio = usuario.DomicilioBarrio;
-                    if (string.IsNullOrEmpty(barrio))
-                    {
                         barrio = "Sin Datos";
                     }
-                    filaInscripcion["DomicilioBarrio"] = barrio;
+                    else
+                    {
+                        var usuario = i.Usuario;
 
+                        //Nombre
+                        nombre = usuario.Nombre;
+                        if (string.IsNullOrEmpty(nombre))
+                        {
+                            nombre = "";
+                        }
+                        filaInscripcion["Nombre"] = nombre;
+                        //Apellido
+                        apellido = usuario.Apellido;
+                        if (string.IsNullOrEmpty(apellido))
+                        {
+                            apellido = "";
+                        }
+                        filaInscripcion["Apellido"] = apellido;
+
+                        //Dni
+                        dni = usuario.Dni.ToString();
+                        if (string.IsNullOrEmpty(dni))
+                        {
+                            dni = "Sin Datos";
+                        }
+                        filaInscripcion["Documento"] = dni;
+
+                        //Calle
+                        calle = usuario.DomicilioCalle;
+                        if (string.IsNullOrEmpty(calle))
+                        {
+                            calle = "Sin Datos";
+                        }
+                        filaInscripcion["DomicilioCalle"] = calle;
+                        //Altura
+                        altura = usuario.DomicilioAltura;
+                        if (altura == null)
+                        {
+                            altura = "Sin Datos";
+                        }
+                        filaInscripcion["DomicilioAltura"] = altura;
+                        //Barrio
+                        barrio = usuario.DomicilioBarrio;
+                        if (string.IsNullOrEmpty(barrio))
+                        {
+                            barrio = "Sin Datos";
+                        }
+                        filaInscripcion["DomicilioBarrio"] = barrio;
+
+                    }
                     //Agrego la fila del requerimiento
                     dtInscripcion.Rows.Add(filaInscripcion);
                 }

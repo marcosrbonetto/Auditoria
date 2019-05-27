@@ -14,17 +14,17 @@ namespace WS_Internet.v1.Controllers
         [HttpPost]
         [ConToken]
         [Route("GetInscripcionesPorDni")]
-        public ResultadoServicio<string> GetInscripcionesPorDni(Consulta_Inscripcion consulta)
+        public ResultadoServicio<string> GetInscripcionesPorDni(int dni)
         {
-            return RestCall.Call<string>(Request, consulta);
+            return RestCall.Call<string>(Request);
         }
 
         [HttpPost]
         [ConToken]
         [Route("GetInscripcionesPorChapa")]
-        public ResultadoServicio<string> GetInscripcionesPorChapa(Consulta_Inscripcion consulta)
+        public ResultadoServicio<string> GetInscripcionesPorChapa(int? tipoAuto, int? numero)
         {
-            return RestCall.Call<string>(Request, consulta);
+            return RestCall.Call<string>(Request);
         }
     }
 }
