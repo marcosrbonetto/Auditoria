@@ -286,6 +286,7 @@ namespace _Rules.Rules
             if (inscripciones.Count == 0)
             {
                 resultado.Error = "No se encontraron inscripciones con los filtros ingresados";
+                return resultado;
             }
 
             try

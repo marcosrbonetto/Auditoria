@@ -56,10 +56,7 @@ namespace _Model
             AutoRemisLujo = 6,
             Escolar = 7,
             EscolarPrivado = 8,
-            Privado = 9,
-            E = 10,
-            S = 11,
-            L = 12
+            Privado = 9
         }
 
         public enum TipoCondicionInscripcion
