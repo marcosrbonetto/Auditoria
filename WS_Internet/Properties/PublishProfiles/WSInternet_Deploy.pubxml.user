@@ -10,10 +10,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>05/27/2019 15:01:55</publishTime>
+      <publishTime>05/28/2019 13:14:33</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>05/27/2019 15:01:55</publishTime>
+      <publishTime>05/28/2019 13:14:33</publishTime>
     </File>
     <File Include="bin/es/System.Net.Http.Formatting.resources.dll">
       <publishTime>05/17/2019 14:46:43</publishTime>
@@ -73,7 +73,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/17/2019 14:46:46</publishTime>
     </File>
     <File Include="bin/WS_Internet.dll">
-      <publishTime>05/27/2019 15:01:53</publishTime>
+      <publishTime>05/28/2019 13:14:31</publishTime>
     </File>
     <File Include="Default.aspx">
       <publishTime>05/17/2019 14:46:46</publishTime>
@@ -82,13 +82,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>05/17/2019 14:46:46</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>05/27/2019 15:01:54</publishTime>
+      <publishTime>05/28/2019 13:14:32</publishTime>
     </File>
     <File Include="Resources/Documentacion.XML">
       <publishTime>05/17/2019 14:46:46</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/23/2019 11:35:19</publishTime>
+      <publishTime>05/28/2019 13:14:32</publishTime>
     </File>
   </ItemGroup>
 </Project>

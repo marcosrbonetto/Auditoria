@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using WS_Internet.v0;
 using WS_Internet.v0.FilterAtributtes;
-using WS_Internet.v1.Entities.Consultas;
 
 namespace WS_Internet.v1.Controllers
 {
@@ -12,19 +10,19 @@ namespace WS_Internet.v1.Controllers
     public class Reporte_v1Controller : ApiController
     {
         [HttpPost]
-        [ConToken]
+        [v0.FilterAtributtes.ConToken]
         [Route("GetInscripcionesPorDni")]
-        public ResultadoServicio<string> GetInscripcionesPorDni(int? dni)
+        public v0.ResultadoServicio<string> GetInscripcionesPorDni(int? dni)
         {
-            return RestCall.Call<string>(Request);
+            return v0.RestCall.Call<string>(Request);
         }
 
         [HttpPost]
-        [ConToken]
+        [v0.FilterAtributtes.ConToken]
         [Route("GetInscripcionesPorChapa")]
-        public ResultadoServicio<string> GetInscripcionesPorChapa(int? tipoAuto, int? numero)
+        public v0.ResultadoServicio<string> GetInscripcionesPorChapa(int? tipoAuto, int? numero)
         {
-            return RestCall.Call<string>(Request);
+            return v0.RestCall.Call<string>(Request);
         }
     }
 }
