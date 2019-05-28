@@ -135,5 +135,41 @@ namespace WS_Intranet.v1.Controllers
 
             return new v1.Rules.WSRules_Inscripcion(usuarioLogeado.Return).GetCantidadConError();
         }
+
+        [HttpGet]
+        [ConToken]
+        [EsOperador]
+        [Route("CalcularErrores")]
+        public void CalcularErrores()
+        {
+            var usuarioLogeado = GetUsuarioLogeado();
+            if (!usuarioLogeado.Ok)
+            {
+                var resultado = new ResultadoServicio<int>();
+                resultado.Error = usuarioLogeado.Error;
+            }
+
+             new v1.Rules.WSRules_Inscripcion(usuarioLogeado.Return).CalcularError();
+        }
+
+        [HttpPut]
+        [ConToken]
+        [EsOperador]
+        [Route("EstaInscripto")]
+        public ResultadoServicio<bool> EstaInscripto(v1.Entities.Consultas.Consulta_Inscripcion consulta)
+        {
+
+            var usuarioLogeado = GetUsuarioLogeado();
+            if (!usuarioLogeado.Ok)
+            {
+                var resultado = new ResultadoServicio<bool>();
+                resultado.Error = usuarioLogeado.Error;
+                return resultado;
+            }
+
+            return new WSRules_Inscripcion(usuarioLogeado.Return).EstaInscripto(consulta);
+        }
+
+        
     }
 }

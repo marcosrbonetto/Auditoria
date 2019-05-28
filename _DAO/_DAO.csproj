@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\DAO_Inhabilitacion.cs" />
+    <Compile Include="DAO\Reportes\DAO_Reportes.cs" />
     <Compile Include="DAO\DAO_TipoCondicionInscripcion.cs" />
     <Compile Include="DAO\DAO_TipoInhabilitacion.cs" />
     <Compile Include="DAO\DAO_Usuario.cs" />

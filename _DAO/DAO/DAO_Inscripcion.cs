@@ -81,6 +81,12 @@ namespace _DAO.DAO
                 query.Where(() => joinUsuario.Dni == consulta.Dni.Value);
             }
 
+            //IdUsuario
+            if (consulta.IdUsuario.HasValue)
+            {
+                query.Where(x => x.Usuario.Id == consulta.IdUsuario.Value);
+            }
+
             //Nombre
             if (!string.IsNullOrEmpty(consulta.Nombre))
             {
@@ -128,7 +134,6 @@ namespace _DAO.DAO
                     query.Where(x => x.FechaInicio == null);
                 }
             }
-
 
             //Con error
             if (consulta.ConError.HasValue)
@@ -383,7 +388,201 @@ namespace _DAO.DAO
 
         }
 
+        public Resultado<int> GetCantidadInscripto(_Model.Consultas.Consulta_Inscripcion consulta)
+        {
+            var resultado = new Resultado<int>();
 
+            try
+            {
+                var query = GetQuery(consulta);
+                
+                if (consulta.TipoInscripcion == Enums.TipoInscripcion.Chofer && consulta.ActivoHasta.HasValue)
+                {
+                    //Activo hasta x fecha (Con fecha fin superior a X fecha)
+                    query.Where(x => x.FechaFin == null || x.FechaFin > consulta.ActivoHasta.Value);
+                    var choferesSinFechaFin = query;
+                    choferesSinFechaFin.Where(x=> x.FechaFin == null);
+                    if (choferesSinFechaFin.RowCount() > 0) 
+                    {
+                        resultado.Error = "E2: Hay inscripcion/es de chofer sin fecha fin";
+                        return resultado;
+                    }
+                }
+                resultado.Return = query.RowCount();
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+            return resultado;
+
+        }
+
+        #region calcular errores
+
+        public Resultado<bool> GenerarErroresInscripcion()
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                using (var s = SessionManager.Instance.SessionFactory.OpenSession())
+                {
+                    s.SetBatchSize(1000);
+
+                    var usuarios = s.QueryOver<Inscripcion>()
+                        .List()
+                        .ToList();
+
+                    using (var t = s.BeginTransaction())
+                    {
+                        usuarios.ForEach((entity) =>
+                        {
+                            try
+                            {
+                                //DateTime fechaAlta = entity.FechaAlta;
+                                //if (fechaAlta.Day == 7 && fechaAlta.Month == 5 && fechaAlta.Year == 2019)
+                                //{
+                                List<string> errores = new List<string>();
+
+                                //Usuario
+                                //Es error cuando no tiene usuario o cuando su usuario tiene error
+                                bool conUsuario = entity.Usuario != null;
+                                bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;
+                                if (!conUsuario || conUsuarioConError)
+                                {
+                                    if (!conUsuario)
+                                    {
+                                        errores.Add("Sin usuario");
+                                    }
+                                    else
+                                    {
+                                        errores.Add("Usuario con error: " + entity.Usuario.Error);
+                                    }
+                                }
+
+                                //Tipo auto
+                                //Cuando no tiene tipo de auto
+                                bool conTipoAuto = entity.TipoAuto != null;
+                                if (!conTipoAuto)
+                                {
+                                    errores.Add("Sin tipo de auto");
+                                }
+
+                                //Identificador
+                                //Cuando no tiene identificador
+                                bool conIdentificador = entity.Identificador != null && entity.Identificador.Trim() != "";
+                                if (!conIdentificador)
+                                {
+                                    errores.Add("Sin identificador");
+                                }
+
+                                if (errores.Count != 0)
+                                {
+                                    entity.Error = string.Join(" - ", errores);
+                                }
+                                else
+                                {
+                                    entity.Error = null;
+                                }
+                                s.Update(entity);
+                                //}
+                            }
+                            catch (Exception ex)
+                            {
+                                var e = ex;
+                            }
+                        });
+
+                        t.Commit();
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+            return resultado;
+        }
+
+        public Resultado<bool> GenerarErroresUsuario()
+        {
+            var resultado = new Resultado<bool>();
+
+            try
+            {
+                using (var s = SessionManager.Instance.SessionFactory.OpenSession())
+                {
+                    s.SetBatchSize(1000);
+
+                    var usuarios = s.QueryOver<Usuario>()
+                        .List()
+                        .ToList();
+
+                    using (var t = s.BeginTransaction())
+                    {
+                        usuarios.ForEach((entity) =>
+                        {
+                            try
+                            {
+
+                                //DateTime fechaAlta = entity.FechaAlta;
+                                //if (fechaAlta.Day == 7 && fechaAlta.Month == 5 && fechaAlta.Year == 2019)
+                                //{
+                                List<string> errores = new List<string>();
+
+                                //Nombre
+                                bool conNombre = entity.Nombre != null && entity.Nombre.Trim() != "";
+                                bool conApellido = entity.Apellido != null && entity.Apellido.Trim() != "";
+                                if (!conNombre && !conApellido)
+                                {
+                                    errores.Add("El nombre y/o apellido es requerido");
+                                }
+
+
+                                //Sexo
+                                if (!entity.SexoMasculino.HasValue)
+                                {
+                                    errores.Add("El campo sexo es requerido");
+                                }
+
+                                //DNI
+                                bool conDni = entity.Dni.HasValue;
+                                bool dniValido = conDni && entity.Dni.Value > 0 && entity.Dni.Value < 200000000;
+                                if (!dniValido)
+                                {
+                                    errores.Add("El campo N° de DNI es inválido");
+                                }
+
+                                if (errores.Count != 0)
+                                {
+                                    entity.Error = string.Join(" - ", errores);
+                                }
+                                else
+                                {
+                                    entity.Error = null;
+                                }
+                                s.Update(entity);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                var e = ex;
+                            }
+                        });
+
+                        t.Commit();
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+            return resultado;
+        }
 
         //public Resultado<bool> GenerarErrorInhabilitacion()
         //{
@@ -477,163 +676,7 @@ namespace _DAO.DAO
         //        resultado.SetError(e);
         //    }
         //    return resultado;
-        //}
-
-
-        //public Resultado<bool> GenerarErroresInscripcion()
-        //{
-        //    var resultado = new Resultado<bool>();
-
-        //    try
-        //    {
-        //        using (var s = SessionManager.Instance.SessionFactory.OpenSession())
-        //        {
-        //            s.SetBatchSize(1000);
-
-        //            var usuarios = s.QueryOver<Inscripcion>()
-        //                .List()
-        //                .ToList();
-
-        //            using (var t = s.BeginTransaction())
-        //            {
-        //                usuarios.ForEach((entity) =>
-        //                {
-        //                    try
-        //                    {
-        //                        List<string> errores = new List<string>();
-
-        //                        //Usuario
-        //                        //Es error cuando no tiene usuario o cuando su usuario tiene error
-        //                        bool conUsuario = entity.Usuario != null;
-        //                        bool conUsuarioConError = entity.Usuario != null && entity.Usuario.Error != null;                                
-        //                        if (!conUsuario || conUsuarioConError)
-        //                        {
-        //                            if (!conUsuario)
-        //                            {
-        //                                errores.Add("Sin usuario");
-        //                            }
-        //                            else
-        //                            {
-        //                                errores.Add("Usuario con error: " + entity.Usuario.Error);
-        //                            }
-        //                        }
-
-        //                        //Tipo auto
-        //                        //Cuando no tiene tipo de auto
-        //                        bool conTipoAuto = entity.TipoAuto!=null;
-        //                        if (!conTipoAuto)
-        //                        {
-        //                            errores.Add("Sin tipo de auto");
-        //                        }
-
-        //                        //Identificador
-        //                        //Cuando no tiene identificador
-        //                        bool conIdentificador = entity.Identificador != null && entity.Identificador.Trim() != "";
-        //                        if (!conIdentificador)
-        //                        {
-        //                            errores.Add("Sin identificador");
-        //                        }
-
-        //                        if (errores.Count != 0)
-        //                        {
-        //                            entity.Error = string.Join(" - ", errores);
-        //                        }
-        //                        else
-        //                        {
-        //                            entity.Error = null;
-        //                        }
-        //                        s.Update(entity);
-        //                    }
-        //                    catch (Exception ex)
-        //                    {
-        //                        var e = ex;
-        //                    }
-        //                });
-
-        //                t.Commit();
-        //            }
-        //        }
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        resultado.SetError(e);
-        //    }
-        //    return resultado;
-        //}
-
-        //public Resultado<bool> GenerarErroresUsuario()
-        //{
-        //    var resultado = new Resultado<bool>();
-
-        //    try
-        //    {
-        //        using (var s = SessionManager.Instance.SessionFactory.OpenSession())
-        //        {
-        //            s.SetBatchSize(1000);
-
-        //            var usuarios = s.QueryOver<Usuario>()
-        //                .List()
-        //                .ToList();
-
-        //            using (var t = s.BeginTransaction())
-        //            {
-        //                usuarios.ForEach((entity) =>
-        //                {
-        //                    try
-        //                    {
-        //                        List<string> errores = new List<string>();
-
-        //                        //Nombre
-        //                        bool conNombre = entity.Nombre != null && entity.Nombre.Trim() != "";
-        //                        bool conApellido = entity.Apellido != null && entity.Apellido.Trim() != "";
-        //                        if (!conNombre && !conApellido)
-        //                        {
-        //                            errores.Add("El nombre y/o apellido es requerido");
-        //                        }
-
-
-        //                        //Sexo
-        //                        if (!entity.SexoMasculino.HasValue)
-        //                        {
-        //                            errores.Add("El campo sexo es requerido");
-        //                        }
-
-        //                        //DNI
-        //                        bool conDni = entity.Dni.HasValue;
-        //                        bool dniValido = conDni && entity.Dni.Value > 0 && entity.Dni.Value < 200000000;
-        //                        if (!dniValido)
-        //                        {
-        //                            errores.Add("El campo N° de DNI es inválido");
-        //                        }
-
-        //                        if (errores.Count != 0)
-        //                        {
-        //                            entity.Error = string.Join(" - ", errores);
-        //                        }
-        //                        else
-        //                        {
-        //                            entity.Error = null;
-        //                        }
-        //                        s.Update(entity);
-        //                    }
-        //                    catch (Exception ex)
-        //                    {
-        //                        var e = ex;
-        //                    }
-        //                });
-
-        //                t.Commit();
-        //            }
-        //        }
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        resultado.SetError(e);
-        //    }
-        //    return resultado;
-        //}
+        //}-
 
         //public Resultado<bool> CorregirFechaInicio()
         //{
@@ -713,5 +756,7 @@ namespace _DAO.DAO
         //    }
         //    return resultado;
         //}
+
+        #endregion
     }
 }

@@ -17,8 +17,9 @@ namespace _Rules.Rules
             : base(data)
         {
             dao = DAO_TipoAuto.Instance;
-        }
 
+        }
+        //test
         public Resultado<TipoAuto> GetByKeyValue(Enums.TipoAuto keyValue)
         {
             return dao.GetByKeyValue(keyValue);

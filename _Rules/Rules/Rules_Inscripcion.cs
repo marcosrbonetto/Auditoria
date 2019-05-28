@@ -12,11 +12,13 @@ namespace _Rules.Rules
     public class Rules_Inscripcion : BaseRules<Inscripcion>
     {
         private readonly DAO_Inscripcion dao;
+        private readonly Rules_Usuario _UsuarioRules;
 
         public Rules_Inscripcion(UsuarioLogueado data)
             : base(data)
         {
             dao = DAO_Inscripcion.Instance;
+            _UsuarioRules = new Rules_Usuario(data);
         }
 
         public Resultado<_Model.Resultados.Resultado_Paginador<Inscripcion>> GetPaginado(_Model.Consultas.Consulta_InscripcionPaginada consulta)
@@ -28,6 +30,121 @@ namespace _Rules.Rules
         {
             return dao.Get(consulta);
         }
+
+        public Resultado<List<Inscripcion>> GetReporte(_Model.Enums.TipoAuto? tipoAuto, int? numero)
+        {
+            var chapa = numero.ToString();
+            for (int i = 4 - chapa.Count(); i > 0; i--)
+            {
+                chapa = string.Format("{0}{1}", "0", chapa.ToString());
+            }
+
+            return dao.Get(new _Model.Consultas.Consulta_Inscripcion() 
+            { 
+                TipoAuto = tipoAuto,
+                Identificador = chapa
+            });
+        }
+
+        public Resultado<bool> EstaInscripto(_Model.Consultas.Consulta_Inscripcion consulta)
+        {
+            var result = new Resultado<bool>();
+
+            if(!consulta.Dni.HasValue)
+            {
+                result.Error = "Dni requerido";
+                return result;
+            }
+            if (string.IsNullOrEmpty(consulta.Nombre))
+            {
+                result.Error = "Nombre requerido";
+                return result;
+            }
+            if (!consulta.TipoInscripcion.HasValue || !Enum.IsDefined(typeof(_Model.Enums.TipoInscripcion),consulta.TipoInscripcion))
+            {
+                result.Error = "Tipo Inscripción requerida";
+                return result;
+            }
+
+            //Busco por DNI
+            var resultadoUsuarioPorDni = _UsuarioRules.Get(new _Model.Consultas.Consulta_Usuario
+            {
+                Dni = consulta.Dni,
+                DadosDeBaja = null
+            });
+            if (!resultadoUsuarioPorDni.Ok)
+            {
+                result.Error = resultadoUsuarioPorDni.Error;
+                return result;
+            }
+
+            if (resultadoUsuarioPorDni.Return.Count >= 1) 
+            {
+                //Hay usuarios con ese dni, busco inscripciones por tipoInscripcion
+                var resultadoInscripciones = dao.GetCantidadInscripto(new _Model.Consultas.Consulta_Inscripcion
+                {
+                    IdUsuario = resultadoUsuarioPorDni.Return.FirstOrDefault().Id,
+                    ActivoHasta = consulta.TipoInscripcion.Value==Enums.TipoInscripcion.Chofer ? (DateTime?)Convert.ToDateTime("31/12/2018"):null,
+                    TipoInscripcion = consulta.TipoInscripcion,
+                    DadosDeBaja = null
+                });
+                if (!resultadoInscripciones.Ok)
+                {
+                    result.Error = resultadoInscripciones.Error;
+                    return result;
+                }
+
+                result.Return = resultadoInscripciones.Return > 0 ? true : false;
+            }
+            else
+            {
+            //No se encuentra por DNI 
+                result.Return = false;
+            }
+            //else 
+            //{
+            //    //No hay usuarios con ese DNI, busco por NOMBRE
+            //    var resultadoUsuarioPorNombre = _UsuarioRules.Get(new _Model.Consultas.Consulta_Usuario
+            //    {
+            //        Nombre = consulta.Nombre,
+            //        DadosDeBaja = null
+            //    });
+            //    if (!resultadoUsuarioPorNombre.Ok)
+            //    {
+            //        result.Error = resultadoUsuarioPorNombre.Error;
+            //        return result;
+            //    }
+
+            //    if (resultadoUsuarioPorNombre.Return.Count == 1)
+            //    {
+            //        //Hay un usuario con ese nombre, busco inscripciones por tipoInscripcion
+            //        var resultadoInscripciones = dao.GetCantidadInscripto(new _Model.Consultas.Consulta_Inscripcion
+            //        {
+            //            IdUsuario = resultadoUsuarioPorNombre.Return.FirstOrDefault().Id,
+            //            ActivoHasta = consulta.TipoInscripcion.Value == Enums.TipoInscripcion.Chofer ? (DateTime?)Convert.ToDateTime("31/12/2018") : null,
+            //            TipoInscripcion = consulta.TipoInscripcion,
+            //            DadosDeBaja = null
+            //        });
+            //        if (!resultadoInscripciones.Ok)
+            //        {
+            //            result.Error = resultadoInscripciones.Error;
+            //            return result;
+            //        }
+                    
+            //        result.Return = resultadoInscripciones.Return > 0 ? true : false;
+            //    }
+            //    else if (resultadoUsuarioPorNombre.Return.Count > 1)
+            //    {
+            //        //No se puedo buscar por dni, y la consulta por nombre obtiene muchos resultados
+            //        result.Error = "E1: No se pudo buscar por DNI, y la consulta por NOMBRE obtiene muchos resultados";
+            //        return result;
+            //    }
+
+            //}
+
+            return result;
+        }
+
         public Resultado<int> GetCantidad(_Model.Consultas.Consulta_Inscripcion consulta)
         {
             return dao.GetCantidad(consulta);
@@ -189,19 +306,19 @@ namespace _Rules.Rules
                     Usuario usuario = null;
                     if (comando.IdUsuario.HasValue)
                     {
-                        var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
-                        if (!resultadoUsuario.Ok)
-                        {
-                            resultado.Error = resultadoUsuario.Error;
-                            return false;
-                        }
+                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
+                    if (!resultadoUsuario.Ok)
+                    {
+                        resultado.Error = resultadoUsuario.Error;
+                        return false;
+                    }
 
                         usuario = resultadoUsuario.Return;
-                        if (usuario == null || usuario.FechaBaja != null)
-                        {
-                            resultado.Error = "El usuario no existe o esta dado de baja";
-                            return false;
-                        }
+                    if (usuario == null || usuario.FechaBaja != null)
+                    {
+                        resultado.Error = "El usuario no existe o esta dado de baja";
+                        return false;
+                    }
 
                     }
 
@@ -209,37 +326,37 @@ namespace _Rules.Rules
                     TipoInscripcion tipoInscripcion = null;
                     if (comando.TipoInscripcionKeyValue.HasValue)
                     {
-                        var resultadoTipoInscripcion = new Rules_TipoInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInscripcionKeyValue.Value);
-                        if (!resultadoTipoInscripcion.Ok)
-                        {
-                            resultado.Error = resultadoTipoInscripcion.Error;
-                            return false;
-                        }
+                    var resultadoTipoInscripcion = new Rules_TipoInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInscripcionKeyValue.Value);
+                    if (!resultadoTipoInscripcion.Ok)
+                    {
+                        resultado.Error = resultadoTipoInscripcion.Error;
+                        return false;
+                    }
 
                         tipoInscripcion = resultadoTipoInscripcion.Return;
-                        if (tipoInscripcion == null || tipoInscripcion.FechaBaja != null)
-                        {
-                            resultado.Error = "El tipo de inscripción no existe o esta dado de baja";
-                            return false;
-                        }
+                    if (tipoInscripcion == null || tipoInscripcion.FechaBaja != null)
+                    {
+                        resultado.Error = "El tipo de inscripción no existe o esta dado de baja";
+                        return false;
+                    }
                     }
 
                     //Busco el tipo de auto
                     TipoAuto tipoAuto = null;
                     if (comando.TipoAutoKeyValue.HasValue)
                     {
-                        var resultadoTipoAuto = new Rules_TipoAuto(getUsuarioLogueado()).GetByKeyValue(comando.TipoAutoKeyValue.Value);
-                        if (!resultadoTipoAuto.Ok)
-                        {
-                            resultado.Error = resultadoTipoAuto.Error;
-                            return false;
-                        }
+                    var resultadoTipoAuto = new Rules_TipoAuto(getUsuarioLogueado()).GetByKeyValue(comando.TipoAutoKeyValue.Value);
+                    if (!resultadoTipoAuto.Ok)
+                    {
+                        resultado.Error = resultadoTipoAuto.Error;
+                        return false;
+                    }
                         tipoAuto = resultadoTipoAuto.Return;
-                        if (tipoAuto == null || tipoAuto.FechaBaja != null)
-                        {
-                            resultado.Error = "El tipo de auto no existe o esta dado de baja";
-                            return false;
-                        }
+                    if (tipoAuto == null || tipoAuto.FechaBaja != null)
+                    {
+                        resultado.Error = "El tipo de auto no existe o esta dado de baja";
+                        return false;
+                    }
                     }
 
                     //Busco el tipo condicion
@@ -279,8 +396,8 @@ namespace _Rules.Rules
                         if (!fechaFin.HasValue)
                         {
                             resultado.Error = "Fecha de fin inválida";
-                            return false;
-                        }
+                        return false;
+                    }
                     }
 
                     DateTime? fechaTelegrama = null;
@@ -310,10 +427,10 @@ namespace _Rules.Rules
                     {
                         artFechaVencimiento = Utils.StringToDate(comando.ArtFechaVencimiento.Trim());
                         if (!artFechaVencimiento.HasValue)
-                        {
+                    {
                             resultado.Error = "Fecha de vencimiento de la licencia inválida";
-                            return false;
-                        }
+                        return false;
+                    }
                     }
 
 
@@ -595,6 +712,13 @@ namespace _Rules.Rules
 
             if (errores.Count == 0) return null;
             return string.Join(" | ", errores);
+        }
+
+        public void calcularErrores()
+        {
+            var usr = dao.GenerarErroresUsuario();
+            var insc = dao.GenerarErroresInscripcion();
+            
         }
     }
 }

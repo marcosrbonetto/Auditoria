@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report DataSourceName="General" Width="18.9470806904254cm" Name="ListadoRQ" Zoom="2" SnapGridSize="0.1cm" xmlns="http://schemas.telerik.com/reporting/2012/3.8">
+  <Style BackgroundColor="" />
+  <DataSources>
+    <SqlDataSource ConnectionString="RequerimientosCiudad" SelectCommand="select &#xD;&#xA;'ZOVAK' as apellido,&#xD;&#xA;'Mauricio' as nombre,&#xD;&#xA;'36355449' as documento,&#xD;&#xA;'Los cipreses' as domicilioCalle,&#xD;&#xA;'4674' as domicilioAltura,&#xD;&#xA;'colinas del cerro' as domicilioBarrio,&#xD;&#xA;'AUTO TAXI' as tipoAuto,&#xD;&#xA;1 as idTipoAuto,&#xD;&#xA;'T521' as identificador" Name="General" />
+    <SqlDataSource ConnectionString="RequerimientosCiudad" SelectCommand="select '25/04/2016' fechaInicio, '14/03/2018' fechaFin, '20/03/2018' fechaTelegrama union all&#xD;&#xA;select '25/04/2016' fechaInicio, '14/03/2018' fechaFin, '20/03/2018' fechaTelegrama" Name="dsTablaFechas" />
+  </DataSources>
+  <Items>
+    <PageHeaderSection Height="0.105833330389527cm" Name="pageHeaderSection1" />
+    <DetailSection Height="0.726758429339293cm" Name="detailSection1">
+      <Items>
+        <Shape Width="18.9469796615062cm" Height="0.132291659712791cm" Left="0.00010012308478013cm" Top="0.594466766352386cm" Name="shape2">
+          <Style BackgroundColor="Silver" Color="191, 191, 191" />
+          <ShapeType>
+            <LineShape Direction="EW" />
+          </ShapeType>
+        </Shape>
+        <TextBox Width="6.30000029269853cm" Height="0.589157093826534cm" Left="6.30030001599749cm" Top="0cm" Value="= Fields.fechaFin" Name="textBox4">
+          <Style TextAlign="Center" VerticalAlign="Middle" />
+        </TextBox>
+        <TextBox Width="6.30000013120969cm" Height="0.594266439438402cm" Left="0.00010012308478013cm" Top="0cm" Value="= Fields.fechaInicio" Name="textBox6">
+          <Style TextAlign="Center" VerticalAlign="Middle" />
+        </TextBox>
+        <TextBox Width="6.29999926320714cm" Height="0.594266439438402cm" Left="12.6005005548656cm" Top="0cm" Value="=Fields.fechaTelegrama" Name="textBox7">
+          <Style TextAlign="Center" VerticalAlign="Middle" />
+        </TextBox>
+      </Items>
+    </DetailSection>
+    <PageFooterSection Height="0.105833360668685cm" Name="pageFooterSection1" />
+  </Items>
+  <StyleSheet>
+    <StyleRule>
+      <Style>
+        <Padding Left="2pt" Right="2pt" />
+      </Style>
+      <Selectors>
+        <TypeSelector Type="TextItemBase" />
+        <TypeSelector Type="HtmlTextBox" />
+      </Selectors>
+    </StyleRule>
+    <StyleRule>
+      <Style Color="Black">
+        <BorderStyle Default="Solid" />
+        <BorderColor Default="Black" />
+        <BorderWidth Default="1px" />
+        <Font Name="Tahoma" Size="9pt" />
+      </Style>
+      <Selectors>
+        <StyleSelector Type="Table" StyleName="Normal.TableNormal" />
+      </Selectors>
+    </StyleRule>
+    <StyleRule>
+      <Style VerticalAlign="Middle">
+        <BorderStyle Default="Solid" />
+        <BorderColor Default="Black" />
+        <BorderWidth Default="1px" />
+        <Font Name="Tahoma" Size="10pt" />
+      </Style>
+      <Selectors>
+        <DescendantSelector>
+          <Selectors>
+            <TypeSelector Type="Table" />
+            <StyleSelector Type="ReportItem" StyleName="Normal.TableHeader" />
+          </Selectors>
+        </DescendantSelector>
+      </Selectors>
+    </StyleRule>
+    <StyleRule>
+      <Style>
+        <BorderStyle Default="Solid" />
+        <BorderColor Default="Black" />
+        <BorderWidth Default="1px" />
+        <Font Name="Tahoma" Size="9pt" />
+      </Style>
+      <Selectors>
+        <DescendantSelector>
+          <Selectors>
+            <TypeSelector Type="Table" />
+            <StyleSelector Type="ReportItem" StyleName="Normal.TableBody" />
+          </Selectors>
+        </DescendantSelector>
+      </Selectors>
+    </StyleRule>
+  </StyleSheet>
+  <PageSettings>
+    <PageSettings PaperKind="A4" Landscape="False" ColumnCount="1" ColumnSpacing="0cm">
+      <Margins>
+        <MarginsU Left="1cm" Right="1cm" Top="1cm" Bottom="1cm" />
+      </Margins>
+    </PageSettings>
+  </PageSettings>
+  <Groups>
+    <Group Name="group">
+      <GroupHeader>
+        <GroupHeaderSection Height="1.29416686137848cm" Name="groupHeaderSection">
+          <Items>
+            <TextBox Width="2.59980010708729cm" Height="0.396806925535202cm" Left="0cm" Top="0.396960255071633cm" Value="N° de Licencia:" Name="textBox3">
+              <Style TextAlign="Left" VerticalAlign="Top">
+                <Font Name="Lato" Bold="True" />
+              </Style>
+            </TextBox>
+            <TextBox Width="1.08416633061622cm" Height="0.396806925535202cm" Left="5.81573057174683cm" Top="0.396960258483887cm" Value="Auto:" Name="textBox2">
+              <Style TextAlign="Left" VerticalAlign="Top">
+                <Font Name="Lato" Bold="True" />
+              </Style>
+            </TextBox>
+            <TextBox Width="2.48723880747686cm" Height="0.396806925535202cm" Left="2.59999981832505cm" Top="0.396960255071633cm" Value="= Fields.identificador" Name="textBox5">
+              <Style VerticalAlign="Top">
+                <Font Name="Lato" />
+              </Style>
+            </TextBox>
+            <TextBox Width="4.9034359772839cm" Height="0.396806925535202cm" Left="6.90009737014771cm" Top="0.396960258483887cm" Value="= Fields.tipoAuto" Name="textBox1">
+              <Style VerticalAlign="Top">
+                <Font Name="Lato" />
+              </Style>
+            </TextBox>
+            <TextBox Width="6.3cm" Height="0.5cm" Left="0.00010012308478013cm" Top="0.793967018931035cm" Value="Fecha Inicio" Multiline="False" Name="textBox11">
+              <Style BackgroundColor="224, 224, 224" TextAlign="Center" VerticalAlign="Middle" LineStyle="Solid">
+                <BorderStyle Default="None" Top="None" Bottom="None" Left="None" />
+                <BorderWidth Default="1pt" />
+                <Font Name="Calibri" Bold="False" />
+              </Style>
+            </TextBox>
+            <TextBox Width="6.3cm" Height="0.5cm" Left="6.30030001599749cm" Top="0.793967018931035cm" Value="Fecha Fin" Multiline="False" Name="textBox16">
+              <Style BackgroundColor="224, 224, 224" TextAlign="Center" VerticalAlign="Middle" LineStyle="Dotted">
+                <BorderStyle Default="None" Top="None" Bottom="None" Right="None" />
+                <BorderWidth Default="1pt" />
+                <Font Name="Calibri" Bold="False" />
+              </Style>
+            </TextBox>
+            <TextBox Width="6.3cm" Height="0.5cm" Left="12.6005005548656cm" Top="0.793967018931035cm" Value="Fecha telegrama" Multiline="False" Name="textBox14">
+              <Style BackgroundColor="224, 224, 224" TextAlign="Center" VerticalAlign="Middle" LineStyle="Dotted">
+                <BorderStyle Default="None" Top="None" Bottom="None" Right="None" />
+                <BorderWidth Default="1pt" />
+                <Font Name="Calibri" Bold="False" />
+              </Style>
+            </TextBox>
+          </Items>
+        </GroupHeaderSection>
+      </GroupHeader>
+      <GroupFooter>
+        <GroupFooterSection Height="0.105833380854791cm" Name="groupFooterSection" />
+      </GroupFooter>
+      <Groupings>
+        <Grouping Expression="= Fields.idTipoAuto" />
+        <Grouping Expression="= Fields.identificador" />
+      </Groupings>
+      <Sortings>
+        <Sorting Direction="Asc" />
+      </Sortings>
+    </Group>
+  </Groups>
+</Report>

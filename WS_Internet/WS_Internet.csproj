@@ -161,6 +161,7 @@
     <Compile Include="v1\Controllers\InhabilitacionController.cs" />
     <Compile Include="v1\Controllers\MuniOnlineUsuarioController.cs" />
     <Compile Include="v1\Controllers\InscripcionController.cs" />
+    <Compile Include="v1\Controllers\ReporteController.cs" />
     <Compile Include="v1\Controllers\TipoInhabilitacionController.cs" />
     <Compile Include="v1\Controllers\TipoCondicionInscripcionController.cs" />
     <Compile Include="v1\Controllers\TipoInscripcionController.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="v1\Entities\Comandos\ComandoWS_UsuarioActualizar.cs" />
     <Compile Include="v1\Entities\Comandos\ComandoWS_UsuarioNuevo.cs" />
     <Compile Include="v1\Entities\Consultas\Consulta_InhabilitacionPaginada.cs" />
+    <Compile Include="v1\Entities\Consultas\Consulta_Inscripcion.cs" />
     <Compile Include="v1\Entities\Consultas\Consulta_InscripcionPaginada.cs" />
     <Compile Include="v1\Entities\Consultas\Consulta_Usuario.cs" />
     <Compile Include="v1\Entities\Consultas\Consulta_UsuarioPaginado.cs" />

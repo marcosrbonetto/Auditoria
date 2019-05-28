@@ -10,6 +10,9 @@ namespace _Model.Consultas
     {
         public int? Dni { get; set; }
         public string Nombre { get; set; }
+        public bool? Sexo { get; set; }
+        public int? IdUsuario { get; set; }
+        public DateTime? ActivoHasta { get; set; }
         public string Identificador { get; set; }
         public Enums.TipoAuto? TipoAuto { get; set; }
         public Enums.TipoInscripcion? TipoInscripcion { get; set; }
