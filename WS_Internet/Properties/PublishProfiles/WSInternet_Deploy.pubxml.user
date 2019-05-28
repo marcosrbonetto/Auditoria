@@ -10,85 +10,85 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>05/27/2019 15:01:55</publishTime>
+      <publishTime>05/28/2019 13:41:26</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>05/27/2019 15:01:55</publishTime>
+      <publishTime>05/28/2019 13:41:26</publishTime>
     </File>
     <File Include="bin/es/System.Net.Http.Formatting.resources.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/es/System.Web.Http.resources.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/es/System.Web.Http.WebHost.resources.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/FubarCoder.RestSharp.Portable.Core.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>08/21/2018 13:27:26</publishTime>
     </File>
     <File Include="bin/FubarCoder.RestSharp.Portable.HttpClient.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>08/21/2018 13:27:27</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
-      <publishTime>05/17/2019 14:46:44</publishTime>
+      <publishTime>08/21/2018 14:48:11</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>05/17/2019 14:46:44</publishTime>
+      <publishTime>11/07/2018 13:29:55</publishTime>
     </File>
     <File Include="bin/Resources/Documentacion.XML">
-      <publishTime>05/17/2019 14:46:46</publishTime>
+      <publishTime>11/07/2018 13:28:28</publishTime>
     </File>
     <File Include="bin/Resources/Swagger.css">
-      <publishTime>05/17/2019 14:46:46</publishTime>
+      <publishTime>09/18/2018 10:21:09</publishTime>
     </File>
     <File Include="bin/Resources/Swagger.js">
-      <publishTime>05/17/2019 14:46:46</publishTime>
+      <publishTime>09/18/2018 10:21:09</publishTime>
     </File>
     <File Include="bin/Swashbuckle.Core.dll">
-      <publishTime>05/17/2019 14:46:46</publishTime>
+      <publishTime>08/21/2018 14:48:12</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Extensions.dll">
-      <publishTime>05/17/2019 14:46:44</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/System.Net.Http.Primitives.dll">
-      <publishTime>05/17/2019 14:46:44</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/System.Web.Cors.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>10/02/2018 10:59:31</publishTime>
     </File>
     <File Include="bin/System.Web.Http.Cors.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>10/02/2018 10:59:31</publishTime>
     </File>
     <File Include="bin/System.Web.Http.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/System.Web.Http.WebHost.dll">
-      <publishTime>05/17/2019 14:46:43</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/WebActivatorEx.dll">
-      <publishTime>05/17/2019 14:46:46</publishTime>
+      <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/WS_Internet.dll">
-      <publishTime>05/27/2019 15:01:53</publishTime>
+      <publishTime>05/28/2019 13:31:41</publishTime>
     </File>
     <File Include="Default.aspx">
-      <publishTime>05/17/2019 14:46:46</publishTime>
+      <publishTime>09/18/2018 10:22:45</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>05/17/2019 14:46:46</publishTime>
+      <publishTime>11/07/2018 13:29:56</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>05/27/2019 15:01:54</publishTime>
+      <publishTime>05/28/2019 13:41:25</publishTime>
     </File>
     <File Include="Resources/Documentacion.XML">
-      <publishTime>05/17/2019 14:46:46</publishTime>
+      <publishTime>11/07/2018 13:28:28</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/23/2019 11:35:19</publishTime>
+      <publishTime>05/28/2019 13:41:25</publishTime>
     </File>
   </ItemGroup>
 </Project>
