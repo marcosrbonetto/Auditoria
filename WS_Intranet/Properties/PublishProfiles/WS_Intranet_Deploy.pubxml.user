@@ -13,13 +13,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>08/22/2018 08:09:01</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>04/23/2019 11:30:32</publishTime>
+      <publishTime>04/23/2019 14:54:50</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>04/23/2019 11:30:32</publishTime>
+      <publishTime>04/23/2019 14:54:50</publishTime>
     </File>
     <File Include="bin/Documentacion.XML">
-      <publishTime>04/23/2019 11:30:28</publishTime>
+      <publishTime>04/23/2019 14:54:45</publishTime>
     </File>
     <File Include="bin/es/System.Net.Http.Formatting.resources.dll">
       <publishTime>09/12/2018 10:19:41</publishTime>
@@ -58,7 +58,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>08/22/2018 08:09:01</publishTime>
     </File>
     <File Include="bin/Resources/Documentacion.XML">
-      <publishTime>04/23/2019 11:30:28</publishTime>
+      <publishTime>04/23/2019 14:54:45</publishTime>
     </File>
     <File Include="bin/Resources/Swagger.css">
       <publishTime>09/18/2018 10:14:21</publishTime>
@@ -97,7 +97,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>09/12/2018 10:19:41</publishTime>
     </File>
     <File Include="bin/WS_Intranet.dll">
-      <publishTime>04/23/2019 11:30:28</publishTime>
+      <publishTime>04/23/2019 14:54:45</publishTime>
     </File>
     <File Include="bin/_DAO.dll">
       <publishTime>04/23/2019 11:30:26</publishTime>
@@ -106,7 +106,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>04/23/2019 11:30:26</publishTime>
     </File>
     <File Include="bin/_Rules.dll">
-      <publishTime>04/23/2019 11:30:27</publishTime>
+      <publishTime>04/23/2019 14:54:45</publishTime>
     </File>
     <File Include="Default.aspx">
       <publishTime>09/14/2018 15:27:37</publishTime>
@@ -115,10 +115,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/21/2018 15:20:59</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>04/23/2019 11:30:29</publishTime>
+      <publishTime>04/23/2019 14:54:48</publishTime>
     </File>
     <File Include="Resources/Documentacion.XML">
-      <publishTime>04/23/2019 11:30:28</publishTime>
+      <publishTime>04/23/2019 14:54:45</publishTime>
     </File>
     <File Include="Web.config">
       <publishTime>04/16/2019 13:46:26</publishTime>
