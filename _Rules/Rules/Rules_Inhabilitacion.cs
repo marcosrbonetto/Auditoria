@@ -42,7 +42,7 @@ namespace _Rules.Rules
             {
                 try
                 {
-                    var validarComando = ValidarComandoInsertarActualizar(comando);
+                    var validarComando = ValidarComandoInsertar(comando);
                     if (!validarComando.Ok)
                     {
                         resultado.Error = validarComando.Error;
@@ -148,59 +148,88 @@ namespace _Rules.Rules
             {
                 try
                 {
-                    var validarComando = ValidarComandoInsertarActualizar(comando);
-                    if (!validarComando.Ok)
+                    //var validarComando = ValidarComandoInsertarActualizar(comando);
+                    //if (!validarComando.Ok)
+                    //{
+                    //    resultado.Error = validarComando.Error;
+                    //    return false;
+                    //}
+
+
+                    if (!comando.Id.HasValue)
                     {
-                        resultado.Error = validarComando.Error;
+                        resultado.Error = "Indique la inhabilitacion a modificar";
                         return false;
                     }
 
                     //Busco el usuario
-                    var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
-                    if (!resultadoUsuario.Ok)
+                    Usuario usuario = null;
+                    if (comando.IdUsuario.HasValue)
                     {
-                        resultado.Error = resultadoUsuario.Error;
-                        return false;
-                    }
+                        var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
+                        if (!resultadoUsuario.Ok)
+                        {
+                            resultado.Error = resultadoUsuario.Error;
+                            return false;
+                        }
 
-                    var usuario = resultadoUsuario.Return;
-                    if (usuario == null || usuario.FechaBaja != null)
-                    {
-                        resultado.Error = "El usuario no existe o esta dado de baja";
-                        return false;
+                        usuario = resultadoUsuario.Return;
+                        if (usuario == null || usuario.FechaBaja != null)
+                        {
+                            resultado.Error = "El usuario no existe o esta dado de baja";
+                            return false;
+                        }
                     }
 
                     //Valido las fechas
-                    DateTime? fechaInicio = Utils.StringToDate(comando.FechaInicio);
-                    DateTime? fechaFin = Utils.StringToDate(comando.FechaFin);
+                    DateTime? fechaInicio = null;
+                    if (comando.FechaInicio != null && comando.FechaInicio.Trim() != "")
+                    {
+                        fechaInicio = Utils.StringToDate(comando.FechaInicio.Trim());
+                        if (!fechaInicio.HasValue)
+                        {
+                            resultado.Error = "Fecha de inicio inválida";
+                            return false;
+                        }
+                    }
+
+                    DateTime? fechaFin = null;
+                    if (comando.FechaFin != null && comando.FechaFin.Trim() != "")
+                    {
+                        fechaFin = Utils.StringToDate(comando.FechaFin.Trim());
+                        if (!fechaFin.HasValue)
+                        {
+                            resultado.Error = "Fecha de fin inválida";
+                            return false;
+                        }
+                    }
 
                     //Tipo
-                    var resultadoConsultaTipo = new Rules.Rules_TipoInhabilitacion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInhabilitacionKeyValue.Value);
-                    if (!resultadoConsultaTipo.Ok)
+                    TipoInhabilitacion tipo = null;
+                    if (comando.TipoInhabilitacionKeyValue.HasValue)
                     {
-                        resultado.Error = resultadoConsultaTipo.Error;
-                        return false;
+                        var resultadoConsultaTipo = new Rules.Rules_TipoInhabilitacion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInhabilitacionKeyValue.Value);
+                        if (!resultadoConsultaTipo.Ok)
+                        {
+                            resultado.Error = resultadoConsultaTipo.Error;
+                            return false;
+                        }
+
+                        if (resultadoConsultaTipo.Return == null)
+                        {
+                            resultado.Error = "El tipo inhabilitacion no existe";
+                            return false;
+                        }
+
+                        tipo = resultadoConsultaTipo.Return;
+                        if (tipo == null || tipo.FechaBaja != null)
+                        {
+                            resultado.Error = "El tipo inhabilitacion no existe";
+                            return false;
+                        }
                     }
 
-                    if (resultadoConsultaTipo.Return == null)
-                    {
-                        resultado.Error = "El tipo inhabilitacion no existe";
-                        return false;
-                    }
 
-
-                    var tipo = resultadoConsultaTipo.Return;
-                    if (tipo.Invalido)
-                    {
-                        resultado.Error = "El tipo de inhabilitación es inválido. Seleccione otro por favor";
-                        return false;
-                    }
-
-                    if (!tipo.Permanente && !fechaFin.HasValue)
-                    {
-                        resultado.Error = "Si selecciona el tipo " + tipo.Nombre + " debe seleccionar una fecha de fin";
-                        return false;
-                    }
 
                     //Busco la entidad
                     var resultadoEntity = GetByIdObligatorio(comando.Id.Value);
@@ -213,7 +242,7 @@ namespace _Rules.Rules
                     var entity = resultadoEntity.Return;
                     if (entity == null || entity.FechaBaja != null)
                     {
-                        resultado.Error = "El titular no existe o esta dado de baja";
+                        resultado.Error = "La inhabilitacion no existe o esta dado de baja";
                         return false;
                     }
 
@@ -222,14 +251,16 @@ namespace _Rules.Rules
                     entity.Usuario = usuario;
                     entity.FechaInicio = fechaInicio;
                     entity.FechaFin = fechaFin;
-                    entity.DtoRes = comando.DtoRes;
-                    entity.Expediente = comando.Expediente;
-                    entity.Observaciones = comando.Observaciones;
-                    entity.ObservacionesAutoChapa = comando.ObservacionesAutoChapa;
-                    entity.ObservacionesTipoAuto = comando.ObservacionesTipoAuto;
-                    entity.FechaFinString = null;
-                    entity.FechaInicioString = null;
-                    entity.Error = null;
+                    entity.DtoRes = comando.DtoRes == null || comando.DtoRes.Trim() == "" ? null : comando.DtoRes.Trim();
+                    entity.Expediente = comando.Expediente == null || comando.Expediente.Trim() == "" ? null : comando.Expediente.Trim();
+                    entity.Observaciones = comando.Observaciones == null || comando.Observaciones.Trim() == "" ? null : comando.Observaciones.Trim();
+                    entity.ObservacionesAutoChapa = comando.ObservacionesAutoChapa == null || comando.ObservacionesAutoChapa.Trim() == "" ? null : comando.ObservacionesAutoChapa.Trim();
+                    entity.ObservacionesTipoAuto = comando.ObservacionesTipoAuto == null || comando.ObservacionesTipoAuto.Trim() == "" ? null : comando.ObservacionesTipoAuto.Trim();
+                    entity.FechaFinString = fechaFin.HasValue ? null : entity.FechaFinString;
+                    entity.FechaInicioString = fechaInicio.HasValue ? null : entity.FechaInicioString;
+
+                    //Errores
+                    entity.Error = CalcularError(entity);
 
                     //Actualizo
                     var resultadoUpdate = base.Update(entity);
@@ -340,7 +371,7 @@ namespace _Rules.Rules
             return resultado;
         }
 
-        public Resultado<bool> ValidarComandoInsertarActualizar(_Model.Comandos.Comando_InhabilitacionNuevo comando)
+        public Resultado<bool> ValidarComandoInsertar(_Model.Comandos.Comando_InhabilitacionNuevo comando)
         {
             var resultado = new Resultado<bool>();
 
@@ -378,7 +409,7 @@ namespace _Rules.Rules
                 }
 
                 //Fecha de inicio
-                if (string.IsNullOrEmpty(comando.FechaInicio))
+                if (comando.FechaInicio == null || comando.FechaInicio.Trim() == "")
                 {
                     resultado.Error = "La fecha de inicio es requerido";
                     return resultado;
@@ -391,7 +422,7 @@ namespace _Rules.Rules
                 }
 
                 //fecha de fin
-                if (!string.IsNullOrEmpty(comando.FechaFin) && !Utils.StringToDate(comando.FechaFin).HasValue)
+                if (!(comando.FechaFin == null || comando.FechaFin.Trim() == "") && !Utils.StringToDate(comando.FechaFin).HasValue)
                 {
                     resultado.Error = "Fecha de fin inválida";
                     return resultado;
@@ -407,6 +438,57 @@ namespace _Rules.Rules
             return resultado;
         }
 
-       
+        public string CalcularError(Inhabilitacion entity)
+        {
+            List<string> errores = new List<string>();
+
+            //Tipo
+            if (entity.TipoInhabilitacion == null)
+            {
+                errores.Add("Tipo de inhabilitacion requerido");
+            }
+            else
+            {
+
+                //Tipo invalido
+                if (entity.TipoInhabilitacion.Invalido)
+                {
+                    errores.Add("Tipo de inhabilitacion invalido");
+                }
+                else
+                {
+                    //Fecha de fin solo cuando es permanente
+                    if (!entity.TipoInhabilitacion.Permanente && !entity.FechaFin.HasValue)
+                    {
+                        errores.Add("Fecha fin requerido");
+                    }
+                }
+            }
+
+            //fecha inicio
+            if (!entity.FechaInicio.HasValue)
+            {
+                errores.Add("Fecha inicio requerido");
+            }
+
+            //Usuario
+            if (entity.Usuario == null)
+            {
+                errores.Add("Persona asociada requerida");
+            }
+            else
+            {
+                var errorUsuario = new Rules_Usuario(getUsuarioLogueado()).CalcularError(entity.Usuario);
+                if (errorUsuario != null)
+                {
+                    errores.Add("Persona con errores (" + errorUsuario + ")");
+                }
+            }
+
+
+            if (errores.Count == 0) return null;
+            return string.Join(" | ", errores);
+        }
+
     }
 }

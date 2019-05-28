@@ -67,7 +67,7 @@ namespace _Rules.Rules
                     return resultado;
                 }
 
-                DateTime? fechaNacimiento =  Utils.StringToDate(comando.FechaNacimiento);
+                DateTime? fechaNacimiento = Utils.StringToDate(comando.FechaNacimiento);
 
                 //Creo el usuario
                 Usuario usuario = new Usuario();
@@ -109,10 +109,17 @@ namespace _Rules.Rules
 
             try
             {
-                var validarComando = ValidarComandoInsertarActualizar(comando);
-                if (!validarComando.Ok)
+                //var validarComando = ValidarComandoInsertarActualizar(comando);
+                //if (!validarComando.Ok)
+                //{
+                //    resultado.Error = validarComando.Error;
+                //    return resultado;
+                //}
+
+
+                if (!comando.Id.HasValue)
                 {
-                    resultado.Error = validarComando.Error;
+                    resultado.Error = "Debe indicar el usuario a modificar";
                     return resultado;
                 }
 
@@ -132,43 +139,59 @@ namespace _Rules.Rules
                 }
 
                 //Busco en mi lista de usuario
-                var resultadoQueryUsuarioExistente = Get(new _Model.Consultas.Consulta_Usuario()
+                if (comando.Dni.HasValue && comando.SexoMasculino.HasValue)
                 {
-                    Dni = comando.Dni,
-                    SexoMasculino = comando.SexoMasculino,
-                    DadosDeBaja = false
-                });
-                if (!resultadoQueryUsuarioExistente.Ok)
-                {
-                    resultado.Error = resultadoQueryUsuario.Error;
-                    return resultado;
+                    var resultadoQueryUsuarioExistente = Get(new _Model.Consultas.Consulta_Usuario()
+                    {
+                        Dni = comando.Dni,
+                        SexoMasculino = comando.SexoMasculino,
+                        DadosDeBaja = false
+                    });
+                    if (!resultadoQueryUsuarioExistente.Ok)
+                    {
+                        resultado.Error = resultadoQueryUsuario.Error;
+                        return resultado;
+                    }
+
+                    bool existeUsuario = resultadoQueryUsuarioExistente.Return.Where(x => x.Id != comando.Id).ToList().Count != 0;
+                    if (existeUsuario)
+                    {
+                        resultado.Error = "Ya existe un usuario con ese DNI y sexo";
+                        return resultado;
+                    }
                 }
 
-                bool existeUsuario = resultadoQueryUsuarioExistente.Return.Where(x => x.Id != comando.Id).ToList().Count != 0;
-                if (existeUsuario)
-                {
-                    resultado.Error = "Ya existe un usuario con ese DNI y sexo";
-                    return resultado;
-                }
 
-                DateTime? fechaNacimiento = Utils.StringToDate(comando.FechaNacimiento);
+                //Valido fecha de nacimiento
+                DateTime? fechaNacimiento = null;
+                if (comando.FechaNacimiento != null && comando.FechaNacimiento.Trim() != "")
+                {
+                    fechaNacimiento = Utils.StringToDate(comando.FechaNacimiento);
+                    if (!fechaNacimiento.HasValue)
+                    {
+                        resultado.Error = "Fecha de nacimiento inválida";
+                    }
+                }
 
                 //Creo el usuario
                 usuario.Id = comando.Id.Value;
                 usuario.Dni = comando.Dni;
                 usuario.SexoMasculino = comando.SexoMasculino;
-                usuario.Nombre = comando.Nombre;
-                usuario.Apellido = comando.Apellido;
+                usuario.Nombre = comando.Nombre == null || comando.Nombre.Trim() == "" ? null : comando.Nombre.Trim();
+                usuario.Apellido = comando.Apellido == null || comando.Apellido.Trim() == "" ? null : comando.Apellido.Trim();
                 usuario.FechaNacimiento = fechaNacimiento;
-                usuario.DomicilioBarrio = comando.DomicilioBarrio;
-                usuario.DomicilioCalle = comando.DomicilioCalle;
-                usuario.DomicilioAltura = comando.DomicilioAltura;
-                usuario.DomicilioObservaciones = comando.DomicilioObservaciones;
-                usuario.DomicilioPiso = comando.DomicilioPiso;
-                usuario.DomicilioDepto = comando.DomicilioDepto;
-                usuario.DomicilioCodigoPostal = comando.DomicilioCodigoPostal;
-                usuario.Observaciones = comando.Observaciones;
-                usuario.Error = null;
+                usuario.DomicilioBarrio = comando.DomicilioBarrio == null || comando.DomicilioBarrio.Trim() == "" ? null : comando.DomicilioBarrio.Trim();
+                usuario.DomicilioCalle = comando.DomicilioCalle == null || comando.DomicilioCalle.Trim() == "" ? null : comando.DomicilioCalle.Trim();
+                usuario.DomicilioAltura = comando.DomicilioAltura == null || comando.DomicilioAltura.Trim() == "" ? null : comando.DomicilioAltura.Trim();
+                usuario.DomicilioObservaciones = comando.DomicilioObservaciones == null || comando.DomicilioObservaciones.Trim() == "" ? null : comando.DomicilioObservaciones.Trim();
+                usuario.DomicilioPiso = comando.DomicilioPiso == null || comando.DomicilioPiso.Trim() == "" ? null : comando.DomicilioPiso.Trim();
+                usuario.DomicilioDepto = comando.DomicilioDepto == null || comando.DomicilioDepto.Trim() == "" ? null : comando.DomicilioDepto.Trim();
+                usuario.DomicilioCodigoPostal = comando.DomicilioCodigoPostal == null || comando.DomicilioCodigoPostal.Trim() == "" ? null : comando.DomicilioCodigoPostal.Trim();
+                usuario.Observaciones = comando.Observaciones == null || comando.Observaciones.Trim() == "" ? null : comando.Observaciones.Trim();
+
+                //Error
+                var error = CalcularError(usuario);
+                usuario.Error = error;
 
                 //Inserto o update
                 Resultado<Usuario> resultadoInsert = base.Update(usuario);
@@ -286,7 +309,7 @@ namespace _Rules.Rules
                 }
 
                 //Nombre Apellido
-                if (string.IsNullOrEmpty(comando.Nombre) || string.IsNullOrEmpty(comando.Apellido))
+                if ((comando.Nombre == null || comando.Nombre.Trim() == "") || (comando.Apellido == null || comando.Apellido.Trim() == ""))
                 {
                     resultado.Error = "El nombre y apellido son requeridos";
                     return resultado;
@@ -322,5 +345,45 @@ namespace _Rules.Rules
 
             return resultado;
         }
+
+        public string CalcularError(Usuario usuario)
+        {
+            List<string> errores = new List<string>();
+
+            //Nombre
+            if ((usuario.Nombre == null || usuario.Nombre.Trim() == ""))
+            {
+                errores.Add("Nombre requerido");
+            }
+
+            //Apellido
+            if ((usuario.Apellido == null || usuario.Apellido.Trim() == ""))
+            {
+                errores.Add("Apellido requerido");
+            }
+
+            //DNI
+            if (!usuario.Dni.HasValue)
+            {
+                errores.Add("N° de Documento requerido");
+            }
+            else
+            {
+                if (usuario.Dni.Value <= 0 || usuario.Dni.Value > 200000000)
+                {
+                    errores.Add("N° de documento inválido");
+                }
+            }
+
+            //Sexo
+            if (!usuario.SexoMasculino.HasValue)
+            {
+                errores.Add("Sexo requerido");
+            }
+
+            if (errores.Count == 0) return null;
+            return string.Join(" | ", errores);
+        }
+
     }
 }

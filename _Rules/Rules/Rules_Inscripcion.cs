@@ -158,7 +158,7 @@ namespace _Rules.Rules
             {
                 try
                 {
-                    var validarComando = ValidarComandoInsertarActualizar(comando);
+                    var validarComando = ValidarComandoInsertar(comando);
                     if (!validarComando.Ok)
                     {
                         resultado.Error = validarComando.Error;
@@ -287,14 +287,25 @@ namespace _Rules.Rules
             {
                 try
                 {
-                    var validarComando = ValidarComandoInsertarActualizar(comando);
-                    if (!validarComando.Ok)
+                    //Busco la entidad
+                    var resultadoEntity = GetByIdObligatorio(comando.Id.Value);
+                    if (!resultadoEntity.Ok)
                     {
-                        resultado.Error = validarComando.Error;
+                        resultado.Error = resultadoEntity.Error;
+                        return false;
+                    }
+                    var entity = resultadoEntity.Return;
+                    if (entity == null || entity.FechaBaja != null)
+                    {
+                        resultado.Error = "La licencia no existe o esta dada de baja";
                         return false;
                     }
 
+
                     //Busco el usuario
+                    Usuario usuario = null;
+                    if (comando.IdUsuario.HasValue)
+                    {
                     var resultadoUsuario = new Rules_Usuario(getUsuarioLogueado()).GetById(comando.IdUsuario.Value);
                     if (!resultadoUsuario.Ok)
                     {
@@ -302,14 +313,19 @@ namespace _Rules.Rules
                         return false;
                     }
 
-                    var usuario = resultadoUsuario.Return;
+                        usuario = resultadoUsuario.Return;
                     if (usuario == null || usuario.FechaBaja != null)
                     {
                         resultado.Error = "El usuario no existe o esta dado de baja";
                         return false;
                     }
 
+                    }
+
                     //Busco el tipo inscripcion
+                    TipoInscripcion tipoInscripcion = null;
+                    if (comando.TipoInscripcionKeyValue.HasValue)
+                    {
                     var resultadoTipoInscripcion = new Rules_TipoInscripcion(getUsuarioLogueado()).GetByKeyValue(comando.TipoInscripcionKeyValue.Value);
                     if (!resultadoTipoInscripcion.Ok)
                     {
@@ -317,25 +333,30 @@ namespace _Rules.Rules
                         return false;
                     }
 
-                    var tipoInscripcion = resultadoTipoInscripcion.Return;
+                        tipoInscripcion = resultadoTipoInscripcion.Return;
                     if (tipoInscripcion == null || tipoInscripcion.FechaBaja != null)
                     {
                         resultado.Error = "El tipo de inscripción no existe o esta dado de baja";
                         return false;
                     }
+                    }
 
                     //Busco el tipo de auto
+                    TipoAuto tipoAuto = null;
+                    if (comando.TipoAutoKeyValue.HasValue)
+                    {
                     var resultadoTipoAuto = new Rules_TipoAuto(getUsuarioLogueado()).GetByKeyValue(comando.TipoAutoKeyValue.Value);
                     if (!resultadoTipoAuto.Ok)
                     {
                         resultado.Error = resultadoTipoAuto.Error;
                         return false;
                     }
-                    var tipoAuto = resultadoTipoAuto.Return;
+                        tipoAuto = resultadoTipoAuto.Return;
                     if (tipoAuto == null || tipoAuto.FechaBaja != null)
                     {
                         resultado.Error = "El tipo de auto no existe o esta dado de baja";
                         return false;
+                    }
                     }
 
                     //Busco el tipo condicion
@@ -357,29 +378,65 @@ namespace _Rules.Rules
                     }
 
                     //Valido las fechas
-                    DateTime? fechaInicio = Utils.StringToDate(comando.FechaInicio); ;
-                    DateTime? fechaFin = Utils.StringToDate(comando.FechaFin); ;
-                    DateTime? fechaTelegrama = Utils.StringToDate(comando.FechaTelegrama); ;
-                    DateTime? fechaVencimientoLicencia = Utils.StringToDate(comando.FechaVencimientoLicencia); ;
-                    DateTime? artFechaVencimiento = Utils.StringToDate(comando.ArtFechaVencimiento); ;
+                    DateTime? fechaInicio = null;
+                    if (comando.FechaInicio != null && comando.FechaInicio.Trim() != "")
+                    {
+                        fechaInicio = Utils.StringToDate(comando.FechaInicio.Trim());
+                        if (!fechaInicio.HasValue)
+                        {
+                            resultado.Error = "Fecha de inicio inválida";
+                            return false;
+                        }
+                    }
 
-                    //Busco la entidad
-                    var resultadoEntity = GetByIdObligatorio(comando.Id.Value);
-                    if (!resultadoEntity.Ok)
+                    DateTime? fechaFin = null;
+                    if (comando.FechaFin != null && comando.FechaFin.Trim() != "")
                     {
-                        resultado.Error = resultadoEntity.Error;
+                        fechaFin = Utils.StringToDate(comando.FechaFin.Trim());
+                        if (!fechaFin.HasValue)
+                        {
+                            resultado.Error = "Fecha de fin inválida";
                         return false;
                     }
-                    var entity = resultadoEntity.Return;
-                    if (entity == null || entity.FechaBaja != null)
+                    }
+
+                    DateTime? fechaTelegrama = null;
+                    if (comando.FechaTelegrama != null && comando.FechaTelegrama.Trim() != "")
                     {
-                        resultado.Error = "El titular no existe o esta dado de baja";
+                        fechaTelegrama = Utils.StringToDate(comando.FechaTelegrama.Trim());
+                        if (!fechaTelegrama.HasValue)
+                        {
+                            resultado.Error = "Fecha de telegrama inválida";
+                            return false;
+                        }
+                    }
+
+                    DateTime? fechaVencimientoLicencia = null;
+                    if (comando.FechaVencimientoLicencia != null && comando.FechaVencimientoLicencia.Trim() != "")
+                    {
+                        fechaVencimientoLicencia = Utils.StringToDate(comando.FechaVencimientoLicencia.Trim());
+                        if (!fechaVencimientoLicencia.HasValue)
+                        {
+                            resultado.Error = "Fecha de vencimiento de la licencia inválida";
+                            return false;
+                        }
+                    }
+
+                    DateTime? artFechaVencimiento = null;
+                    if (comando.ArtFechaVencimiento != null && comando.ArtFechaVencimiento.Trim() != "")
+                    {
+                        artFechaVencimiento = Utils.StringToDate(comando.ArtFechaVencimiento.Trim());
+                        if (!artFechaVencimiento.HasValue)
+                    {
+                            resultado.Error = "Fecha de vencimiento de la licencia inválida";
                         return false;
                     }
+                    }
+
 
                     //Actualizo
                     entity.Id = comando.Id.Value;
-                    entity.Identificador = comando.Identificador;
+                    entity.Identificador = comando.Identificador == null || comando.Identificador.Trim() == "" ? null : comando.Identificador.Trim();
                     entity.Usuario = usuario;
                     entity.TipoInscripcion = tipoInscripcion;
                     entity.TipoAuto = tipoAuto;
@@ -387,12 +444,14 @@ namespace _Rules.Rules
                     entity.FechaFin = fechaFin;
                     entity.FechaTelegrama = fechaTelegrama;
                     entity.FechaVencimientoLicencia = fechaVencimientoLicencia;
-                    entity.ArtCompañia = comando.ArtCompañia;
+                    entity.ArtCompañia = comando.ArtCompañia == null || comando.ArtCompañia.Trim() == "" ? null : comando.ArtCompañia.Trim();
                     entity.ArtFechaVencimiento = artFechaVencimiento;
-                    entity.Caja = comando.Caja;
-                    entity.Observaciones = comando.Observaciones;
+                    entity.Caja = comando.Caja == null || comando.Caja.Trim() == "" ? null : comando.Caja.Trim();
+                    entity.Observaciones = comando.Observaciones == null || comando.Observaciones.Trim() == "" ? null : comando.Observaciones.Trim();
                     entity.TipoCondicionInscripcion = condicion;
-                    entity.Error = null;
+
+                    //Error
+                    entity.Error = CalcularError(entity);
 
                     //Actualizo
                     var resultadoUpdate = base.Update(entity);
@@ -502,7 +561,7 @@ namespace _Rules.Rules
             return resultado;
         }
 
-        public Resultado<bool> ValidarComandoInsertarActualizar(_Model.Comandos.Comando_InscripcionNuevo comando)
+        public Resultado<bool> ValidarComandoInsertar(_Model.Comandos.Comando_InscripcionNuevo comando)
         {
             var resultado = new Resultado<bool>();
 
@@ -521,7 +580,7 @@ namespace _Rules.Rules
                 }
 
                 //Identificador requerdio
-                if (string.IsNullOrEmpty(comando.Identificador))
+                if (comando.Identificador == null || comando.Identificador.Trim() == "")
                 {
                     resultado.Error = "El identificador es requerido";
                     return resultado;
@@ -556,42 +615,42 @@ namespace _Rules.Rules
                 }
 
                 //FEcha de inicio requerida
-                if (string.IsNullOrEmpty(comando.FechaInicio))
+                if (comando.FechaInicio == null || comando.FechaInicio.Trim() == "")
                 {
                     resultado.Error = "La fecha de inicio es requerida";
                     return resultado;
                 }
 
                 //Fecha de inicio valida
-                if (!Utils.StringToDate(comando.FechaInicio).HasValue)
+                if (!Utils.StringToDate(comando.FechaInicio.Trim()).HasValue)
                 {
                     resultado.Error = "Fecha de inicio inválida";
                     return resultado;
                 }
 
                 //Si manda fecha de fin, debe ser valida
-                if (!string.IsNullOrEmpty(comando.FechaFin) && !Utils.StringToDate(comando.FechaFin).HasValue)
+                if (!(comando.FechaFin == null || comando.FechaFin.Trim() == "") && !Utils.StringToDate(comando.FechaFin.Trim()).HasValue)
                 {
                     resultado.Error = "Fecha de fin inválida";
                     return resultado;
                 }
 
                 //Si manda fecha de telegrama, debe ser valida
-                if (!string.IsNullOrEmpty(comando.FechaTelegrama) && !Utils.StringToDate(comando.FechaTelegrama).HasValue)
+                if (!(comando.FechaTelegrama == null || comando.FechaTelegrama.Trim() == "") && !Utils.StringToDate(comando.FechaTelegrama.Trim()).HasValue)
                 {
                     resultado.Error = "Fecha de telegrama inválida";
                     return resultado;
                 }
 
                 //Si manda fecha de vencimiento de licencia, debe ser valida
-                if (!string.IsNullOrEmpty(comando.FechaVencimientoLicencia) && !Utils.StringToDate(comando.FechaVencimientoLicencia).HasValue)
+                if (!(comando.FechaVencimientoLicencia == null || comando.FechaVencimientoLicencia.Trim() == "") && !Utils.StringToDate(comando.FechaVencimientoLicencia.Trim()).HasValue)
                 {
                     resultado.Error = "Fecha de vencimiento de licencia inválida";
                     return resultado;
                 }
 
                 //Si manda fecha de vencimiento de ART, debe ser valida
-                if (!string.IsNullOrEmpty(comando.ArtFechaVencimiento) && !Utils.StringToDate(comando.ArtFechaVencimiento).HasValue)
+                if (!(comando.ArtFechaVencimiento == null || comando.ArtFechaVencimiento.Trim() == "") && !Utils.StringToDate(comando.ArtFechaVencimiento.Trim()).HasValue)
                 {
                     resultado.Error = "Fecha de vencimiento de ART inválida";
                     return resultado;
@@ -606,6 +665,53 @@ namespace _Rules.Rules
             }
 
             return resultado;
+        }
+
+        public string CalcularError(Inscripcion entity)
+        {
+            List<string> errores = new List<string>();
+
+            //Tipo
+            if (entity.TipoInscripcion == null)
+            {
+                errores.Add("Tipo de licencia requerido");
+            }
+
+            //Auti
+            if (entity.TipoAuto == null)
+            {
+                errores.Add("Tipo de auto requerido");
+            }
+
+            //identificador
+            if (entity.Identificador == null || entity.Identificador.Trim() == "")
+            {
+                errores.Add("N° de licencia requerido");
+            }
+
+            ////fecha inicio
+            //if (!entity.FechaInicio.HasValue)
+            //{
+            //    errores.Add("Fecha inicio requerido");
+            //}
+
+            //Usuario
+            if (entity.Usuario == null)
+            {
+                errores.Add("Persona asociada requerida");
+            }
+            else
+            {
+                var errorUsuario = new Rules_Usuario(getUsuarioLogueado()).CalcularError(entity.Usuario);
+                if (errorUsuario != null)
+                {
+                    errores.Add("Persona con errores (" + errorUsuario + ")");
+                }
+            }
+
+
+            if (errores.Count == 0) return null;
+            return string.Join(" | ", errores);
         }
 
         public void calcularErrores()
