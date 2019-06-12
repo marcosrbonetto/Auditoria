@@ -170,6 +170,21 @@ namespace WS_Intranet.v1.Controllers
             return new WSRules_Inscripcion(usuarioLogeado.Return).EstaInscripto(consulta);
         }
 
-        
+        [HttpPut]
+        [ConToken]
+        [EsOperador]
+        [Route("GetAntiguedadEnDias")]
+        public ResultadoServicio<double> GetAntiguedadEnDias(v1.Entities.Consultas.Consulta_Inscripcion consulta)
+        {
+            var usuarioLogeado = GetUsuarioLogeado();
+            if (!usuarioLogeado.Ok)
+            {
+                var resultado = new ResultadoServicio<double>();
+                resultado.Error = usuarioLogeado.Error;
+                return resultado;
+            }
+
+            return new WSRules_Inscripcion(usuarioLogeado.Return).GetAntiguedadEnDias(consulta);
+        }
     }
 }

@@ -395,20 +395,85 @@ namespace _DAO.DAO
             try
             {
                 var query = GetQuery(consulta);
-                
-                if (consulta.TipoInscripcion == Enums.TipoInscripcion.Chofer && consulta.ActivoHasta.HasValue)
+
+                if (consulta.TipoInscripcion == Enums.TipoInscripcion.Chofer && consulta.FechaReferencia.HasValue)
                 {
-                    //Activo hasta x fecha (Con fecha fin superior a X fecha)
-                    query.Where(x => x.FechaFin == null || x.FechaFin > consulta.ActivoHasta.Value);
-                    var choferesSinFechaFin = query;
-                    choferesSinFechaFin.Where(x=> x.FechaFin == null);
-                    if (choferesSinFechaFin.RowCount() > 0) 
+                    var copiaQuery = query.Clone();
+                    if (copiaQuery.Where(x => (x.FechaInicio == null && x.FechaFin > consulta.FechaReferencia.Value)
+                        || x.FechaInicio == null && x.FechaFin == null).RowCount() > 0)
                     {
-                        resultado.Error = "E2: Hay inscripcion/es de chofer sin fecha fin";
+                        resultado.Error = "El sistema no puede corroborar la integridad de sus datos. Por favor, comuniquese con Dirección de Transporte";
                         return resultado;
                     }
+
+                    //Activo en x fecha (Con fechaInicio<x y fechaFin>x) ó (fechaInicio<x y fechaFin null)
+                    query = query.Where(x => (x.FechaInicio.Value < consulta.FechaReferencia.Value && x.FechaFin.Value > consulta.FechaReferencia.Value)
+                        || (x.FechaInicio.Value < consulta.FechaReferencia.Value && x.FechaFin.Value == null));
                 }
                 resultado.Return = query.RowCount();
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
+            return resultado;
+        }
+
+        public Resultado<double> GetAntiguedadEnDias(_Model.Consultas.Consulta_Inscripcion consulta)
+        {
+            var resultado = new Resultado<double>();
+            int diasTrabajados = 0;
+            try
+            {
+                var query = GetQuery(consulta);
+                var test = query.List().ToList();
+
+                var fechaReferencia = consulta.FechaReferencia.HasValue ? consulta.FechaReferencia.Value : DateTime.Now;
+
+                var copiaQuery = query.Clone();
+                if (copiaQuery.Where(x => x.FechaInicio == null).RowCount() > 0)
+                {
+                    resultado.Error = "El sistema no puede corroborar la integridad de sus datos. Por favor, comuniquese con Dirección de Transporte";
+                    return resultado;
+                }
+
+
+                var inscripcionesAntesReferencia = query.Where(x => x.FechaInicio.Value < fechaReferencia).List().ToList();
+                DateTime fechaMenor = inscripcionesAntesReferencia.Count() > 0 ? inscripcionesAntesReferencia.First().FechaInicio.Value : new DateTime();
+                DateTime fechaMayor = inscripcionesAntesReferencia.Count() > 0 ? inscripcionesAntesReferencia.First().FechaFin.Value : new DateTime();
+
+                //Calculo extremos
+                inscripcionesAntesReferencia.ForEach(x =>
+                {
+                    if (x.FechaInicio.HasValue && x.FechaInicio.Value < fechaMenor)
+                    {
+                        fechaMenor = x.FechaInicio.Value;
+                    }
+                    if (x.FechaFin.HasValue && x.FechaFin.Value > fechaMayor)
+                    {
+                        fechaMayor = x.FechaFin.Value;
+                    }
+                    else if (!x.FechaFin.HasValue)
+                    {
+                        fechaMayor = x.FechaTelegrama.HasValue ? (x.FechaTelegrama.Value > fechaMayor ? x.FechaTelegrama.Value : fechaMayor) : fechaMayor;
+                    }
+                });
+
+                var cursor = fechaMenor;
+                diasTrabajados = 1;
+
+                do
+                {
+                    cursor=cursor.AddDays(1);
+                    diasTrabajados = inscripcionesAntesReferencia.Any(x =>
+                        cursor >= x.FechaInicio.Value && (cursor <= x.FechaFin.Value || cursor <= x.FechaTelegrama.Value)) ?
+                        diasTrabajados + 1 : diasTrabajados;
+                }
+                while (cursor < fechaMayor);
+
+                resultado.Return = diasTrabajados;
+
             }
             catch (Exception e)
             {

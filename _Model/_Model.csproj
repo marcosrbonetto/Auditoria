@@ -71,6 +71,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resultado.cs" />
+    <Compile Include="Resultados\Resultado_Antiguedad.cs" />
     <Compile Include="Resultados\Resultado_Paginador.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>

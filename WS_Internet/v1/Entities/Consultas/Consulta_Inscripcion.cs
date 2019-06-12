@@ -17,6 +17,6 @@ namespace WS_Internet.v1.Entities.Consultas
         public bool? ConFechaInicio { get; set; }
         public bool? ConError { get; set; }
         public bool? Favorito { get; set; }
-
+        public string FechaReferencia { get; set; }
     }
 }

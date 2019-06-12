@@ -134,5 +134,23 @@ namespace WS_Intranet.v1.Controllers
 
             return new v1.Rules.WSRules_Inhabilitacion(usuarioLogeado.Return).GetCantidadConError();
         }
+
+        [HttpGet]
+        [ConToken]
+        [EsOperador]
+        [Route("EstaInhabilitado")]
+        public ResultadoServicio<bool> EstaInhabilitado(int? dni)
+        {
+
+            var usuarioLogeado = GetUsuarioLogeado();
+            if (!usuarioLogeado.Ok)
+            {
+                var resultado = new ResultadoServicio<bool>();
+                resultado.Error = usuarioLogeado.Error;
+                return resultado;
+            }
+
+            return new WSRules_Inhabilitacion(usuarioLogeado.Return).EstaInhabilitado(dni);
+        }
     }
 }

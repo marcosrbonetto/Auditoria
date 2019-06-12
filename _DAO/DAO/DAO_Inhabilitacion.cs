@@ -59,12 +59,11 @@ namespace _DAO.DAO
 
             ClearJoins();
             var query = GetSession().QueryOver<Inhabilitacion>();
-
+            JoinTipoInhabilitacion(query);
 
             //Tipo
             if (consulta.TipoInhabilitacion.HasValue)
             {
-                JoinTipoInhabilitacion(query);
                 query = query.Where(() => joinTipoInhabilitacion.KeyValue == consulta.TipoInhabilitacion.Value);
             }
 
@@ -269,6 +268,35 @@ namespace _DAO.DAO
 
         }
 
+        public Resultado<int> GetCantidadInhabilitaciones(_Model.Consultas.Consulta_Inhabilitacion consulta)
+        {
+            var resultado = new Resultado<int>();
+
+            try
+            {
+                var query = GetQuery(consulta);
+
+                var res = query.List().ToList();
+                
+                if (query.Clone().Where(x => !joinTipoInhabilitacion.Permanente && x.FechaInicio == null).RowCount() > 0)
+                {
+                    resultado.Error = "El sistema no puede corroborar la integridad de sus datos. Por favor, comuniquese con Dirección de Transporte";
+                    return resultado;
+                }
+
+                //Inhabilitacion activa
+                query = query.Where(x => joinTipoInhabilitacion.Permanente ||
+                                        (x.FechaInicio.Value < DateTime.Now && x.FechaFin.Value > DateTime.Now) ||
+                                        (x.FechaInicio.Value < DateTime.Now && x.FechaFin.Value == null));
+
+                resultado.Return = query.RowCount();
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+            return resultado;
+        }
 
     }
 }
