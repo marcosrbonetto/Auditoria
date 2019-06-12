@@ -461,12 +461,8 @@ namespace _DAO.DAO
                 });
 
                 var cursor = fechaMenor;
-                diasTrabajados = 1;
-
                 do
                 {
-                    cursor=cursor.AddDays(1);
-
                     //TODO periodos con fechaFin null no suman
                     diasTrabajados = inscripcionesAntesReferencia.Any(x => 
                         x.FechaInicio.HasValue &&
@@ -475,8 +471,10 @@ namespace _DAO.DAO
                         (x.FechaTelegrama.HasValue && cursor <= x.FechaTelegrama.Value))) ?
 
                         diasTrabajados + 1 : diasTrabajados;
+
+                    cursor = cursor.AddDays(1);
                 }
-                while (cursor < fechaMayor);
+                while (cursor <= fechaMayor);
 
                 resultado.Return = diasTrabajados;
 
