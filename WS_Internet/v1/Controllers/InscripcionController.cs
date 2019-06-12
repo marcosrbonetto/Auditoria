@@ -89,9 +89,9 @@ namespace WS_Internet.v1.Controllers
         [ConToken]
         [EsOperador]
         [Route("GetAntiguedadEnDias")]
-        public ResultadoServicio<double> GetAntiguedadEnDias(v1.Entities.Consultas.Consulta_Inscripcion consulta)
+        public ResultadoServicio<int> GetAntiguedadEnDias(v1.Entities.Consultas.Consulta_Inscripcion consulta)
         {
-            return RestCall.Call<double>(Request, consulta);
+            return RestCall.Call<int>(Request, consulta);
         }
     }
 }

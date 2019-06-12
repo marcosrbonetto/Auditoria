@@ -420,13 +420,14 @@ namespace _DAO.DAO
             return resultado;
         }
 
-        public Resultado<double> GetAntiguedadEnDias(_Model.Consultas.Consulta_Inscripcion consulta)
+        public Resultado<int> GetAntiguedadEnDias(_Model.Consultas.Consulta_Inscripcion consulta)
         {
-            var resultado = new Resultado<double>();
+            var resultado = new Resultado<int>();
             int diasTrabajados = 0;
             try
             {
                 var query = GetQuery(consulta);
+                //TODO sacar
                 var test = query.List().ToList();
 
                 var fechaReferencia = consulta.FechaReferencia.HasValue ? consulta.FechaReferencia.Value : DateTime.Now;
@@ -434,10 +435,9 @@ namespace _DAO.DAO
                 var copiaQuery = query.Clone();
                 if (copiaQuery.Where(x => x.FechaInicio == null).RowCount() > 0)
                 {
-                    resultado.Error = "El sistema no puede corroborar la integridad de sus datos. Por favor, comuniquese con Dirección de Transporte";
+                    resultado.Error = "El sistema no puede corroborar la integridad de sus inscripciones. Por favor, comuniquese con Dirección de Transporte. Detalle: licencia sin fecha inicio.";
                     return resultado;
                 }
-
 
                 var inscripcionesAntesReferencia = query.Where(x => x.FechaInicio.Value < fechaReferencia).List().ToList();
                 DateTime fechaMenor = inscripcionesAntesReferencia.Count() > 0 ? inscripcionesAntesReferencia.First().FechaInicio.Value : new DateTime();
@@ -466,8 +466,14 @@ namespace _DAO.DAO
                 do
                 {
                     cursor=cursor.AddDays(1);
-                    diasTrabajados = inscripcionesAntesReferencia.Any(x =>
-                        cursor >= x.FechaInicio.Value && (cursor <= x.FechaFin.Value || cursor <= x.FechaTelegrama.Value)) ?
+
+                    //TODO periodos con fechaFin null no suman
+                    diasTrabajados = inscripcionesAntesReferencia.Any(x => 
+                        x.FechaInicio.HasValue &&
+                        cursor >= x.FechaInicio.Value && 
+                        ((x.FechaFin.HasValue && cursor <= x.FechaFin.Value) || 
+                        (x.FechaTelegrama.HasValue && cursor <= x.FechaTelegrama.Value))) ?
+
                         diasTrabajados + 1 : diasTrabajados;
                 }
                 while (cursor < fechaMayor);

@@ -174,12 +174,12 @@ namespace WS_Intranet.v1.Controllers
         [ConToken]
         [EsOperador]
         [Route("GetAntiguedadEnDias")]
-        public ResultadoServicio<double> GetAntiguedadEnDias(v1.Entities.Consultas.Consulta_Inscripcion consulta)
+        public ResultadoServicio<int> GetAntiguedadEnDias(v1.Entities.Consultas.Consulta_Inscripcion consulta)
         {
             var usuarioLogeado = GetUsuarioLogeado();
             if (!usuarioLogeado.Ok)
             {
-                var resultado = new ResultadoServicio<double>();
+                var resultado = new ResultadoServicio<int>();
                 resultado.Error = usuarioLogeado.Error;
                 return resultado;
             }

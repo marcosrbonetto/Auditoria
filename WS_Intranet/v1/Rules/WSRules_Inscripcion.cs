@@ -178,9 +178,9 @@ namespace WS_Intranet.v1.Rules
             return resultado;
         }
 
-        public ResultadoServicio<double> GetAntiguedadEnDias(v1.Entities.Consultas.Consulta_Inscripcion consulta)
+        public ResultadoServicio<int> GetAntiguedadEnDias(v1.Entities.Consultas.Consulta_Inscripcion consulta)
         {
-            var resultado = new ResultadoServicio<double>();
+            var resultado = new ResultadoServicio<int>();
 
             //Busco la info
             var resultadoData = new _Rules.Rules.Rules_Inscripcion(getUsuarioLogueado()).GetAntiguedadEnDias(consulta.Convertir());

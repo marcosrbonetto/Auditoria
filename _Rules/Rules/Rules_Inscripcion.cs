@@ -80,9 +80,9 @@ namespace _Rules.Rules
             return result;
         }
 
-        public Resultado<double> GetAntiguedadEnDias(_Model.Consultas.Consulta_Inscripcion consulta)
+        public Resultado<int> GetAntiguedadEnDias(_Model.Consultas.Consulta_Inscripcion consulta)
         {
-            var result = new Resultado<double>();
+            var result = new Resultado<int>();
 
             if (!consulta.Dni.HasValue)
             {
