@@ -427,7 +427,7 @@ namespace _DAO.DAO
             try
             {
                 var query = GetQuery(consulta);
-                //TODO sacar
+                //TODO sacar test
                 var test = query.List().ToList();
 
                 var fechaReferencia = consulta.FechaReferencia.HasValue ? consulta.FechaReferencia.Value : DateTime.Now;
@@ -440,8 +440,15 @@ namespace _DAO.DAO
                 }
 
                 var inscripcionesAntesReferencia = query.Where(x => x.FechaInicio.Value < fechaReferencia).List().ToList();
-                DateTime fechaMenor = inscripcionesAntesReferencia.Count() > 0 ? inscripcionesAntesReferencia.First().FechaInicio.Value : new DateTime();
-                DateTime fechaMayor = inscripcionesAntesReferencia.Count() > 0 ? inscripcionesAntesReferencia.First().FechaFin.Value : new DateTime();
+                if (inscripcionesAntesReferencia.Count() == 0) 
+                {
+                    resultado.Return = diasTrabajados;
+                    return resultado;
+                }
+
+                var inscripcionDeReferencia = inscripcionesAntesReferencia.FirstOrDefault();
+                DateTime fechaMenor = inscripcionDeReferencia.FechaInicio.Value;
+                DateTime fechaMayor = inscripcionesAntesReferencia.Any(x => x.FechaFin == null && x.FechaTelegrama == null) ? fechaReferencia : inscripcionDeReferencia.FechaFin.HasValue ? inscripcionDeReferencia.FechaFin.Value : inscripcionDeReferencia.FechaTelegrama.Value;
 
                 //Calculo extremos
                 inscripcionesAntesReferencia.ForEach(x =>
@@ -463,12 +470,15 @@ namespace _DAO.DAO
                 var cursor = fechaMenor;
                 do
                 {
-                    //TODO periodos con fechaFin null no suman
                     diasTrabajados = inscripcionesAntesReferencia.Any(x => 
                         x.FechaInicio.HasValue &&
                         cursor >= x.FechaInicio.Value && 
-                        ((x.FechaFin.HasValue && cursor <= x.FechaFin.Value) || 
-                        (x.FechaTelegrama.HasValue && cursor <= x.FechaTelegrama.Value))) ?
+                        (
+                            (x.FechaFin.HasValue && cursor <= x.FechaFin.Value) || 
+                            (x.FechaTelegrama.HasValue && cursor <= x.FechaTelegrama.Value) ||
+                            (!x.FechaFin.HasValue && !x.FechaTelegrama.HasValue) ? 
+                            cursor <= fechaReferencia : false
+                        )) ?
 
                         diasTrabajados + 1 : diasTrabajados;
 
