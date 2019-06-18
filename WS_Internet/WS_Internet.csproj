@@ -180,7 +180,6 @@
     <Compile Include="v1\Entities\Resultados\ResultadoWS_InscripcionDetalle.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_InscripcionListado.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_MuniOnlineUsuario.cs" />
-    <Compile Include="v1\Entities\Resultados\ResultadoWS_Antiguedad.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_Paginador.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoInhabilitacion.cs" />
     <Compile Include="v1\Entities\Resultados\ResultadoWS_TipoCondicionInscripcion.cs" />
