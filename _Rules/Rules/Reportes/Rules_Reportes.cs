@@ -253,6 +253,7 @@ namespace _Rules.Rules
                 //Seteo el datasource al reclamo
                 objectDataSourceInscripcion.DataSource = dtInscripcion;
                 reporte.DataSource = objectDataSourceInscripcion;
+                //%
 
                 result.Return = reporte;
             }
