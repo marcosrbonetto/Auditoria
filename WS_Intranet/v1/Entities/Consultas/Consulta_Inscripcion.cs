@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,6 +18,8 @@ namespace WS_Intranet.v1.Entities.Consultas
         public bool? ConFechaInicio { get; set; }
         public bool? ConError { get; set; }
         public bool? Favorito{ get; set; }
+        public string FechaReferencia { get; set; }
+
 
         public _Model.Consultas.Consulta_Inscripcion Convertir()
         {
@@ -31,7 +34,8 @@ namespace WS_Intranet.v1.Entities.Consultas
                 ConError = ConError,
                 Favorito = Favorito,
                 Sexo = Sexo,
-                DadosDeBaja = false
+                DadosDeBaja = false,
+                FechaReferencia = Utils.StringToDate(FechaReferencia)
             };
         }
     }

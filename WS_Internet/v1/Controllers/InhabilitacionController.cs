@@ -73,5 +73,14 @@ namespace WS_Internet.v1.Controllers
         {
             return RestCall.Call<int>(Request);
         }
+
+        [HttpGet]
+        [ConToken]
+        [EsOperador]
+        [Route("EstaInhabilitado")]
+        public ResultadoServicio<bool> EstaInhabilitado(int? dni)
+        {
+            return RestCall.Call<bool>(Request);
+        }
     }
 }

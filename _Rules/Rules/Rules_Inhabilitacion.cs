@@ -12,11 +12,13 @@ namespace _Rules.Rules
     public class Rules_Inhabilitacion : BaseRules<Inhabilitacion>
     {
         private readonly DAO_Inhabilitacion dao;
+        private readonly Rules_Usuario _UsuarioRules;
 
         public Rules_Inhabilitacion(UsuarioLogueado data)
             : base(data)
         {
             dao = DAO_Inhabilitacion.Instance;
+            _UsuarioRules = new Rules_Usuario(data);
         }
 
         public Resultado<_Model.Resultados.Resultado_Paginador<Inhabilitacion>> GetPaginado(_Model.Consultas.Consulta_InhabilitacionPaginada consulta)
@@ -488,6 +490,32 @@ namespace _Rules.Rules
 
             if (errores.Count == 0) return null;
             return string.Join(" | ", errores);
+        }
+
+        public Resultado<bool> EstaInhabilitado(int? dni)
+        {
+            var result = new Resultado<bool>();
+
+            if (!dni.HasValue)
+            {
+                result.Error = "Dni requerido";
+                return result;
+            }
+
+            var resultadoInhab = dao.GetCantidadInhabilitaciones(new _Model.Consultas.Consulta_Inhabilitacion
+            {
+                Dni = dni,
+                DadosDeBaja = null
+            });
+            if (!resultadoInhab.Ok)
+            {
+                result.Error = resultadoInhab.Error;
+                return result;
+            }
+
+            result.Return = resultadoInhab.Return > 0 ? true : false;
+
+            return result;
         }
 
     }

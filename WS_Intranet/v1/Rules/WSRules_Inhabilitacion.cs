@@ -155,5 +155,22 @@ namespace WS_Intranet.v1.Rules
             return resultado;
         }
 
+        public ResultadoServicio<bool> EstaInhabilitado(int? dni)
+        {
+            var resultado = new ResultadoServicio<bool>();
+
+            //Busco la info
+            var resultadoData = new _Rules.Rules.Rules_Inhabilitacion(getUsuarioLogueado()).EstaInhabilitado(dni);
+            if (!resultadoData.Ok)
+            {
+                resultado.Error = resultadoData.Error;
+                return resultado;
+            }
+
+            //Resultado
+            resultado.Return = resultadoData.Return;
+            return resultado;
+        }
+
     }
 }
