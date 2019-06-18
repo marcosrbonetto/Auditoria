@@ -28,8 +28,6 @@ namespace _Rules.Rules
         {
             return dao.GetByKeyValue(keyValue);
         }
-
-
         public Resultado<string> GetInscripcionesPorDni(int? dni)
         {           
             var resultado = new Resultado<string>();
@@ -157,7 +155,7 @@ namespace _Rules.Rules
 
 
                 Telerik.Reporting.SubReport subReportItem = (Telerik.Reporting.SubReport)(reporte.Items.Find("subreporteInsripciones", true)[0]);
-                subReportItem.ReportSource = crearSubreporteInscripcionesDni(inscripciones).Return;
+                subReportItem.ReportSource = CrearSubreporteInscripcionesDni(inscripciones).Return;
 
                 //Agrego la fila del requerimiento
                 dtInscripcionUsuario.Rows.Add(filaInscripcion);
@@ -182,7 +180,7 @@ namespace _Rules.Rules
             return resultado;
         }
 
-        public Resultado<Telerik.Reporting.Report> crearSubreporteInscripcionesDni(List<Inscripcion> inscripciones)
+        public Resultado<Telerik.Reporting.Report> CrearSubreporteInscripcionesDni(List<Inscripcion> inscripciones)
         {
             var result = new Resultado<Telerik.Reporting.Report>();
 
@@ -340,7 +338,7 @@ namespace _Rules.Rules
 
 
                 Telerik.Reporting.SubReport subReportItem = (Telerik.Reporting.SubReport)(reporte.Items.Find("subreporteInsripcionesLicencia", true)[0]);
-                subReportItem.ReportSource = crearSubreporteInscripcionesLicencia(inscripciones).Return;
+                subReportItem.ReportSource = CrearSubreporteInscripcionesLicencia(inscripciones).Return;
 
                 //Agrego la fila del requerimiento
                 dtInscripcionLicencia.Rows.Add(filaLicencia);
@@ -364,7 +362,7 @@ namespace _Rules.Rules
 
             return resultado;
         }
-        public Resultado<Telerik.Reporting.Report> crearSubreporteInscripcionesLicencia(List<Inscripcion> inscripciones)
+        public Resultado<Telerik.Reporting.Report> CrearSubreporteInscripcionesLicencia(List<Inscripcion> inscripciones)
         {
             var result = new Resultado<Telerik.Reporting.Report>();
 
