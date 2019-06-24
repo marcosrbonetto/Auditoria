@@ -184,6 +184,19 @@ namespace WS_Intranet.v1.Rules
             return resultado;
         }
 
+        public ResultadoServicio<string> GetUsuariosConAntiguedad()
+        {
+            var resultado = new ResultadoServicio<string>();
 
+            var resultadoQuery = new _Rules.Rules.Rules_Usuario(getUsuarioLogueado()).GetUsuariosConAntiguedad();
+            if (!resultadoQuery.Ok)
+            {
+                resultado.Error = resultadoQuery.Error;
+                return resultado;
+            }
+
+            resultado.Return = resultadoQuery.Return;
+            return resultado;
+        }
     }
 }

@@ -156,5 +156,22 @@ namespace WS_Intranet.v1.Controllers
             return new v1.Rules.WSRules_Usuario(usuarioLogeado.Return).GetCantidadConError();
         }
 
+        [HttpPut]
+        [ConToken]
+        [EsOperador]
+        [Route("GetUsuariosConAntiguedad")]
+        public ResultadoServicio<string> GetUsuariosConAntiguedad()
+        {
+
+            var usuarioLogeado = GetUsuarioLogeado();
+            if (!usuarioLogeado.Ok)
+            {
+                var resultado = new ResultadoServicio<string>();
+                resultado.Error = usuarioLogeado.Error;
+                return resultado;
+            }
+
+            return new v1.Rules.WSRules_Usuario(usuarioLogeado.Return).GetUsuariosConAntiguedad();
+        }
     }
 }

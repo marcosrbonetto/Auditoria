@@ -15,6 +15,10 @@ namespace _Model.Consultas
         public bool? ConError { get; set; }
         public bool? Favorito { get; set; }
         public bool? DadosDeBaja { get; set; }
+        public int? Antiguedad { get; set; }
+        public Enums.TipoAuto? TipoAuto { get; set; }
+        public Enums.TipoInscripcion? TipoInscripcion { get; set; }
+        public bool? ConSexo { get; set; }
 
         public Consulta_Usuario()
         {

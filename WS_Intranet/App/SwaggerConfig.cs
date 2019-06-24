@@ -74,6 +74,14 @@ namespace WS_Intranet.App
                     description = "Token",
                     required = true
                 });
+                parametros.Add(new Parameter
+                {
+                    name = "--Clave",
+                    @in = "header",
+                    type = "string",
+                    description = "Token",
+                    required = false
+                });
             }
         }
     }

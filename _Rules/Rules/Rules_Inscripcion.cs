@@ -11,14 +11,12 @@ namespace _Rules.Rules
 {
     public class Rules_Inscripcion : BaseRules<Inscripcion>
     {
-        private readonly DAO_Inscripcion dao;
-        private readonly Rules_Usuario _UsuarioRules;
+        private readonly DAO_Inscripcion dao;      
 
         public Rules_Inscripcion(UsuarioLogueado data)
             : base(data)
         {
             dao = DAO_Inscripcion.Instance;
-            _UsuarioRules = new Rules_Usuario(data);
         }
 
         public Resultado<_Model.Resultados.Resultado_Paginador<Inscripcion>> GetPaginado(_Model.Consultas.Consulta_InscripcionPaginada consulta)
@@ -101,6 +99,7 @@ namespace _Rules.Rules
                 Dni = consulta.Dni,
                 FechaReferencia = consulta.FechaReferencia,
                 TipoInscripcion = consulta.TipoInscripcion,
+                TipoAuto= consulta.TipoAuto,
                 DadosDeBaja = null
             });
             if (!resultadoInscripciones.Ok)
@@ -689,5 +688,6 @@ namespace _Rules.Rules
             var insc = dao.GenerarErroresInscripcion();
 
         }
+
     }
 }

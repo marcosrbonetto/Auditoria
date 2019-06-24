@@ -137,7 +137,7 @@ namespace WS_Intranet.v1.Controllers
 
         [HttpGet]
         [ConToken]
-        [EsOperador]
+        [ConClaveInterna]
         [Route("EstaInhabilitado")]
         public ResultadoServicio<bool> EstaInhabilitado(int? dni)
         {

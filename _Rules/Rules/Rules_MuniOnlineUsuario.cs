@@ -221,6 +221,27 @@ namespace _Rules.Rules
             return resultado;
         }
 
+        public Resultado<bool> EsClaveCorrecta(string clave)
+        {
+            var resultado = new Resultado<bool>();
 
+            try
+            {
+                var resultadoClave = ConfigurationManager.AppSettings["CLAVE_SISTEMA_SORTEO"];
+                if (string.IsNullOrEmpty(resultadoClave))
+                {
+                    resultado.Error = "No se encuentra la clave interna";
+                    return resultado;
+                }
+
+                resultado.Return = resultadoClave.Equals(clave);
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+
+            return resultado;
+        }
     }
 }

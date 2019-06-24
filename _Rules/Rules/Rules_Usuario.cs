@@ -13,12 +13,13 @@ namespace _Rules.Rules
     public class Rules_Usuario : BaseRules<Usuario>
     {
         private readonly DAO_Usuario dao;
-
+        private readonly Rules_Inscripcion _InscripcionRules;
 
         public Rules_Usuario(UsuarioLogueado data)
             : base(data)
         {
             dao = DAO_Usuario.Instance;
+            _InscripcionRules = new Rules_Inscripcion(data);
         }
 
         public Resultado<_Model.Resultados.Resultado_Paginador<Usuario>> GetPaginado(_Model.Consultas.Consulta_UsuarioPaginado consulta)
@@ -383,6 +384,142 @@ namespace _Rules.Rules
 
             if (errores.Count == 0) return null;
             return string.Join(" | ", errores);
+        }
+
+        public Resultado<string> GetUsuariosConAntiguedad()
+        {
+            var resultado = new Resultado<string>();
+
+            try
+            {
+                var usuarios = dao.Get(new _Model.Consultas.Consulta_Usuario(){ConSexo=true});
+                if (!usuarios.Ok)
+                {
+                    resultado.Error = usuarios.Error;
+                    return resultado;
+                }
+                var count = usuarios.Return.Count;
+                int iterados = 0, RFaceptadosEntre3y20 = 0, RFaceptadosMas20 = 0;
+                int RMaceptadosEntre3y20 = 0, RMaceptadosMas20 = 0;
+                int TFaceptadosEntre3y20 = 0, TFaceptadosMas20 = 0;
+                int TMaceptadosEntre3y20 = 0, TMaceptadosMas20 = 0; 
+
+                foreach (var u in usuarios.Return)
+                {
+                    iterados++;
+                    if (u.SexoMasculino.HasValue && u.SexoMasculino.Value)
+                    {
+                        //CHOFER-REMIS-MASC
+                        var consultaAntiguedadR = _InscripcionRules.GetAntiguedadEnDias(new _Model.Consultas.Consulta_Inscripcion()
+                        {
+                            Dni = u.Dni,
+                            Sexo = true,
+                            FechaReferencia = Utils.StringToDate("12/12/2018"),
+                            TipoInscripcion = Enums.TipoInscripcion.Chofer,
+                            TipoAuto = Enums.TipoAuto.AutoRemis
+                        });
+
+                        if (consultaAntiguedadR.Ok)
+                        {
+                            if (consultaAntiguedadR.Return > 1094 && consultaAntiguedadR.Return < 7300)
+                            {
+                                RMaceptadosEntre3y20++;
+                            }
+                            else if (consultaAntiguedadR.Return > 7299)
+                            {
+                                RMaceptadosMas20++;
+                            }
+                        }
+
+                        //CHOFER-TAXI-MASC
+                        var consultaAntiguedadT = _InscripcionRules.GetAntiguedadEnDias(new _Model.Consultas.Consulta_Inscripcion()
+                        {
+                            Dni = u.Dni,
+                            Sexo = true,
+                            FechaReferencia = Utils.StringToDate("12/12/2018"),
+                            TipoInscripcion = Enums.TipoInscripcion.Chofer,
+                            TipoAuto = Enums.TipoAuto.AutoTaxi
+                        });
+
+                        if (consultaAntiguedadT.Ok)
+                        {
+                            if (consultaAntiguedadT.Return > 1094 && consultaAntiguedadT.Return < 7300)
+                            {
+                                TMaceptadosEntre3y20++;
+                            }
+                            else if (consultaAntiguedadT.Return > 7299)
+                            {
+                                TMaceptadosMas20++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //CHOFER-REMIS-FEM
+                        var consultaAntiguedadRF = _InscripcionRules.GetAntiguedadEnDias(new _Model.Consultas.Consulta_Inscripcion()
+                        {
+                            Dni = u.Dni,
+                            Sexo = false,
+                            FechaReferencia = Utils.StringToDate("12/12/2018"),
+                            TipoInscripcion = Enums.TipoInscripcion.Chofer,
+                            TipoAuto = Enums.TipoAuto.AutoRemis
+                        });
+
+                        if (consultaAntiguedadRF.Ok)
+                        {
+                            if (consultaAntiguedadRF.Return > 1094 && consultaAntiguedadRF.Return < 7300)
+                            {
+                                RFaceptadosEntre3y20++;
+                            }
+                            else if (consultaAntiguedadRF.Return > 7299)
+                            {
+                                RFaceptadosMas20++;
+                            }
+                        }
+
+                        //CHOFER-TAXI-FEM
+                        var consultaAntiguedadTF = _InscripcionRules.GetAntiguedadEnDias(new _Model.Consultas.Consulta_Inscripcion()
+                        {
+                            Dni = u.Dni,
+                            Sexo = false,
+                            FechaReferencia = Utils.StringToDate("12/12/2018"),
+                            TipoInscripcion = Enums.TipoInscripcion.Chofer,
+                            TipoAuto = Enums.TipoAuto.AutoTaxi
+                        });
+
+                        if (consultaAntiguedadTF.Ok)
+                        {
+                            if (consultaAntiguedadTF.Return > 1094 && consultaAntiguedadTF.Return < 7300)
+                            {
+                                TFaceptadosEntre3y20++;
+                            }
+                            else if (consultaAntiguedadTF.Return > 7299)
+                            {
+                                TFaceptadosMas20++;
+                            }
+                        }
+                    }
+
+
+                }
+
+                var resultadoRF = " #REMIS F--> -Entre3y20: " + RFaceptadosEntre3y20 + " -Mas20: " + RFaceptadosMas20;
+                var resultadoRM = " #REMIS M--> -Entre3y20: " + RMaceptadosEntre3y20 + " -Mas20: " + RMaceptadosMas20;
+                var resultadoTF = " #TAXI F--> -Entre3y20: " + TFaceptadosEntre3y20 + " -Mas20: " + TFaceptadosMas20;
+                var resultadoTM = " #TAXI M--> -Entre3y20: " + TMaceptadosEntre3y20 + " -Mas20: " + TMaceptadosMas20;
+
+                var resultadoTotal = resultadoRM + resultadoRF + resultadoTM + resultadoTF;
+
+                System.Diagnostics.Debug.WriteLine(resultadoTotal);
+
+                resultado.Return = resultadoTotal;
+                return resultado;
+            }
+            catch (Exception e)
+            {
+                resultado.Error = "Error procesando la solicitud - "+e.Message;
+                return resultado;
+            }
         }
 
     }

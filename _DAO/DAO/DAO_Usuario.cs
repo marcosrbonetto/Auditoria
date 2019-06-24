@@ -6,6 +6,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using System.Collections.Generic;
 using _Model.Resultados;
+using NHibernate.SqlCommand;
 
 namespace _DAO.DAO
 {
@@ -26,10 +27,37 @@ namespace _DAO.DAO
         }
 
         Dictionary<string, bool> joins = new Dictionary<string, bool>();
+        TipoInscripcion joinTipoInscripcion;
+        TipoAuto joinTipoAuto;
+        Usuario usr = null;
+        Inscripcion ins = null;
+
 
         private void ClearJoins()
         {
+            usr = null;
+            ins = null;
+            joinTipoInscripcion = null;
+            joinTipoAuto = null;
             joins = new Dictionary<string, bool>();
+        }
+
+        private void JoinTipoInscripcion(IQueryOver<Usuario, Inscripcion> query)
+        {
+            if (!joins.ContainsKey("tipoInscripcion"))
+            {
+                query.Left.JoinAlias(x => x.TipoInscripcion, () => joinTipoInscripcion);
+                joins["tipoInscripcion"] = true;
+            }
+        }
+
+        private void JoinTipoAuto(IQueryOver<Usuario, Inscripcion> query)
+        {
+            if (!joins.ContainsKey("tipoAuto"))
+            {
+                query.Left.JoinAlias(x => x.TipoAuto, () => joinTipoAuto);
+                joins["tipoAuto"] = true;
+            }
         }
 
         public IQueryOver<Usuario, Usuario> GetQuery(_Model.Consultas.Consulta_Usuario consulta)
@@ -58,6 +86,12 @@ namespace _DAO.DAO
             if (consulta.FechaNacimiento.HasValue)
             {
                 query.Where(x => x.FechaNacimiento.Value.Date == consulta.FechaNacimiento.Value.Date);
+            }
+
+            //ConSexo
+            if (consulta.ConSexo.HasValue && consulta.ConSexo.Value)
+            {
+                query.Where(x => x.SexoMasculino != null);
             }
 
             //Sexo
@@ -108,6 +142,38 @@ namespace _DAO.DAO
             return query;
         }
 
+        public IQueryOver<Usuario, Inscripcion> GetQueryJoinInscripcion(_Model.Consultas.Consulta_Usuario consulta)
+        {
+            
+            ClearJoins();
+           
+
+            var query = GetSession().QueryOver<Usuario>(() => usr)
+                .JoinEntityQueryOver(() => ins, () => ins.Usuario.Id == usr.Id ,JoinType.FullJoin).Select(x=>x);
+
+
+            //Sexo
+            if (consulta.SexoMasculino.HasValue)
+            {
+                query.Where(x => usr.SexoMasculino == consulta.SexoMasculino.Value);
+            }
+            //Tipo auto
+            if (consulta.TipoAuto.HasValue)
+            {
+                JoinTipoAuto(query);
+                query = query.Where(x => joinTipoAuto.KeyValue == consulta.TipoAuto.Value);
+            }
+
+            //Tipo inscripcion
+            if (consulta.TipoInscripcion.HasValue)
+            {
+                JoinTipoInscripcion(query);
+                query = query.Where(x => joinTipoInscripcion.KeyValue == consulta.TipoInscripcion.Value);
+            }
+
+            return query;
+        }
+
         public Resultado<List<Usuario>> Get(_Model.Consultas.Consulta_Usuario consulta)
         {
             var resultado = new Resultado<List<Usuario>>();
@@ -115,6 +181,23 @@ namespace _DAO.DAO
             try
             {
                 var query = GetQuery(consulta);
+                resultado.Return = query.List().ToList();
+            }
+            catch (Exception e)
+            {
+                resultado.SetError(e);
+            }
+            return resultado;
+
+        }
+
+        public Resultado<List<Usuario>> GetJoinInscripcion(_Model.Consultas.Consulta_Usuario consulta)
+        {
+            var resultado = new Resultado<List<Usuario>>();
+
+            try
+            {
+                var query = GetQueryJoinInscripcion(consulta);
                 resultado.Return = query.List().ToList();
             }
             catch (Exception e)

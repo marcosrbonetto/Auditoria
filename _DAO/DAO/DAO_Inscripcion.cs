@@ -87,6 +87,13 @@ namespace _DAO.DAO
                 query.Where(x => x.Usuario.Id == consulta.IdUsuario.Value);
             }
 
+            //Sexo
+            if (consulta.Sexo.HasValue)
+            {
+                JoinUsuario(query);
+                query.Where(x => joinUsuario.SexoMasculino == consulta.Sexo.Value);
+            }
+
             //Nombre
             if (!string.IsNullOrEmpty(consulta.Nombre))
             {
@@ -448,7 +455,15 @@ namespace _DAO.DAO
 
                 var inscripcionDeReferencia = inscripcionesAntesReferencia.FirstOrDefault();
                 DateTime fechaMenor = inscripcionDeReferencia.FechaInicio.Value;
-                DateTime fechaMayor = inscripcionesAntesReferencia.Any(x => x.FechaFin == null && x.FechaTelegrama == null) ? fechaReferencia : inscripcionDeReferencia.FechaFin.HasValue ? inscripcionDeReferencia.FechaFin.Value : inscripcionDeReferencia.FechaTelegrama.Value;
+                DateTime fechaMayor = inscripcionesAntesReferencia.Any(x => x.FechaFin == null && x.FechaTelegrama == null) ? 
+                                        fechaReferencia
+                                        : inscripcionDeReferencia.FechaFin.HasValue ? 
+                                            inscripcionDeReferencia.FechaFin.Value>fechaReferencia ?
+                                                fechaReferencia  
+                                                : inscripcionDeReferencia.FechaFin.Value
+                                            : inscripcionDeReferencia.FechaTelegrama.Value > fechaReferencia ?
+                                                fechaReferencia 
+                                                : inscripcionDeReferencia.FechaTelegrama.Value;
 
                 //Calculo extremos
                 inscripcionesAntesReferencia.ForEach(x =>

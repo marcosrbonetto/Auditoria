@@ -154,7 +154,7 @@ namespace WS_Intranet.v1.Controllers
 
         [HttpPut]
         [ConToken]
-        [EsOperador]
+        [ConClaveInterna]
         [Route("EstaInscripto")]
         public ResultadoServicio<bool> EstaInscripto(v1.Entities.Consultas.Consulta_Inscripcion consulta)
         {
@@ -172,7 +172,7 @@ namespace WS_Intranet.v1.Controllers
 
         [HttpPut]
         [ConToken]
-        [EsOperador]
+        [ConClaveInterna]
         [Route("GetAntiguedadEnDias")]
         public ResultadoServicio<int> GetAntiguedadEnDias(v1.Entities.Consultas.Consulta_Inscripcion consulta)
         {

@@ -124,6 +124,7 @@
     </Content>
     <Content Include="Resources\Reportes\Reporte_Inscripcion_Licencia_detalle.trdx" />
     <Content Include="Resources\Reportes\Reporte_Inscripcion_Licencia_encabezado.trdx" />
+    <None Include="Properties\PublishProfiles\intranet_release.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -166,6 +167,7 @@
     <Compile Include="v0\Controllers\_Control.cs" />
     <Compile Include="v0\ResultadoServicio.cs" />
     <Compile Include="v0\Rules\WSRules_Base.cs" />
+    <Compile Include="v1\Controllers\FilterAtributtes\ConClaveInterna.cs" />
     <Compile Include="v1\Controllers\FilterAtributtes\ConToken.cs" />
     <Compile Include="v1\Controllers\InhabilitacionController.cs" />
     <Compile Include="v1\Controllers\ReporteController.cs" />
@@ -209,9 +211,7 @@
     <Compile Include="v1\Rules\WSRules_Usuario.cs" />
     <Compile Include="v1\Rules\WSRules_MuniOnlineUsuario.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\_Model\_Model.csproj">
       <Project>{e99c5e8a-755a-49ba-a606-dde171b8ccef}</Project>

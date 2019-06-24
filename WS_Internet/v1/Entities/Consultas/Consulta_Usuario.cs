@@ -12,5 +12,6 @@ namespace WS_Internet.v1.Entities.Consultas
         public string Nombre { get; set; }
         public bool? ConError { get; set; }
         public bool? Favorito { get; set; }
+        public int? Antiguedad { get; set; }
     }
 }

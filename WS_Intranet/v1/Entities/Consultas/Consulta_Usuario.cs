@@ -12,6 +12,7 @@ namespace WS_Intranet.v1.Entities.Consultas
         public bool? SexoMasculino { get; set; }
         public bool? ConError { get; set; }
         public bool? Favorito { get; set; }
+        public int? Antiguedad { get; set; }
         public _Model.Consultas.Consulta_Usuario Convertir()
         {
             return new _Model.Consultas.Consulta_Usuario()
@@ -21,7 +22,8 @@ namespace WS_Intranet.v1.Entities.Consultas
                 SexoMasculino = SexoMasculino,
                 ConError = ConError,
                 Favorito = Favorito,
-                DadosDeBaja = false
+                DadosDeBaja = false,
+                Antiguedad=Antiguedad
             };
         }
     }
