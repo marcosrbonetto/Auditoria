@@ -39,16 +39,13 @@ _ReSharper*/
 /WS_Intranet/bin/
 /WS_Intranet/obj/
 
-/AutosAlquilerConChofer.v12.suo
+/PlazasCordoba.v12.suo
 
-/AutosAlquilerConChofer.suo
+/PlazasCordoba.suo
 
-AutosAlquilerConChofer.v12.suo
-AutosAlquilerConChofer.v12.suo
-*.suo
-*.suoAutosAlquilerConChofer.v12.suo
-
-/AutosAlquilerConChofer.sln
+.suo
+*
+/PlazasCordoba.sln
 /WS_Intranet/Properties/PublishProfiles
 /WS_Internet/Properties/PublishProfiles
 
