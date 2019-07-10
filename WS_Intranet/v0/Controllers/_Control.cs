@@ -13,6 +13,11 @@ namespace WS_Intranet.v0.Controllers
             return Request.Headers.GetValues("--Token").First();
         }
 
+        public string GetClaveSistema()
+        {
+            return Request.Headers.GetValues("--Clave").First();
+        }
+
         public ResultadoServicio<UsuarioLogueado> GetUsuarioLogeado()
         {
             var token = GetToken();

@@ -19,7 +19,7 @@ namespace WS_Intranet.App
                 .EnableSwagger(c =>
                     {
                         c.PrettyPrint();
-                        c.SingleApiVersion("WS", "Sorteo Taxis y Remises");
+                        c.SingleApiVersion("WS", "Auditoria");
                         c.OperationFilter<AddRequiredHeaderParameter>();
                         //c.IncludeXmlComments(String.Format(@"{0}\bin\\Resources\\Documentacion.XML", System.AppDomain.CurrentDomain.BaseDirectory));
                     })
@@ -27,7 +27,7 @@ namespace WS_Intranet.App
                     {
                         var thisAssembly = typeof(SwaggerConfig).Assembly;
 
-                        c.DocumentTitle(ASSEMBLY_NAME + " Sorteo Taxis y Remises");
+                        c.DocumentTitle(ASSEMBLY_NAME + " Auditoria");
                         c.InjectStylesheet(thisAssembly, ASSEMBLY_NAME + ".Resources.Swagger.css");
                         c.InjectJavaScript(thisAssembly, ASSEMBLY_NAME + ".Resources.Swagger.js");
                         c.EnableDiscoveryUrlSelector();

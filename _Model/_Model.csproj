@@ -46,32 +46,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity.cs" />
-    <Compile Include="Comandos\Comando_InhabilitacionActualizar.cs" />
-    <Compile Include="Comandos\Comando_InscripcionActualizar.cs" />
-    <Compile Include="Comandos\Comando_InhabilitacionNuevo.cs" />
-    <Compile Include="Comandos\Comando_UsuarioActualizar.cs" />
-    <Compile Include="Comandos\Comando_UsuarioNuevo.cs" />
-    <Compile Include="Comandos\Comando_InscripcionNuevo.cs" />
-    <Compile Include="Consultas\Consulta_Inhabilitacion.cs" />
-    <Compile Include="Consultas\Consulta_InhabilitacionPaginada.cs" />
-    <Compile Include="Consultas\Consulta_UsuarioPaginado.cs" />
-    <Compile Include="Consultas\Consulta_InscripcionPaginada.cs" />
-    <Compile Include="Consultas\Consulta_Usuario.cs" />
-    <Compile Include="Consultas\Consulta_Inscripcion.cs" />
-    <Compile Include="Consultas\Consulta_MuniOnlineUsuario.cs" />
-    <Compile Include="Entities\Inhabilitacion.cs" />
-    <Compile Include="Entities\Reportes\Reporte.cs" />
-    <Compile Include="Entities\TipoCondicionInscripcion.cs" />
-    <Compile Include="Entities\TipoInhabilitacion.cs" />
-    <Compile Include="Entities\Usuario.cs" />
+    <Compile Include="Comandos\Comando_Registro.cs" />
+    <Compile Include="Constantes.cs" />
+    <Compile Include="Consultas\Consulta_RegistroPaginado.cs" />
+    <Compile Include="Consultas\Consulta_Registro.cs" />
     <Compile Include="Entities\MuniOnlineUsuario.cs" />
-    <Compile Include="Entities\Inscripcion.cs" />
-    <Compile Include="Entities\TipoInscripcion.cs" />
-    <Compile Include="Entities\TipoAuto.cs" />
+    <Compile Include="Entities\Registro.cs" />
+    <Compile Include="Entities\Sistema.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resultado.cs" />
-    <Compile Include="Resultados\Resultado_Antiguedad.cs" />
     <Compile Include="Resultados\Resultado_Paginador.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>

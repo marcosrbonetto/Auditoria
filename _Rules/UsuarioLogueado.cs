@@ -9,5 +9,6 @@ namespace _Rules
         public int IdUsuario { get; set; }
 
         public string Token { get; set; }
+        public string Sistema { get; set; }
     }
 }

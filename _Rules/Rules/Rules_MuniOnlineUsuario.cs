@@ -12,19 +12,12 @@ namespace _Rules.Rules
     public class Rules_MuniOnlineUsuario : BaseRules<MuniOnlineUsuario>
     {
         private readonly DAO_MuniOnlineUsuario dao;
-
         private readonly string baseUrl = ConfigurationManager.AppSettings["URL_WS_VECINO_VIRTUAL"];
-        //private readonly string baseUrl = ConfigurationManager.AppSettings["URL_WS_VECINO_VIRTUAL_TEST"];
 
         public Rules_MuniOnlineUsuario(UsuarioLogueado data)
             : base(data)
         {
             dao = DAO_MuniOnlineUsuario.Instance;
-        }
-
-        public Resultado<List<MuniOnlineUsuario>> Get(_Model.Consultas.Consulta_MuniOnlineUsuario consulta)
-        {
-            return dao.Get(consulta);
         }
 
 

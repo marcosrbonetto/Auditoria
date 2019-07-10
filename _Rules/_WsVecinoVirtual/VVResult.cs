@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using RestSharp.Portable;
+using RestSharp.Portable.HttpClient;
+using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace _Rules._WsVecinoVirtual
 {

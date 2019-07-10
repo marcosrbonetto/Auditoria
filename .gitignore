@@ -39,13 +39,13 @@ _ReSharper*/
 /WS_Intranet/bin/
 /WS_Intranet/obj/
 
-/PlazasCordoba.v12.suo
+/Auditoria.v12.suo
 
-/PlazasCordoba.suo
+/Auditoria.suo
 
 .suo
 *
-/PlazasCordoba.sln
+/Auditoria.sln
 /WS_Intranet/Properties/PublishProfiles
 /WS_Internet/Properties/PublishProfiles
 

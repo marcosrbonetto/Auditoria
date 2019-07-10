@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _Model.Entities
 {
-    public class MuniOnlineUsuario: BaseEntity
+    public class MuniOnlineUsuario : BaseEntity
     {
         public virtual string Nombre { get; set; }
         public virtual string Apellido { get; set; }
@@ -33,5 +33,6 @@ namespace _Model.Entities
         //Validaciones
         public virtual DateTime? FechaValidacionRenaper { get; set; }
         public virtual DateTime? FechaValidacionEmail { get; set; }
+        
     }
 }

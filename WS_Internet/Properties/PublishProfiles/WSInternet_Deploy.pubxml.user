@@ -6,14 +6,14 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>D:\Proyectos\AutosAlquilerConChofer\Publicaciones\WS_Internet</_PublishTargetUrl>
+    <_PublishTargetUrl>D:\Proyectos\Auditoria\Publicaciones\WS_Internet</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>06/13/2019 12:55:25</publishTime>
+      <publishTime>07/10/2019 13:01:43</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>06/13/2019 12:55:25</publishTime>
+      <publishTime>07/10/2019 13:01:42</publishTime>
     </File>
     <File Include="bin/es/System.Net.Http.Formatting.resources.dll">
       <publishTime>04/12/2019 11:31:34</publishTime>
@@ -40,10 +40,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>11/07/2018 13:28:28</publishTime>
     </File>
     <File Include="bin/Resources/Swagger.css">
-      <publishTime>04/12/2019 11:31:33</publishTime>
+      <publishTime>06/27/2019 15:02:57</publishTime>
     </File>
     <File Include="bin/Resources/Swagger.js">
-      <publishTime>04/12/2019 11:31:33</publishTime>
+      <publishTime>06/27/2019 15:02:57</publishTime>
     </File>
     <File Include="bin/Swashbuckle.Core.dll">
       <publishTime>04/12/2019 11:31:41</publishTime>
@@ -73,22 +73,22 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>04/12/2019 11:31:41</publishTime>
     </File>
     <File Include="bin/WS_Internet.dll">
-      <publishTime>06/13/2019 12:55:18</publishTime>
+      <publishTime>07/10/2019 13:00:55</publishTime>
     </File>
     <File Include="Default.aspx">
-      <publishTime>04/12/2019 11:31:33</publishTime>
+      <publishTime>06/27/2019 15:02:58</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>04/12/2019 11:31:33</publishTime>
+      <publishTime>06/27/2019 15:02:57</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>06/13/2019 12:55:22</publishTime>
+      <publishTime>07/10/2019 13:01:10</publishTime>
     </File>
     <File Include="Resources/Documentacion.XML">
       <publishTime>11/07/2018 13:28:28</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/13/2019 12:55:20</publishTime>
+      <publishTime>07/10/2019 13:00:56</publishTime>
     </File>
   </ItemGroup>
 </Project>

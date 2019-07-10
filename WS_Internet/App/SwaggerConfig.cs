@@ -19,14 +19,14 @@ namespace WS_Internet.App
                 .EnableSwagger(c =>
                 {
                     c.PrettyPrint();
-                    c.SingleApiVersion("v1", "Sorteo Taxis y Remises - v1");
+                    c.SingleApiVersion("v1", "Auditoria - v1");
                     c.OperationFilter<AddRequiredHeaderParameter>();
                 })
                 .EnableSwaggerUi(c =>
                 {
                     var thisAssembly = typeof(SwaggerConfig).Assembly;
 
-                    c.DocumentTitle(ASSEMBLY_NAME + " Sorteo Taxis y Remises");
+                    c.DocumentTitle(ASSEMBLY_NAME + " Auditoria");
                     c.InjectStylesheet(thisAssembly, ASSEMBLY_NAME + ".Resources.Swagger.css");
                     c.InjectJavaScript(thisAssembly, ASSEMBLY_NAME + ".Resources.Swagger.js");
                     //c.EnableDiscoveryUrlSelector();
@@ -66,6 +66,14 @@ namespace WS_Internet.App
                     type = "string",
                     description = "Token",
                     required = true
+                });
+                parametros.Add(new Parameter
+                {
+                    name = "--Clave",
+                    @in = "header",
+                    type = "string",
+                    description = "Clave",
+                    required = false
                 });
             }
         }

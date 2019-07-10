@@ -5,72 +5,15 @@ namespace _Model
 {
     public class Enums
     {
-
-        public enum InscripcionOrderBy
+        public enum RegistroOrderBy
         {
-            Identificador = 1,
-            TipoInscripcion = 2,
-            TipoAuto = 3,
-            FechaInicio = 4,
-            FechaFin = 5,
-            UsuarioApellidoNombre = 6
+            Sistema = 1,
+            FechaAlta = 2
         }
-
-        public enum InhabilitacionOrderBy
+        public enum Sistema
         {
-            FechaInicio = 1,
-            FechaFin = 2,
-            UsuarioApellidoNombre = 3
+            Sorteo = 1,
+            AutoDeAlquilerConChofer = 2
         }
-
-        public enum UsuarioOrderBy
-        {
-            Nombre = 1,
-            Dni = 2,
-            FechaNacimiento = 3
-        }
-
-
-        public enum TipoInscripcion
-        {
-            Titular = 1,
-            Chofer = 2
-        }
-
-        public enum TipoInhabilitacion
-        {
-            Definitivo = 1,
-            Provisorio = 2,
-            Prescripto = 3,
-            Fallecido = 4,
-            Sobreseido = 5
-        }
-
-        public enum TipoAuto
-        {
-            AutoTaxi = 1,
-            AutoRemis = 2,
-            AutoTaxiDiscap = 3,
-            AutoRemisDiscap = 4,
-            AutoTaxiLujo = 5,
-            AutoRemisLujo = 6,
-            Escolar = 7,
-            EscolarPrivado = 8,
-            Privado = 9
-        }
-
-        public enum TipoCondicionInscripcion
-        {
-            Aspirante = 1,
-            Caducidad = 2,
-            Habilitado = 3,
-            TRPFALLE = 4,
-            Vacante = 5,
-            Deposito = 6,
-            Suspendido = 7,
-            Transferen = 8
-        }
-
-
     }
 }
